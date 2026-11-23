@@ -94,6 +94,33 @@
 </div>
 <p id="focus-status" class="status">Keyboard focus: not in a preview control.</p>
 
+<div class="panes" id="pr-compare" hidden>
+  <section class="pane" aria-labelledby="pr-before-h">
+    <div class="panehead"><h2 id="pr-before-h">Before (current Playground)</h2><a id="open-pr-before" target="_blank" rel="noopener" href="https://blocknote-git-main-typecell.vercel.app">Open current Playground</a></div>
+    <iframe id="pr-before" title="Before: current BlockNote Playground"></iframe>
+  </section>
+  <section class="pane" aria-labelledby="pr-after-h">
+    <div class="panehead"><h2 id="pr-after-h">After (PR preview)</h2><a id="open-pr-after" target="_blank" rel="noopener" href="#">Open PR preview</a></div>
+    <iframe id="pr-after" title="After: PR preview BlockNote Playground"></iframe>
+  </section>
+</div>
+<p id="pr-note" class="status" hidden>These are cross-origin Playground builds: the left frame is current main, the right frame is the pull-request preview. Focus readout and keyboard mirroring are unavailable here; test each frame separately.</p>
+
+<div class="panes" id="no-fix-compare" hidden>
+  <section class="pane" aria-labelledby="nofix-before-h">
+    <div class="panehead"><h2 id="nofix-before-h">Before (current Playground)</h2><a id="open-nofix-before" target="_blank" rel="noopener" href="https://blocknote-git-main-typecell.vercel.app">Open current Playground</a></div>
+    <iframe id="nofix-before" title="Before: current BlockNote Playground"></iframe>
+  </section>
+  <section class="pane" aria-labelledby="nofix-after-h">
+    <div class="panehead"><h2 id="nofix-after-h">After (no fix yet)</h2></div>
+    <div class="no-fix-after">
+      <h3>No patch is available for this issue yet</h3>
+      <p id="nofix-text"></p>
+      <p><a id="nofix-link" target="_blank" rel="noopener" href="#">Open the upstream issue</a></p>
+    </div>
+  </section>
+</div>
+
 <main id="main">
   <section class="info" id="issue-2854-info" aria-labelledby="info-h">
     <h2 id="info-h">What this compares</h2>
@@ -122,6 +149,12 @@
     <div data-patch="activation" hidden><pre tabindex="0" aria-label="Activation-only patch"><code>{{PATCH_ACTIVATION}}</code></pre></div>
   </section>
 
+  <section class="diff" id="pr-patch" hidden aria-labelledby="pr-patch-h">
+    <h2 id="pr-patch-h">Patch for this PR</h2>
+    <p id="pr-patch-text"></p>
+    <p><a id="pr-patch-link" target="_blank" rel="noopener" href="#">Open the PR files and patch</a></p>
+  </section>
+
   <section class="info" id="issue-limits" aria-labelledby="limits-h">
     <h2 id="limits-h">Limits and provenance</h2>
     <ul>
@@ -133,16 +166,10 @@
     </ul>
   </section>
 
-  <section class="info" id="no-local" hidden aria-labelledby="no-local-h">
-    <h2 id="no-local-h">No local static before/after build for this issue yet</h2>
-    <p id="no-local-text"></p>
-    <p id="no-local-fix"></p>
-    <p>The validation checklist above is still usable: it records the current behavior and the expected result, and links to the upstream issue or pull request. Interactive static bundles are currently built only for #2854; adding more requires a fixture, a patch, and a matching static bundle.</p>
-  </section>
 </main>
 
 <footer>
-  <p>Frames share one origin, so scrolling and the focus readout stay in step. Navigation, Tab and Enter are not mirrored: test each frame independently. The focus controls outside the iframes are real host-page targets, not simulated key events.</p>
+  <p>The #2854 frames share one origin, so scrolling and the focus readout stay in step. PR preview frames are cross-origin external Playgrounds: test each frame separately. Navigation, Tab and Enter are not mirrored. The focus controls outside the #2854 iframes are real host-page targets, not simulated key events.</p>
   <p>Lab-authored comparison code is MIT-licensed. BlockNote source and the experimental patch remain under BlockNote’s MPL-2.0 terms. Modeled on the <a href="https://mgifford.github.io/FOSDEM-website/compare/">FOSDEM before/after comparator</a>.</p>
 </footer>
 
@@ -172,6 +199,7 @@
     activation: 'Activation only: just AddBlockButton.tsx. Enter and Space work, but Tab still lands on the dead closing clone and focus falls to the body.',
   };
   const frames = { before: $('before'), after: $('after') };
+  const MAIN_PLAYGROUND = 'https://blocknote-git-main-typecell.vercel.app';
 
   const frameSrc = (side) => {
     const query = state.theme === 'auto' ? '' : `?theme=${state.theme}`;
@@ -329,50 +357,60 @@
       tag.textContent = text;
       tags.append(tag);
     }
-    $('compare-controls').hidden = !issue.variants;
-    $('compare-panes').hidden = !issue.variants;
-    $('focus-status').hidden = !issue.variants;
-    $('issue-2854-info').hidden = !issue.variants;
-    $('issue-2854-diff').hidden = !issue.variants;
-    $('issue-limits').hidden = !issue.variants;
-    $('no-local').hidden = issue.variants;
-    $('no-local-text').textContent = issue.fix.previewUrl ? 'No local before/after bundle is available, but the PR has a real Playground preview. Open it and repeat the steps above against the current editor and the preview.' : 'No local static before/after bundle is available for this issue. The checklist above records current behavior and the expected result; use the upstream issue or pull request to inspect the fix.';
-    const noLocalFix = $('no-local-fix');
-    noLocalFix.textContent = '';
-    if (issue.issueUrl) {
-      const link = document.createElement('a');
-      link.href = issue.issueUrl;
-      link.target = '_blank';
-      link.rel = 'noopener';
-      link.textContent = `Open upstream issue #${issue.number}`;
-      noLocalFix.append(link);
+    const local = Boolean(issue.variants);
+    const pr = !local && issue.fix.kind === 'pr' && Boolean(issue.fix.previewUrl) && Boolean(issue.fix.beforeUrl);
+    const noFix = !local && !pr;
+
+    $('compare-controls').hidden = !local;
+    $('compare-panes').hidden = !local;
+    $('focus-status').hidden = !local;
+    $('issue-2854-info').hidden = !local;
+    $('issue-2854-diff').hidden = !local;
+    $('issue-limits').hidden = !local;
+    $('pr-compare').hidden = !pr;
+    $('pr-note').hidden = !pr;
+    $('pr-patch').hidden = !pr;
+    $('no-fix-compare').hidden = !noFix;
+
+    if (local) {
+      applyCompare();
+    } else if (pr) {
+      const before = issue.fix.beforeUrl || MAIN_PLAYGROUND;
+      $('pr-before').src = before;
+      $('pr-after').src = issue.fix.previewUrl;
+      $('open-pr-before').href = before;
+      $('open-pr-after').href = issue.fix.previewUrl;
+      $('pr-before').title = `Before: current Playground for #${issue.number}`;
+      $('pr-after').title = `After: PR preview for #${issue.number}`;
+      const stats = issue.fix.changedFiles
+        ? `${issue.fix.changedFiles} files changed, +${issue.fix.additions} / −${issue.fix.deletions}.`
+        : '';
+      $('pr-patch-text').textContent = `The After frame is the upstream pull-request preview. ${stats} This lab does not re-bundle the PR head; use the upstream files and patch to inspect the change.`;
+      $('pr-patch-link').href = issue.fix.patchUrl || issue.fix.url;
+      $('pr-patch-link').textContent = issue.fix.patchUrl ? `Open the PR files and patch for #${issue.number}` : 'Open the upstream pull request';
+    } else {
+      $('nofix-before').src = MAIN_PLAYGROUND;
+      $('open-nofix-before').href = MAIN_PLAYGROUND;
+      $('nofix-text').textContent = `${issue.fix.note} There is no local or upstream patch to preview, so the After pane is intentionally empty.`;
+      $('nofix-link').href = issue.issueUrl;
+      $('nofix-link').textContent = `Open upstream issue #${issue.number}`;
     }
-    if (issue.fix.url) {
-      noLocalFix.append(document.createTextNode(' · '));
-      const link = document.createElement('a');
-      link.href = issue.fix.url;
-      link.target = '_blank';
-      link.rel = 'noopener';
-      link.textContent = issue.fix.kind === 'pr' ? 'Open the upstream PR' : 'Open the fix';
-      noLocalFix.append(link);
-    }
-    if (issue.fix.previewUrl) {
-      noLocalFix.append(document.createTextNode(' · '));
-      const preview = document.createElement('a');
-      preview.href = issue.fix.previewUrl;
-      preview.target = '_blank';
-      preview.rel = 'noopener';
-      preview.textContent = issue.fix.previewLabel || 'Open the PR preview';
-      noLocalFix.append(preview);
-    }
+
     for (const button of document.querySelectorAll('.issue-card')) {
       button.setAttribute('aria-current', String(Number(button.dataset.issue) === currentIssue));
     }
     renderValidate(issue);
-    $('status').textContent = issue.variants
+    $('status').textContent = local
       ? `Showing #${issue.number} with ${variantLabels[state.variant]}. The Before and After frames are built editors.`
-      : `Showing #${issue.number}. No local Before/After bundle is available; use the steps and upstream links.`;
-    if (issue.variants) applyCompare(); else updateHash();
+      : pr
+        ? `Showing #${issue.number}. Before is current main; After is the real PR preview. Both frames are external Playgrounds.`
+        : `Showing #${issue.number}. Before is the current Playground; the After pane records that no fix exists yet.`;
+    updateHash();
+  }
+
+  function selectIssue(number) {
+    currentIssue = number;
+    applyIssue();
   }
 
   function selectIssue(number) {
@@ -382,6 +420,18 @@
 
   $('issue').innerHTML = issues.map((issue) => `<option value="${issue.number}">#${issue.number} — ${issue.title}</option>`).join('');
   $('issue').addEventListener('change', (event) => selectIssue(Number(event.target.value)));
+  window.addEventListener('hashchange', () => {
+    const next = new URLSearchParams(location.hash.slice(1));
+    const number = Number(next.get('issue') || '2854');
+    if (!byNumber.has(number)) return;
+    currentIssue = number;
+    state.variant = next.get('variant') || 'both';
+    if (!variants.includes(state.variant)) state.variant = 'both';
+    state.page = next.get('page') || 'minimal';
+    state.theme = next.get('theme') || 'auto';
+    if (!['light', 'dark', 'auto'].includes(state.theme)) state.theme = 'auto';
+    applyIssue();
+  });
   $('variant').addEventListener('change', (event) => { state.variant = event.target.value; applyCompare(); });
   $('page').addEventListener('change', (event) => { state.page = event.target.value; applyCompare(); });
   for (const button of document.querySelectorAll('[data-theme]')) {

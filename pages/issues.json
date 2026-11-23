@@ -97,7 +97,12 @@
         "url": "https://github.com/TypeCellOS/BlockNote/pull/3337",
         "note": "The PR is not bundled in this static page. Open it, or run its head locally, to compare the media toolbar and alt fallback.",
         "previewUrl": "https://blocknote-git-file-ux-update-typecell.vercel.app",
-        "previewLabel": "Open the PR preview playground"
+        "previewLabel": "Open the PR preview playground",
+        "beforeUrl": "https://blocknote-git-main-typecell.vercel.app",
+        "patchUrl": "https://github.com/TypeCellOS/BlockNote/pull/3337/files",
+        "changedFiles": 126,
+        "additions": 705,
+        "deletions": 1329
       },
       "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2822",
       "wcag": [
@@ -141,7 +146,12 @@
         "url": "https://github.com/TypeCellOS/BlockNote/pull/3215",
         "note": "The PR is not bundled here. Its source changes are large and include tests and snapshots.",
         "previewUrl": "https://blocknote-git-tables-a11y-typecell.vercel.app",
-        "previewLabel": "Open the PR preview playground"
+        "previewLabel": "Open the PR preview playground",
+        "beforeUrl": "https://blocknote-git-main-typecell.vercel.app",
+        "patchUrl": "https://github.com/TypeCellOS/BlockNote/pull/3215/files",
+        "changedFiles": 65,
+        "additions": 2858,
+        "deletions": 95
       },
       "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2825",
       "wcag": [
@@ -223,7 +233,12 @@
         "url": "https://github.com/TypeCellOS/BlockNote/pull/3215",
         "note": "Not bundled here; validate the merged-cell cases against the PR.",
         "previewUrl": "https://blocknote-git-tables-a11y-typecell.vercel.app",
-        "previewLabel": "Open the PR preview playground"
+        "previewLabel": "Open the PR preview playground",
+        "beforeUrl": "https://blocknote-git-main-typecell.vercel.app",
+        "patchUrl": "https://github.com/TypeCellOS/BlockNote/pull/3215/files",
+        "changedFiles": 65,
+        "additions": 2858,
+        "deletions": 95
       },
       "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2826",
       "wcag": [

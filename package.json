@@ -14,7 +14,8 @@
     "capture": "node bin/diff-lab.mjs capture",
     "test": "node --test tests/*.test.mjs",
     "pages:build": "node scripts/build-pages.mjs",
-    "pages:bundles": "bash scripts/build-static-bundles.sh"
+    "pages:bundles": "bash scripts/build-static-bundles.sh",
+    "test:pages": "node tests/pages.e2e.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.60.0",

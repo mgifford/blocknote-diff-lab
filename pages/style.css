@@ -108,3 +108,6 @@ input:focus-visible, select:focus-visible { outline: 3px solid var(--focus); out
   .controls > div, .controls #compare-controls { flex: 1 1 100%; width: 100%; }
   .controls select { width: 100%; }
 }
+.no-fix-after { min-height: 70vh; border: 1px solid var(--line); background: var(--panel); padding: 1rem; display: flex; flex-direction: column; justify-content: center; }
+.no-fix-after h3 { margin-top: 0; }
+@media (max-width: 800px) { .no-fix-after { min-height: 40vh; } }
