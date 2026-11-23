@@ -1,0 +1,43 @@
+{
+  "results": [
+    {
+      "side": "before",
+      "pre": {
+        "activeIsEditor": true,
+        "liveAdd": true
+      },
+      "immediate": {
+        "tag": "IFRAME",
+        "id": "before",
+        "isIframe": true
+      },
+      "statusImmediate": "Keyboard focus: still inside the Before editor preview; the adjacent focus target has not received focus.",
+      "later": {
+        "tag": "IFRAME",
+        "id": "before"
+      },
+      "statusLater": "Keyboard focus: still inside the Before editor preview; the adjacent focus target has not received focus."
+    },
+    {
+      "side": "after",
+      "pre": {
+        "activeIsEditor": true,
+        "liveAdd": true
+      },
+      "immediate": {
+        "tag": "BUTTON",
+        "id": "after-next",
+        "isIframe": false
+      },
+      "statusImmediate": "Keyboard focus: Focus after editor (After).",
+      "later": {
+        "tag": "BUTTON",
+        "id": "after-next"
+      },
+      "statusLater": "Keyboard focus: Focus after editor (After)."
+    }
+  ],
+  "buttonActive": "before-next",
+  "buttonStatus": "Keyboard focus: Focus after editor (Before).",
+  "errors": []
+}

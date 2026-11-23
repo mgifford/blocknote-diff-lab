@@ -29,6 +29,11 @@ main > section { border:1px solid var(--border); border-radius:.4rem; padding:1r
 .pane { min-width:0; }
 .pane-heading { display:flex; justify-content:space-between; flex-wrap:wrap; align-items:center; gap:.4rem; margin:.2rem 0 .7rem; }
 .pane-heading a { font-size:.9rem; }
+.pane-focus-controls { display:flex; gap:.4rem; margin:.2rem 0; }
+.pane-focus-controls.prev { justify-content:flex-start; }
+.pane-focus-controls.next { justify-content:flex-end; }
+.pane-focus-controls button { font-size:.78rem; padding:.2em .5em; }
+#focus-status { margin:.4rem 0 .2rem; }
 .preview-stage { width:100%; position:relative; overflow:hidden; min-height:180px; border:1px solid var(--border); background:white; }
 .preview-stage iframe { position:absolute; left:0; top:0; border:0; background:white; display:block; transform-origin:top left; }
 .section-title { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.6rem; }

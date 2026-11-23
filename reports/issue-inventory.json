@@ -48,7 +48,7 @@
         "screen-reader"
       ],
       "fixtureSuitable": true,
-      "nextAction": "Prototype inert closing copy plus button activation; add regression test; obtain maintainer decision on keyboard route",
+      "nextAction": "Viewer comparison integrated; add upstream regression test; obtain maintainer decision on the full keyboard route",
       "url": "https://github.com/TypeCellOS/BlockNote/issues/2854",
       "reportedVersions": "0.56.0, 0.57.0 (reported); reproduced on 0.57.0"
     },
@@ -374,7 +374,7 @@
     {
       "number": 2854,
       "rank": 1,
-      "reason": "Verified; small source surface; clear keyboard/focus impact; prototype available"
+      "reason": "Verified; small source surface; clear keyboard/focus impact; prototype integrated into the Diff Lab"
     },
     {
       "number": 977,

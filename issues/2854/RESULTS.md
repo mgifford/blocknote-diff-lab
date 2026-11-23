@@ -69,7 +69,16 @@ Open-menu forced-dark screenshots were excluded: computed styles were white on b
 
 ## Lab integration status
 
-The Diff Lab viewer currently points at the stock `/basic/minimal?hideMenu` route, which has neither the two-block fixture nor the host controls that make the focus destination easy to observe. The #2854 evidence here is script-driven. Milestone 4 integration needs a shared fixture route (identical in both worktrees) with initial content and before/after host buttons, plus a scenario panel in the viewer. The patch and the reproduction scripts are ready for that integration.
+The Diff Lab comparison now targets #2854 (`compare.config.json` → `side-menu-keyboard-focus`). Each live pane has a **Focus before editor** button before the iframe and a **Focus after editor** button after it, plus a focus-status line:
+
+- **Before:** after Tab from the hovered editor, the top-level active element remains the Before iframe; the status reads “Keyboard focus: still inside the Before editor preview; the adjacent focus target has not received focus.” The adjacent control does not receive focus.
+- **After:** Tab moves to `#after-next` (Focus after editor); the status reads “Keyboard focus: Focus after editor (After).”
+- Clicking either focus button directly updates the status and shows a visible focus ring.
+- No console errors; the existing 4-step reproduction checklist now describes the #2854 focus and activation checks.
+
+Evidence: `evidence/viewer-integration.json` and `evidence/viewer-integration.png`.
+
+Remaining integration gap: `/basic/minimal` starts empty, so the steps ask the user to type two paragraphs. A shared deterministic fixture route with initial content would make the comparison more repeatable; the current viewer still exercises the real editor and the real focus sequence.
 
 ## Patch
 

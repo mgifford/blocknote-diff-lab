@@ -229,6 +229,34 @@ async function init() {
     $(side).src = url;
     $(`${side}-link`).href = url;
   }
+  const focusTargets = {
+    'before-prev': 'Focus before editor (Before)',
+    'before-next': 'Focus after editor (Before)',
+    'after-prev': 'Focus before editor (After)',
+    'after-next': 'Focus after editor (After)',
+  };
+  let lastFocusStatus = '';
+  const updateFocusStatus = () => {
+    const el = document.activeElement;
+    let text;
+    if (focusTargets[el?.id]) {
+      text = `Keyboard focus: ${focusTargets[el.id]}.`;
+    } else if (el?.tagName === 'IFRAME') {
+      const side = el.id === 'before' ? 'Before' : 'After';
+      text = `Keyboard focus: still inside the ${side} editor preview; the adjacent focus target has not received focus.`;
+    } else if (el === document.body || !el) {
+      text = 'Keyboard focus: no page control focused.';
+    } else {
+      text = `Keyboard focus: ${el.tagName.toLowerCase()}${el.id ? `#${el.id}` : ''}.`;
+    }
+    if (text !== lastFocusStatus) {
+      lastFocusStatus = text;
+      $('focus-status').textContent = text;
+    }
+  };
+  document.addEventListener('focusin', updateFocusStatus);
+  setInterval(updateFocusStatus, 250);
+  updateFocusStatus();
   renderSteps();
   fitFrames();
   new ResizeObserver(fitFrames).observe($('before-stage'));

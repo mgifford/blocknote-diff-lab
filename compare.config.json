@@ -5,36 +5,36 @@
     "branch": "main"
   },
   "comparison": {
-    "id": "keyboard-menu-baseline",
-    "title": "Keyboard navigation in the BlockNote editor",
-    "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/3208",
+    "id": "side-menu-keyboard-focus",
+    "title": "Side menu keyboard focus",
+    "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2854",
     "patchFile": null,
     "path": "/basic/minimal?hideMenu",
-    "description": "Demonstration baseline. In live mode Before and After are identical until an actual patch is supplied; the demo fixtures intentionally simulate a focus difference. Do not claim a fix without an observed difference.",
+    "description": "Verified baseline for #2854. With the side menu showing, Tab can focus a cloned Add block button and then drop focus to the document body; the live Add block button also ignores Enter and Space. After carries a local experimental patch that makes closing popover copies inert and activates Add block from the button. This is a partial fix: keyboard-only discovery of the side menu is not solved.",
     "steps": [
       {
-        "id": "open",
-        "instruction": "Focus the editor using the keyboard. Check whether the focused element is identifiable.",
-        "expectedBefore": "Record where focus lands in the unmodified editor.",
-        "expectedAfter": "Focus should reach the editor predictably; record whether the change affects it."
+        "id": "focus-entry",
+        "instruction": "Click into the editor, type two short paragraphs, and hover the first paragraph so the side menu appears. Leave the pointer over the block.",
+        "expectedBefore": "Record how the side menu appears and whether it is reachable without a pointer.",
+        "expectedAfter": "The side menu still appears on hover. Record whether anything about focus or activation changed."
       },
       {
-        "id": "format",
-        "instruction": "Select text using the keyboard and attempt to open and navigate the formatting toolbar.",
-        "expectedBefore": "Describe which toolbar controls can be reached, their names and the focus sequence.",
-        "expectedAfter": "The intended control should be keyboard-operable, with equivalent editing behavior."
+        "id": "tab-out",
+        "instruction": "With the caret in the hovered paragraph, press Tab. Check the focus status and the focused element immediately, then again after half a second.",
+        "expectedBefore": "Focus may land on a fading copy of Add block and then disappear. Record whether it reaches a real control.",
+        "expectedAfter": "Focus should reach the adjacent 'Focus after editor' button and stay there."
       },
       {
-        "id": "escape",
-        "instruction": "Close an open formatting or slash menu with Escape and continue editing.",
-        "expectedBefore": "Record whether focus returns to a usable editing position.",
-        "expectedAfter": "Focus should return to a usable editing position, with content preserved."
+        "id": "add-block",
+        "instruction": "With the side menu showing, focus 'Focus after editor', press Shift+Tab twice to reach the live Add block button, then press Enter and Space.",
+        "expectedBefore": "Record whether the suggestion menu opens from the keyboard.",
+        "expectedAfter": "The suggestion menu should open. Record whether focus remains usable."
       },
       {
-        "id": "modes",
-        "instruction": "Repeat the interaction at 320px, light, dark, forced-colours light and forced-colours dark.",
-        "expectedBefore": "Record any clipped controls, invisible focus indicators or confusing system-colour behavior.",
-        "expectedAfter": "Record what actually changed. Automated checks do not establish WCAG conformance."
+        "id": "conditions",
+        "instruction": "Repeat the focus and activation checks at 320px, light, dark, forced-colours light, forced-colours dark and reduced motion.",
+        "expectedBefore": "Record focus loss, invisible focus, or controls that cannot be activated.",
+        "expectedAfter": "Record what changed. Automated checks do not establish WCAG conformance, and keyboard-only discovery remains a manual check."
       }
     ]
   },
