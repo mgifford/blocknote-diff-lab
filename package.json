@@ -13,7 +13,8 @@
     "demo": "node bin/diff-lab.mjs demo",
     "capture": "node bin/diff-lab.mjs capture",
     "test": "node --test tests/*.test.mjs",
-    "pages:build": "node scripts/build-pages.mjs"
+    "pages:build": "node scripts/build-pages.mjs",
+    "pages:bundles": "bash scripts/build-static-bundles.sh"
   },
   "devDependencies": {
     "@playwright/test": "1.60.0",

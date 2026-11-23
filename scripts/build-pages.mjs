@@ -10,6 +10,10 @@ const evidence = path.join(root, 'issues', '2854', 'evidence');
 fs.rmSync(out, { recursive: true, force: true });
 fs.mkdirSync(assets, { recursive: true });
 fs.copyFileSync(path.join(root, 'pages', 'style.css'), path.join(out, 'style.css'));
+for (const side of ['before', 'after']) {
+  fs.cpSync(path.join(root, 'pages', side), path.join(out, side), { recursive: true });
+}
+fs.copyFileSync(path.join(root, 'pages', 'LICENSE-BlockNote.txt'), path.join(out, 'LICENSE-BlockNote.txt'));
 
 const files = [
   ['before/forced-light-menu.png', 'before-forced-light-menu.png'],

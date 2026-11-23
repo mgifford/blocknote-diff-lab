@@ -4,112 +4,233 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
-  <title>BlockNote #2854 — side-menu keyboard focus</title>
+  <title>BlockNote #2854 — before and after</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header>
-  <p class="eyebrow">BlockNote Accessibility Diff Lab · static evidence</p>
+  <p class="eyebrow">BlockNote Accessibility Diff Lab · static before/after</p>
   <h1>#2854 — side menu “Add block” and keyboard focus</h1>
-  <p class="lede">A verified BlockNote 0.57.0 defect: with the side menu showing, Tab can focus a cloned Add block button from a closing transition, Enter and Space do nothing, and focus falls to <code>document.body</code>. A two-file experimental patch stops the dead focus stop and restores button activation.</p>
-  <p class="meta">Upstream base: <code>9cb988ff94b60979bbbc62b0ded5cf62fdac88c8</code> (0.57.0) · Fixture: <code>4611ae1b</code> (local) · Browser: Chromium 148 / Playwright 1.60 · Recorded 2026-11-23</p>
+  <p class="lede" id="intro">Left: upstream BlockNote 0.57.0. Right: the same source with a two-file experimental patch. Both frames are built static editors; the problem, reproduction steps and results are below.</p>
+  <p class="meta">Upstream base <code>9cb988f</code> (0.57.0) · Fixture <code>4611ae1</code> (local) · After patch: two files · Recorded 2026-11-23</p>
   <p><span class="tag">Verified defect</span> <span class="tag">Experimental patch</span> <span class="tag">Partial fix</span></p>
 </header>
 
-<main id="main">
-  <div class="notice status-partial">
-    <strong>This is a static evidence report, not the live editor comparison.</strong>
-    GitHub Pages cannot run BlockNote’s Vite+ dev servers or the local Chromium CDP controller. The live before/after editors and forced-colours emulation run locally with the Diff Lab. The interactive viewer and the source are in the <a href="https://github.com/mgifford/blocknote-diff-lab">repository</a>.
-  </div>
-
-  <h2>Problem and affected users</h2>
-  <p>The side menu beside a block contains <strong>Add block</strong> (+) and <strong>Open block menu</strong> (six-dot). With the default editor:</p>
-  <ol>
-    <li>Hover a paragraph so the side menu appears and place the caret in that block.</li>
-    <li>Press Tab.</li>
-    <li>Focus lands on a cloned, non-interactive copy of Add block. Enter or Space does nothing.</li>
-    <li>About 250 ms later the copy is removed and focus falls to <code>document.body</code>.</li>
-  </ol>
-  <p>Keyboard-only users lose their place, screen-reader users hear a control that does not work, and switch/voice users cannot activate Add block from the keyboard. The live Add block button also ignores Enter and Space because its click handler is on the icon, not the button.</p>
-  <p><strong>WCAG 2.2 indicators:</strong> 2.1.1 Keyboard, 2.4.3 Focus Order, 2.4.7 Focus Visible, 4.1.2 Name, Role, Value. These are investigation targets, not a conformance finding.</p>
-
-  <h2>Before and after</h2>
-  <table>
-    <caption>Tab from the hovered first paragraph with the side menu showing</caption>
-    <thead>
-      <tr><th scope="col">Condition</th><th scope="col">Before</th><th scope="col">After the patch</th></tr>
-    </thead>
-    <tbody>
-      <tr><th scope="row">Light, 1280×840</th><td>Cloned Add block button → <code>BODY</code></td><td><code>#after-next</code> (“Focus after editor”), stays there</td></tr>
-      <tr><th scope="row">Dark</th><td>Cloned Add block button → <code>BODY</code></td><td><code>#after-next</code>, stays there</td></tr>
-      <tr><th scope="row">Forced colours light</th><td>Cloned Add block button → <code>BODY</code></td><td><code>#after-next</code>, stays there</td></tr>
-      <tr><th scope="row">Forced colours dark</th><td>Cloned Add block button → <code>BODY</code></td><td><code>#after-next</code>, stays there</td></tr>
-      <tr><th scope="row">Reduced motion</th><td>Cloned Add block button → <code>BODY</code></td><td><code>#after-next</code>, stays there</td></tr>
-      <tr><th scope="row">320×800 reflow</th><td>Cloned Add block button → <code>BODY</code></td><td><code>#after-next</code>, stays there</td></tr>
-    </tbody>
-  </table>
-  <p>Repeated light runs: Before 3/3 clone → <code>BODY</code>; After 3/3 next control immediately and after 450 ms. The clone has no React props. Pressing Enter or Space on the live Add block opens a suggestion menu only after the patch.</p>
-
-  <div class="grid">
-    <figure>
-      <img src="assets/before-forced-light-menu.png" alt="Before editor in forced-colours light, with the side menu Add block and block menu buttons visible beside the first paragraph.">
-      <figcaption>Before: the side menu is shown by pointer hover; the Add block button is not reliably keyboard-operable.</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/after-forced-light-after-tab.png" alt="After editor in forced-colours light, with focus on the host button after the editor rather than on a disappearing menu copy.">
-      <figcaption>After the patch: Tab leaves the editor for the adjacent focus target instead of the cloned menu.</figcaption>
-    </figure>
-  </div>
-
-  <h2>Root cause</h2>
-  <p>The core side-menu extension hides the menu on any keydown while the editor is focused. <code>SideMenuController</code> then removes the live children, and <code>GenericPopover</code> clones the last rendered DOM for the closing transition. That clone is still in the tab order. A separate bug attaches Add block’s <code>onClick</code> to the icon rather than the shared side-menu button.</p>
-
-  <h2>Experimental patch</h2>
-  <p>Two files in <code>packages/react</code>: mark closing popover snapshots <code>inert</code>, and move Add block activation to the button. The patch applies cleanly to the pinned base. It is not an upstream submission.</p>
-  <div class="links">
-    <a href="assets/2854.patch">Download the patch</a>
-    <a href="assets/fixture.patch">Download the viewer fixture patch</a>
-    <a href="assets/after-focus.json">After focus JSON</a>
-    <a href="assets/before-focus.json">Before focus JSON</a>
-    <a href="assets/after-activation.json">After activation JSON</a>
-    <a href="assets/before-activation.json">Before activation JSON</a>
-    <a href="https://github.com/mgifford/blocknote-diff-lab/tree/main/issues/2854">Full investigation</a>
-  </div>
-  <details>
-    <summary>Show the two-file patch</summary>
-    <pre><code>{{PATCH}}</code></pre>
-  </details>
-
-  <h2>Reproduction steps</h2>
-  <ol>
-    <li>Open the live comparison locally with the Diff Lab: <code>node bin/diff-lab.mjs start</code>.</li>
-    <li>Both editors start with the shared two-paragraph fixture. Hover the first paragraph and click it to place the caret.</li>
-    <li>Press Tab. In Before, focus stays inside the editor after the dead clone disappears; in After, focus reaches <strong>Focus after editor</strong>.</li>
-    <li>With the side menu showing, focus <strong>Focus after editor</strong>, press Shift+Tab twice to reach Add block, then press Enter and Space. The suggestion menu opens only in After.</li>
-    <li>Repeat at 320px, light, dark, forced-colours light/dark and reduced motion.</li>
-  </ol>
-
-  <h2>Limits</h2>
-  <ul>
-    <li>This is a <strong>partial</strong> fix. It prevents focus loss and fixes button activation, but it does not make the side menu discoverable by keyboard alone; that interaction still needs a maintainer decision.</li>
-    <li>Only the default Mantine UI and Chromium 148 were exercised. Ariakit, shadcn, Firefox and Safari are unverified.</li>
-    <li>No human screen-reader session was recorded.</li>
-    <li>The proposed upstream regression test has not been run because BlockNote requires its browser suite to run in Docker.</li>
-    <li>axe-core and Lighthouse are not used to claim a pass for this focus-order defect.</li>
+<nav class="changes" aria-labelledby="changes-h">
+  <h2 id="changes-h">Changes you can compare</h2>
+  <ul id="changes">
+    <li data-slug="2854" aria-current="true">
+      <a class="main" href="#variant=2854&amp;page=minimal">Side menu focus and Add block activation</a>
+      <p>Closing popover snapshots are made inert, and Add block activation is moved from the icon to the button. Stops Tab landing on a dead clone and restores Enter/Space.</p>
+      <p class="meta">2 files differ · Partial fix · No upstream PR</p>
+    </li>
   </ul>
+</nav>
 
-  <h2>Run the live lab</h2>
-  <p>The live comparison, forced-colours emulation, capture reports and issue scripts are in the <a href="https://github.com/mgifford/blocknote-diff-lab">BlockNote Accessibility Diff Lab</a>. Start with the README’s local workflow; GitHub Pages intentionally hosts only this static report.</p>
+<section class="controls" aria-label="Comparison controls">
+  <div>
+    <label for="variant">Compare upstream with</label>
+    <select id="variant"><option value="2854">Side menu focus + activation</option></select>
+  </div>
+  <div>
+    <label for="page">Editor page</label>
+    <select id="page"><option value="minimal">Minimal editor (two-paragraph fixture)</option></select>
+  </div>
+  <fieldset>
+    <legend>Editor theme (reloads both frames)</legend>
+    <button type="button" data-theme="light">Light</button>
+    <button type="button" data-theme="dark">Dark</button>
+    <button type="button" data-theme="auto">Follow OS</button>
+  </fieldset>
+  <fieldset>
+    <legend>Frame width</legend>
+    <label><input type="radio" name="w" value="calc(50% - .5rem)" checked> Half</label>
+    <label><input type="radio" name="w" value="390px"> Phone</label>
+    <label><input type="radio" name="w" value="820px"> Tablet</label>
+  </fieldset>
+  <label><input type="checkbox" id="syncscroll" checked> Sync scrolling</label>
+</section>
 
-  <figure>
-    <img src="assets/viewer-fixture.png" alt="The full BlockNote Diff Lab viewer showing the seeded two-paragraph fixture in Before and After, focus before/after editor buttons around each pane, a focus status line reading Focus after editor, and the reproduction steps.">
-    <figcaption>The local live viewer with the seeded fixture and real focus targets. This interactive view requires the local Vite+ servers and is not available on GitHub Pages.</figcaption>
-  </figure>
+<p class="status" id="status" role="status"></p>
+
+<div class="panes">
+  <section class="pane" aria-labelledby="hb">
+    <div class="panehead"><h2 id="hb">Before (upstream)</h2><a id="open-before" target="_blank" rel="noopener" href="before/index.html">Open before in a new window</a></div>
+    <div class="pane-focus-controls prev"><button id="before-prev" type="button">Focus before editor</button></div>
+    <iframe id="before" title="Before: upstream BlockNote editor"></iframe>
+    <div class="pane-focus-controls next"><button id="before-next" type="button">Focus after editor</button></div>
+  </section>
+  <section class="pane" aria-labelledby="ha">
+    <div class="panehead"><h2 id="ha">After (with the patch)</h2><a id="open-after" target="_blank" rel="noopener" href="after/index.html">Open after in a new window</a></div>
+    <div class="pane-focus-controls prev"><button id="after-prev" type="button">Focus before editor</button></div>
+    <iframe id="after" title="After: patched BlockNote editor"></iframe>
+    <div class="pane-focus-controls next"><button id="after-next" type="button">Focus after editor</button></div>
+  </section>
+</div>
+<p id="focus-status" class="status">Keyboard focus: not in a preview control.</p>
+
+<main id="main">
+  <section class="info" aria-labelledby="info-h">
+    <h2 id="info-h">What this compares</h2>
+    <p>Both frames are built from the same BlockNote source and the same two-paragraph fixture. The After frame differs only by the experimental patch (two files in <code>packages/react</code>). The left frame is the unmodified baseline.</p>
+    <h3>The problem</h3>
+    <p>With the side menu showing and the caret in a block, Tab can focus a cloned Add block button from the closing transition. That copy has no React handlers; Enter and Space do nothing, and about 250 ms later it is removed and focus falls to the document body. The live Add block button also ignores Enter and Space because its click handler is on the icon.</p>
+    <h3>Steps to replicate</h3>
+    <ol>
+      <li>Hover the first paragraph in either frame so the side menu appears, then click it to place the caret.</li>
+      <li>Press Tab. Compare where focus lands in Before and After; the focus status reports the active control inside the frames.</li>
+      <li>With the side menu showing, focus <strong>Focus after editor</strong>, press Shift+Tab twice to reach Add block, then press Enter and Space.</li>
+      <li>Use the theme and width controls; test the keyboard separately in each frame. Tab and Enter are not mirrored.</li>
+    </ol>
+    <h3>What to expect</h3>
+    <table>
+      <caption>Observed in the local lab; the static frames reproduce the same DOM and focus behavior</caption>
+      <thead><tr><th scope="col">Check</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Tab from the hovered first paragraph</th><td>Cloned Add block button → focus falls to <code>body</code></td><td>Adjacent “Focus after editor” control; focus stays there</td></tr>
+        <tr><th scope="row">Enter or Space on the live Add block</th><td>No suggestion menu</td><td>One suggestion menu</td></tr>
+        <tr><th scope="row">Light / dark / reduced motion / 320px</th><td>Same focus loss in all tested conditions</td><td>Same next-control result in all tested conditions</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Important:</strong> the static build does not emulate forced colours or CDP media preferences. Use the local Diff Lab for forced-colours light/dark, reduced motion, capture and controlled Chromium. The theme buttons here force the editor’s Mantine theme; they do not claim to reproduce OS contrast themes.</p>
+    <div class="links">
+      <a href="assets/2854.patch">Download the patch</a>
+      <a href="assets/fixture.patch">Download the fixture patch</a>
+      <a href="assets/before-focus.json">Before focus JSON</a>
+      <a href="assets/after-focus.json">After focus JSON</a>
+      <a href="assets/before-activation.json">Before activation JSON</a>
+      <a href="assets/after-activation.json">After activation JSON</a>
+      <a href="https://github.com/mgifford/blocknote-diff-lab/tree/main/issues/2854">Full investigation</a>
+    </div>
+  </section>
+
+  <section class="diff" aria-labelledby="diff-h">
+    <h2 id="diff-h">What differs in the built editor</h2>
+    <p>Both sides share the fixture and build. The After bundle differs only by this source patch; generated asset filenames also change because the bundles are content-addressed.</p>
+    <pre><code>{{PATCH}}</code></pre>
+  </section>
+
+  <section class="info" aria-labelledby="limits-h">
+    <h2 id="limits-h">Limits and provenance</h2>
+    <ul>
+      <li>This is a <strong>partial</strong> fix: it prevents focus loss and fixes activation, but the side menu is still only revealed by pointer hover. Keyboard-only discovery needs a maintainer decision.</li>
+      <li>Only the default Mantine UI and Chromium were exercised. Ariakit, shadcn, Firefox and Safari are unverified; no human screen-reader session was recorded.</li>
+      <li>The proposed upstream regression test is in the repository but has not been run because BlockNote requires its browser suite to run in Docker.</li>
+      <li>Static bundles are prebuilt from upstream <code>9cb988ff94b60979bbbc62b0ded5cf62fdac88c8</code> plus local fixture <code>4611ae1b</code> and committed to <code>pages/before</code>/<code>pages/after</code>; the Pages workflow assembles the page but does not rebuild BlockNote. BlockNote remains MPL-2.0; see <a href="LICENSE-BlockNote.txt">LICENSE-BlockNote.txt</a>.</li>
+      <li>No upstream BlockNote PR was opened. This is a local experimental comparison, not a conformance claim.</li>
+    </ul>
+  </section>
 </main>
 
 <footer>
-  <p>Lab-authored code is MIT-licensed. BlockNote source and the experimental patch remain under BlockNote’s MPL-2.0 terms. This report contains partial accessibility evidence, not a WCAG conformance claim. No upstream BlockNote PR was opened.</p>
+  <p>Frames share one origin, so scrolling and the focus readout stay in step. Navigation, Tab and Enter are not mirrored: test each frame independently. The focus controls outside the iframes are real host-page targets, not simulated key events.</p>
+  <p>Lab-authored comparison code is MIT-licensed. BlockNote source and the experimental patch remain under BlockNote’s MPL-2.0 terms. Modeled on the <a href="https://mgifford.github.io/FOSDEM-website/compare/">FOSDEM before/after comparator</a>.</p>
 </footer>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const frames = { before: $('before'), after: $('after') };
+  const params = new URLSearchParams(location.hash.slice(1));
+  const state = {
+    variant: params.get('variant') || '2854',
+    page: params.get('page') || 'minimal',
+    theme: params.get('theme') || 'auto',
+  };
+  if (!['light', 'dark', 'auto'].includes(state.theme)) state.theme = 'auto';
+
+  const frameSrc = (side) => {
+    const query = state.theme === 'auto' ? '' : `?theme=${state.theme}`;
+    return `${side}/index.html${query}`;
+  };
+
+  function applyState(reload = true) {
+    $('variant').value = state.variant;
+    $('page').value = state.page;
+    for (const button of document.querySelectorAll('[data-theme]')) {
+      button.setAttribute('aria-pressed', String(button.dataset.theme === state.theme));
+    }
+    for (const side of ['before', 'after']) {
+      const src = frameSrc(side);
+      if (reload && frames[side].getAttribute('src') !== src) frames[side].src = src;
+      $(`open-${side}`).href = src;
+    }
+    const suffix = state.theme === 'auto' ? '' : `&theme=${state.theme}`;
+    history.replaceState(null, '', `#variant=${state.variant}&page=${state.page}${suffix}`);
+    $('status').textContent = `Showing ${state.page === 'minimal' ? 'the minimal editor' : state.page}. Both frames are static builds.`;
+  }
+
+  $('variant').addEventListener('change', (event) => { state.variant = event.target.value; applyState(); });
+  $('page').addEventListener('change', (event) => { state.page = event.target.value; applyState(); });
+  for (const button of document.querySelectorAll('[data-theme]')) {
+    button.addEventListener('click', () => { state.theme = button.dataset.theme; applyState(); });
+  }
+  for (const radio of document.querySelectorAll('input[name="w"]')) {
+    radio.addEventListener('change', () => {
+      document.querySelector('.panes').style.setProperty('--w', radio.value);
+    });
+  }
+
+  // Sync scrolling between the same-origin frames.
+  let syncing = false;
+  const sync = (from, to) => {
+    from.addEventListener('scroll', () => {
+      if (!$('syncscroll').checked || syncing) return;
+      syncing = true;
+      to.scrollTo(0, from.scrollY);
+      setTimeout(() => { syncing = false; }, 0);
+    }, { passive: true });
+  };
+  for (const side of ['before', 'after']) {
+    frames[side].addEventListener('load', () => {
+      try {
+        const from = frames[side].contentWindow;
+        const to = frames[side === 'before' ? 'after' : 'before'].contentWindow;
+        if (from && to) sync(from, to);
+        frames[side].contentDocument?.addEventListener('focusin', updateFocus);
+      } catch { /* frames are same-origin; ignore transient navigations */ }
+    });
+  }
+
+  const targetNames = {
+    'before-prev': 'Focus before editor (Before)',
+    'before-next': 'Focus after editor (Before)',
+    'after-prev': 'Focus before editor (After)',
+    'after-next': 'Focus after editor (After)',
+  };
+  let lastFocus = '';
+  function focusText() {
+    const parent = document.activeElement;
+    if (parent && targetNames[parent.id]) return `Keyboard focus: ${targetNames[parent.id]}.`;
+    for (const side of ['before', 'after']) {
+      if (parent === frames[side]) {
+        try {
+          const doc = frames[side].contentDocument;
+          const active = doc && doc.activeElement;
+          if (active && active !== doc.body) {
+            const label = active.getAttribute('aria-label') || active.id || active.tagName.toLowerCase();
+            const dead = Boolean(active.closest('.bn-side-menu')) && !Object.keys(active).some((key) => key.startsWith('__reactProps$'));
+            return `Keyboard focus: inside the ${side} editor — ${label}${dead ? ' (non-interactive closing copy)' : ''}.`;
+          }
+        } catch { /* ignore */ }
+        return `Keyboard focus: inside the ${side} editor frame; no visible control is focused.`;
+      }
+    }
+    return 'Keyboard focus: not in a preview control.';
+  }
+  const updateFocus = () => {
+    const text = focusText();
+    if (text !== lastFocus) {
+      lastFocus = text;
+      $('focus-status').textContent = text;
+    }
+  };
+  document.addEventListener('focusin', updateFocus);
+  setInterval(updateFocus, 250);
+  applyState();
+  updateFocus();
+})();
+</script>
 </body>
 </html>
