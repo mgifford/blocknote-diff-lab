@@ -1,0 +1,18 @@
+[
+  {
+    "side": "before",
+    "viewport": "320x800",
+    "menuShown": true,
+    "active": {
+      "tag": "BUTTON",
+      "id": "",
+      "ariaLabel": "Add block",
+      "inSideMenu": true
+    },
+    "later": {
+      "tag": "BODY",
+      "id": "",
+      "inSideMenu": false
+    }
+  }
+]

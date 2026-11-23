@@ -1,0 +1,71 @@
+{
+  "issue": 2854,
+  "title": "Side menu Add block keyboard focus and activation",
+  "upstream": {
+    "repository": "https://github.com/TypeCellOS/BlockNote",
+    "sha": "9cb988ff94b60979bbbc62b0ded5cf62fdac88c8",
+    "version": "0.57.0"
+  },
+  "ports": {
+    "before": 5173,
+    "after": 5174
+  },
+  "environment": {
+    "browser": "Chromium 148.0.7778.96",
+    "playwright": "1.60.0",
+    "os": "macOS arm64",
+    "viewport": [1280, 840]
+  },
+  "steps": [
+    "Open /basic/minimal?hideMenu in the default Mantine editor.",
+    "Type 'First paragraph', press Enter, type 'Second paragraph'.",
+    "Insert focusable host buttons before and after .bn-container.",
+    "Hover the first paragraph and click it to place the caret.",
+    "Wait for .bn-side-menu to be visible and verify the Add block button is live (has React props).",
+    "Ensure document.activeElement is .bn-editor.",
+    "Press Tab and record document.activeElement immediately and after 450 ms.",
+    "Separately focus the live Add block button and press Enter or Space.",
+    "Separately focus #after-editor, press Shift+Tab twice to reach the live Add block, and press Enter."
+  ],
+  "selectors": {
+    "editor": ".bn-editor",
+    "sideMenu": ".bn-side-menu",
+    "addBlock": "button[aria-label='Add block']",
+    "beforeControl": "#before-editor",
+    "afterControl": "#after-editor",
+    "suggestionMenu": ".bn-suggestion-menu, [role='listbox']"
+  },
+  "conditions": [
+    "light",
+    "dark",
+    "forced-light",
+    "forced-dark",
+    "reduced-motion",
+    "reflow-320"
+  ],
+  "assertions": {
+    "before": {
+      "tabImmediate": "A button inside .bn-side-menu with aria-label 'Add block' and no __reactProps key",
+      "tabAfter450ms": "document.body",
+      "enterOnLiveAdd": "no suggestion menu",
+      "spaceOnLiveAdd": "no suggestion menu"
+    },
+    "after": {
+      "tabImmediate": "#after-editor",
+      "tabAfter450ms": "#after-editor",
+      "enterOnLiveAdd": "one suggestion menu",
+      "spaceOnLiveAdd": "one suggestion menu"
+    }
+  },
+  "scripts": {
+    "focus": "scripts/focus.mjs <out.json>",
+    "modes": "scripts/modes.mjs <out.json>",
+    "activation": "scripts/activation.mjs <port> <out.json>",
+    "keyboardRoute": "scripts/keyboard-route.mjs <port> <out.json>",
+    "reflow320": "scripts/reflow-320.mjs <out.json>"
+  },
+  "evidence": {
+    "before": "evidence/before/",
+    "after": "evidence/after/"
+  }
+}

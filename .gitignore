@@ -1,5 +1,7 @@
 .lab/
 .pnpm-store/
 node_modules/
-reports/
+reports/*
+!reports/ISSUE-INVENTORY.md
+!reports/issue-inventory.json
 .DS_Store

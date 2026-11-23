@@ -1,0 +1,14 @@
+{
+  "side": "before",
+  "active": {
+    "tag": "BUTTON",
+    "id": "",
+    "ariaLabel": "Add block",
+    "inSideMenu": true,
+    "reactProps": 1
+  },
+  "afterEnter": {
+    "suggestionMenus": 0,
+    "active": "BUTTON"
+  }
+}

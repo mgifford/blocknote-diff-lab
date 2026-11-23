@@ -1,0 +1,137 @@
+[
+  {
+    "side": "before",
+    "mode": "light",
+    "preTab": {
+      "activeIsEditor": true,
+      "liveAdd": true,
+      "sideMenus": 1
+    },
+    "immediate": {
+      "tag": "BUTTON",
+      "id": "",
+      "ariaLabel": "Add block",
+      "inSideMenu": true,
+      "reactProps": 0
+    },
+    "later": {
+      "tag": "BODY",
+      "id": "",
+      "ariaLabel": null,
+      "inSideMenu": false
+    },
+    "observed": {
+      "forcedColors": false,
+      "dark": false,
+      "reducedMotion": false
+    }
+  },
+  {
+    "side": "before",
+    "mode": "dark",
+    "preTab": {
+      "activeIsEditor": true,
+      "liveAdd": true,
+      "sideMenus": 1
+    },
+    "immediate": {
+      "tag": "BUTTON",
+      "id": "",
+      "ariaLabel": "Add block",
+      "inSideMenu": true,
+      "reactProps": 0
+    },
+    "later": {
+      "tag": "BODY",
+      "id": "",
+      "ariaLabel": null,
+      "inSideMenu": false
+    },
+    "observed": {
+      "forcedColors": false,
+      "dark": true,
+      "reducedMotion": false
+    }
+  },
+  {
+    "side": "before",
+    "mode": "forced-light",
+    "preTab": {
+      "activeIsEditor": true,
+      "liveAdd": true,
+      "sideMenus": 1
+    },
+    "immediate": {
+      "tag": "BUTTON",
+      "id": "",
+      "ariaLabel": "Add block",
+      "inSideMenu": true,
+      "reactProps": 0
+    },
+    "later": {
+      "tag": "BODY",
+      "id": "",
+      "ariaLabel": null,
+      "inSideMenu": false
+    },
+    "observed": {
+      "forcedColors": true,
+      "dark": false,
+      "reducedMotion": false
+    }
+  },
+  {
+    "side": "before",
+    "mode": "forced-dark",
+    "preTab": {
+      "activeIsEditor": true,
+      "liveAdd": true,
+      "sideMenus": 1
+    },
+    "immediate": {
+      "tag": "BUTTON",
+      "id": "",
+      "ariaLabel": "Add block",
+      "inSideMenu": true,
+      "reactProps": 0
+    },
+    "later": {
+      "tag": "BODY",
+      "id": "",
+      "ariaLabel": null,
+      "inSideMenu": false
+    },
+    "observed": {
+      "forcedColors": true,
+      "dark": true,
+      "reducedMotion": false
+    }
+  },
+  {
+    "side": "before",
+    "mode": "reduced-motion",
+    "preTab": {
+      "activeIsEditor": true,
+      "liveAdd": true,
+      "sideMenus": 1
+    },
+    "immediate": {
+      "tag": "BUTTON",
+      "id": "",
+      "ariaLabel": "Add block",
+      "inSideMenu": true,
+      "reactProps": 0
+    },
+    "later": {
+      "tag": "BODY",
+      "id": "",
+      "ariaLabel": null,
+      "inSideMenu": false
+    },
+    "observed": {
+      "forcedColors": false,
+      "dark": false,
+      "reducedMotion": true
+    }
+  }
+]

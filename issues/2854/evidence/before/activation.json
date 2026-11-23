@@ -1,0 +1,22 @@
+{
+  "side": "before",
+  "port": 5173,
+  "enter": {
+    "key": "Enter",
+    "buttonInfo": {
+      "reactProps": 1,
+      "tabIndex": 0
+    },
+    "suggestionMenus": 0,
+    "active": "Add block"
+  },
+  "space": {
+    "key": "Space",
+    "buttonInfo": {
+      "reactProps": 1,
+      "tabIndex": 0
+    },
+    "suggestionMenus": 0,
+    "active": "Add block"
+  }
+}

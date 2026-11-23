@@ -1,0 +1,31 @@
+{
+  "id": "2854-side-menu-focus",
+  "issue": 2854,
+  "route": "/basic/minimal?hideMenu",
+  "editor": "default Mantine BlockNote editor",
+  "initialContent": [
+    {
+      "id": "first",
+      "type": "paragraph",
+      "content": "First paragraph"
+    },
+    {
+      "id": "second",
+      "type": "paragraph",
+      "content": "Second paragraph"
+    }
+  ],
+  "hostControls": [
+    {
+      "id": "before-editor",
+      "position": "before .bn-container",
+      "label": "Before editor"
+    },
+    {
+      "id": "after-editor",
+      "position": "after .bn-container",
+      "label": "After editor"
+    }
+  ],
+  "note": "The current /basic/minimal example starts empty, so the reproduction scripts type the blocks. A future fixture route should pass initialContent and render the same host controls identically in both worktrees."
+}

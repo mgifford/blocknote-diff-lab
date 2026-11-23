@@ -1,0 +1,137 @@
+[
+  {
+    "side": "after",
+    "mode": "light",
+    "preTab": {
+      "activeIsEditor": true,
+      "liveAdd": true,
+      "sideMenus": 1
+    },
+    "immediate": {
+      "tag": "BUTTON",
+      "id": "after-editor",
+      "ariaLabel": null,
+      "inSideMenu": false,
+      "reactProps": 0
+    },
+    "later": {
+      "tag": "BUTTON",
+      "id": "after-editor",
+      "ariaLabel": null,
+      "inSideMenu": false
+    },
+    "observed": {
+      "forcedColors": false,
+      "dark": false,
+      "reducedMotion": false
+    }
+  },
+  {
+    "side": "after",
+    "mode": "dark",
+    "preTab": {
+      "activeIsEditor": true,
+      "liveAdd": true,
+      "sideMenus": 1
+    },
+    "immediate": {
+      "tag": "BUTTON",
+      "id": "after-editor",
+      "ariaLabel": null,
+      "inSideMenu": false,
+      "reactProps": 0
+    },
+    "later": {
+      "tag": "BUTTON",
+      "id": "after-editor",
+      "ariaLabel": null,
+      "inSideMenu": false
+    },
+    "observed": {
+      "forcedColors": false,
+      "dark": true,
+      "reducedMotion": false
+    }
+  },
+  {
+    "side": "after",
+    "mode": "forced-light",
+    "preTab": {
+      "activeIsEditor": true,
+      "liveAdd": true,
+      "sideMenus": 1
+    },
+    "immediate": {
+      "tag": "BUTTON",
+      "id": "after-editor",
+      "ariaLabel": null,
+      "inSideMenu": false,
+      "reactProps": 0
+    },
+    "later": {
+      "tag": "BUTTON",
+      "id": "after-editor",
+      "ariaLabel": null,
+      "inSideMenu": false
+    },
+    "observed": {
+      "forcedColors": true,
+      "dark": false,
+      "reducedMotion": false
+    }
+  },
+  {
+    "side": "after",
+    "mode": "forced-dark",
+    "preTab": {
+      "activeIsEditor": true,
+      "liveAdd": true,
+      "sideMenus": 1
+    },
+    "immediate": {
+      "tag": "BUTTON",
+      "id": "after-editor",
+      "ariaLabel": null,
+      "inSideMenu": false,
+      "reactProps": 0
+    },
+    "later": {
+      "tag": "BUTTON",
+      "id": "after-editor",
+      "ariaLabel": null,
+      "inSideMenu": false
+    },
+    "observed": {
+      "forcedColors": true,
+      "dark": true,
+      "reducedMotion": false
+    }
+  },
+  {
+    "side": "after",
+    "mode": "reduced-motion",
+    "preTab": {
+      "activeIsEditor": true,
+      "liveAdd": true,
+      "sideMenus": 1
+    },
+    "immediate": {
+      "tag": "BUTTON",
+      "id": "after-editor",
+      "ariaLabel": null,
+      "inSideMenu": false,
+      "reactProps": 0
+    },
+    "later": {
+      "tag": "BUTTON",
+      "id": "after-editor",
+      "ariaLabel": null,
+      "inSideMenu": false
+    },
+    "observed": {
+      "forcedColors": false,
+      "dark": false,
+      "reducedMotion": true
+    }
+  }
+]

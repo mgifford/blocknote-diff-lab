@@ -1,0 +1,71 @@
+[
+  {
+    "side": "before",
+    "run": 1,
+    "preTab": {
+      "active": "tiptap ProseMirror bn-editor bn-default-styles placeholder-selector-d690b516-5336-482a-846c-4af48c408037 ProseMirror-focused",
+      "activeIsEditor": true,
+      "liveAdd": true,
+      "sideMenus": 1
+    },
+    "immediate": {
+      "tag": "BUTTON",
+      "id": "",
+      "ariaLabel": "Add block",
+      "inSideMenu": true,
+      "reactProps": 0
+    },
+    "later": {
+      "tag": "BODY",
+      "id": "",
+      "ariaLabel": null,
+      "inSideMenu": false
+    }
+  },
+  {
+    "side": "before",
+    "run": 2,
+    "preTab": {
+      "active": "tiptap ProseMirror bn-editor bn-default-styles placeholder-selector-c770b205-dcfb-4dae-8f59-cfec3b227524 ProseMirror-focused",
+      "activeIsEditor": true,
+      "liveAdd": true,
+      "sideMenus": 1
+    },
+    "immediate": {
+      "tag": "BUTTON",
+      "id": "",
+      "ariaLabel": "Add block",
+      "inSideMenu": true,
+      "reactProps": 0
+    },
+    "later": {
+      "tag": "BODY",
+      "id": "",
+      "ariaLabel": null,
+      "inSideMenu": false
+    }
+  },
+  {
+    "side": "before",
+    "run": 3,
+    "preTab": {
+      "active": "tiptap ProseMirror bn-editor bn-default-styles placeholder-selector-340ffadb-01ff-4694-bb15-3cd8b08587bf ProseMirror-focused",
+      "activeIsEditor": true,
+      "liveAdd": true,
+      "sideMenus": 1
+    },
+    "immediate": {
+      "tag": "BUTTON",
+      "id": "",
+      "ariaLabel": "Add block",
+      "inSideMenu": true,
+      "reactProps": 0
+    },
+    "later": {
+      "tag": "BODY",
+      "id": "",
+      "ariaLabel": null,
+      "inSideMenu": false
+    }
+  }
+]

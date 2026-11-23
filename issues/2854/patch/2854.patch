@@ -1,0 +1,41 @@
+diff --git a/packages/react/src/components/Popovers/GenericPopover.tsx b/packages/react/src/components/Popovers/GenericPopover.tsx
+index 2eb5808..80ab35b 100644
+--- a/packages/react/src/components/Popovers/GenericPopover.tsx
++++ b/packages/react/src/components/Popovers/GenericPopover.tsx
+@@ -235,13 +235,19 @@ export const GenericPopover = (
+       return;
+     }
+ 
++    const wrapper = ref.current;
++    // The snapshot is only for the closing transition. It must never become
++    // a tab stop after the live popover has closed: Tab can otherwise focus
++    // a button inside the copy, which is then removed and drops focus.
++    wrapper.setAttribute("inert", "");
+     const nodes = [...snapshot.current];
+-    ref.current.append(...nodes);
++    wrapper.append(...nodes);
+ 
+     return () => {
+       for (const node of nodes) {
+         node.parentNode?.removeChild(node);
+       }
++      wrapper.removeAttribute("inert");
+     };
+   }, [status]);
+ 
+diff --git a/packages/react/src/components/SideMenu/DefaultButtons/AddBlockButton.tsx b/packages/react/src/components/SideMenu/DefaultButtons/AddBlockButton.tsx
+index ac1209f..26fc8bc 100644
+--- a/packages/react/src/components/SideMenu/DefaultButtons/AddBlockButton.tsx
++++ b/packages/react/src/components/SideMenu/DefaultButtons/AddBlockButton.tsx
+@@ -55,9 +55,8 @@ export const AddBlockButton = () => {
+     <Components.SideMenu.Button
+       className={"bn-button"}
+       label={dict.side_menu.add_block_label}
+-      icon={
+-        <AiOutlinePlus size={24} onClick={onClick} data-test="dragHandleAdd" />
+-      }
++      onClick={onClick}
++      icon={<AiOutlinePlus size={24} data-test="dragHandleAdd" />}
+     />
+   );
+ };

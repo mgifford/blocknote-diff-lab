@@ -1,0 +1,441 @@
+{
+  "generatedAt": "2026-11-23",
+  "source": {
+    "repository": "https://github.com/TypeCellOS/BlockNote",
+    "sha": "9cb988ff94b60979bbbc62b0ded5cf62fdac88c8",
+    "version": "0.57.0",
+    "branch": "main"
+  },
+  "environment": {
+    "os": "macOS arm64",
+    "node": "24.15.0",
+    "pnpm": "11.8.0",
+    "playwright": "1.60.0",
+    "chromium": "148.0.7778.96 (revision 1223)",
+    "install": "filtered @blocknote/example-editor graph; 20 of 128 workspace projects",
+    "worktrees": ".lab/worktrees/before, .lab/worktrees/after"
+  },
+  "method": "gh issue view and timeline API on 2026-11-23; source inspection; real-keyboard Playwright reproduction of #2854 in Chromium; no full monorepo install and no Docker e2e run",
+  "issues": [
+    {
+      "number": 2854,
+      "title": "Side menu \"Add block\" (+) not usable with keyboard",
+      "state": "OPEN",
+      "priority": "P1",
+      "classification": "verified-defect",
+      "reproductionConfidence": "verified",
+      "components": [
+        "packages/core/src/extensions/SideMenu/SideMenu.ts",
+        "packages/react/src/components/SideMenu/SideMenuController.tsx",
+        "packages/react/src/components/SideMenu/DefaultButtons/AddBlockButton.tsx",
+        "packages/react/src/components/Popovers/GenericPopover.tsx",
+        "packages/{mantine,ariakit,shadcn}/src/sideMenu/SideMenuButton.tsx"
+      ],
+      "remediation": "Make closing popover snapshots inert; move Add block activation to the button; decide a non-conflicting keyboard route to the live menu",
+      "complexity": "M",
+      "upstreamActivity": "Maintainer discussion 2026-06-17; detailed reproduction 2026-10-30; no fix PR",
+      "wcag": [
+        "2.1.1",
+        "2.4.3",
+        "2.4.7",
+        "4.1.2"
+      ],
+      "testTypes": [
+        "keyboard",
+        "focus",
+        "forced-colours",
+        "reduced-motion",
+        "screen-reader"
+      ],
+      "fixtureSuitable": true,
+      "nextAction": "Prototype inert closing copy plus button activation; add regression test; obtain maintainer decision on keyboard route",
+      "url": "https://github.com/TypeCellOS/BlockNote/issues/2854",
+      "reportedVersions": "0.56.0, 0.57.0 (reported); reproduced on 0.57.0"
+    },
+    {
+      "number": 977,
+      "title": "Tab does not work when highlighting multiple items",
+      "state": "OPEN",
+      "priority": "P3",
+      "classification": "reported-not-reproduced",
+      "reproductionConfidence": "not-reproduced",
+      "components": [
+        "packages/core/src/extensions/tiptap-extensions/KeyboardShortcuts/KeyboardShortcutsExtension.ts",
+        "packages/core/src/extensions/SideMenu/MultipleNodeSelection.ts",
+        "block nesting commands"
+      ],
+      "remediation": "Define the intended Tab behaviour per selection state; fix checklist/video overrides without breaking toolbar focus or Shift+Tab",
+      "complexity": "M",
+      "upstreamActivity": "Maintainer says toolbar focus is intentional; some blocks override Tab; assigned to a11y work",
+      "wcag": [
+        "2.1.1",
+        "2.4.3"
+      ],
+      "testTypes": [
+        "keyboard",
+        "selection",
+        "undo-redo"
+      ],
+      "fixtureSuitable": true,
+      "nextAction": "Build a state matrix: caret, text selection, multi-block, list selection, leaving the editor",
+      "url": "https://github.com/TypeCellOS/BlockNote/issues/977",
+      "reportedVersions": "not stated (report dates from 2024)"
+    },
+    {
+      "number": 2822,
+      "title": "Missing alternative text field for images",
+      "state": "OPEN",
+      "priority": "P1",
+      "classification": "fix-in-review",
+      "reproductionConfidence": "reported-high",
+      "components": [
+        "packages/core/src/blocks/File/block.ts",
+        "packages/core/src/blocks/File/helpers/",
+        "packages/react/src/blocks/Image/",
+        "image/file toolbar"
+      ],
+      "remediation": "Dedicated alternative-text property and authoring control, distinct from caption; preserve through import/export and transformations",
+      "complexity": "L",
+      "upstreamActivity": "PR #3337 open; reporter tested the alt field and reported remaining concerns",
+      "wcag": [
+        "1.1.1"
+      ],
+      "testTypes": [
+        "authoring",
+        "keyboard",
+        "serialization",
+        "screen-reader"
+      ],
+      "fixtureSuitable": true,
+      "nextAction": "Validate PR #3337 and add import/export/keyboard regression coverage",
+      "url": "https://github.com/TypeCellOS/BlockNote/issues/2822",
+      "reportedVersions": "not stated; reporter tested PR #3337"
+    },
+    {
+      "number": 2825,
+      "title": "Table headers are not associated with data cells",
+      "state": "OPEN",
+      "priority": "P1",
+      "classification": "fix-in-review",
+      "reproductionConfidence": "reported-high",
+      "components": [
+        "packages/core/src/blocks/Table/block.ts",
+        "packages/core/src/blocks/Table/TableExtension.ts",
+        "table decorations and HTML export"
+      ],
+      "remediation": "Add native scope/headers relationships for simple tables; preserve through editing and export",
+      "complexity": "M",
+      "upstreamActivity": "PR #3215 open; maintainer notes axe does not flag it and asks for concrete screen-reader callouts",
+      "wcag": [
+        "1.3.1"
+      ],
+      "testTypes": [
+        "semantic-dom",
+        "screen-reader",
+        "serialization"
+      ],
+      "fixtureSuitable": true,
+      "nextAction": "Validate PR #3215 with screen-reader table navigation and export tests",
+      "url": "https://github.com/TypeCellOS/BlockNote/issues/2825",
+      "reportedVersions": "not stated; covered by open PR #3215"
+    },
+    {
+      "number": 2809,
+      "title": "Structure document lists correctly in reading mode",
+      "state": "OPEN",
+      "priority": "P1",
+      "classification": "downstream-and-upstream-architecture",
+      "reproductionConfidence": "reported-medium",
+      "components": [
+        "packages/core/src/blocks/ListItem/",
+        "block-group and read-only rendering",
+        "Docs reading-mode renderer"
+      ],
+      "remediation": "Provide native ul/ol/li or equivalent list structure in reading mode; needs a wrapper/plugin or role-based structure",
+      "complexity": "L",
+      "upstreamActivity": "Maintainer notes wrapper/plugin or role=list are needed; no PR",
+      "wcag": [
+        "1.3.1"
+      ],
+      "testTypes": [
+        "semantic-dom",
+        "screen-reader",
+        "reading-mode"
+      ],
+      "fixtureSuitable": true,
+      "nextAction": "Verify upstream read-only output; prototype a reading-mode wrapper/plugin",
+      "url": "https://github.com/TypeCellOS/BlockNote/issues/2809",
+      "reportedVersions": "not stated"
+    },
+    {
+      "number": 2826,
+      "title": "Merged table cells do not expose clear header relationships",
+      "state": "OPEN",
+      "priority": "P2",
+      "classification": "fix-in-review",
+      "reproductionConfidence": "reported-medium",
+      "components": [
+        "packages/core/src/blocks/Table/block.ts",
+        "table spans, decorations and export"
+      ],
+      "remediation": "Explicit id/headers relationships where native scope cannot express merged-cell context",
+      "complexity": "L",
+      "upstreamActivity": "Covered by PR #3215",
+      "wcag": [
+        "1.3.1"
+      ],
+      "testTypes": [
+        "semantic-dom",
+        "screen-reader",
+        "serialization"
+      ],
+      "fixtureSuitable": true,
+      "nextAction": "Validate merged row/column spans and multiple applicable headers with PR #3215",
+      "url": "https://github.com/TypeCellOS/BlockNote/issues/2826",
+      "reportedVersions": "not stated; covered by open PR #3215"
+    },
+    {
+      "number": 2823,
+      "title": "Bilingual documents: unable to declare language on foreign language passages",
+      "state": "OPEN",
+      "priority": "P2",
+      "classification": "feature-design",
+      "reproductionConfidence": "not-implemented",
+      "components": [
+        "inline content schema and marks",
+        "HTML import/export",
+        "formatting or block controls"
+      ],
+      "remediation": "Design block-level or inline language metadata and an accessible authoring control; preserve lang through import/export",
+      "complexity": "L",
+      "upstreamActivity": "No comments or PR",
+      "wcag": [
+        "3.1.2"
+      ],
+      "testTypes": [
+        "authoring",
+        "serialization",
+        "screen-reader"
+      ],
+      "fixtureSuitable": true,
+      "nextAction": "Design language representation (inline mark vs block attribute) before coding",
+      "url": "https://github.com/TypeCellOS/BlockNote/issues/2823",
+      "reportedVersions": "not stated"
+    },
+    {
+      "number": 2853,
+      "title": "Improve table and videos accessibility in BlockNote",
+      "state": "OPEN",
+      "priority": "P2",
+      "classification": "feature-design",
+      "reproductionConfidence": "not-implemented",
+      "components": [
+        "table props and UI, table caption",
+        "video block controls"
+      ],
+      "remediation": "Add table caption/title support; distinguish video accessibility requirements and controls",
+      "complexity": "M",
+      "upstreamActivity": "No comments or PR",
+      "wcag": [
+        "1.3.1",
+        "1.1.1",
+        "2.1.1"
+      ],
+      "testTypes": [
+        "authoring",
+        "semantic-dom",
+        "keyboard"
+      ],
+      "fixtureSuitable": true,
+      "nextAction": "Split the request into table caption and video accessibility work",
+      "url": "https://github.com/TypeCellOS/BlockNote/issues/2853",
+      "reportedVersions": "not stated"
+    },
+    {
+      "number": 2829,
+      "title": "Keyboard workflow for deleting a table is not explained",
+      "state": "OPEN",
+      "priority": "P2",
+      "classification": "downstream-documentation",
+      "reproductionConfidence": "docs-high",
+      "components": [
+        "external Docs content (docs.numerique.gouv.fr), not this repository"
+      ],
+      "remediation": "Document the keyboard deletion workflow; first resolve the keyboard route in #2854",
+      "complexity": "S",
+      "upstreamActivity": "Maintainer says it depends on #2854",
+      "wcag": [
+        "3.3.2"
+      ],
+      "testTypes": [
+        "documentation",
+        "keyboard"
+      ],
+      "fixtureSuitable": false,
+      "nextAction": "Update downstream Docs after #2854 is resolved; do not change BlockNote runtime for this",
+      "url": "https://github.com/TypeCellOS/BlockNote/issues/2829",
+      "reportedVersions": "not stated (Docs page audit)"
+    }
+  ],
+  "closedRegressions": [
+    {
+      "number": 2813,
+      "title": "Focus not moved when image edit panel opens",
+      "state": "CLOSED",
+      "closedAt": "2026-11-20",
+      "fix": {
+        "likelyPr": 3220,
+        "mergedAt": "2026-11-20",
+        "confidence": "likely"
+      },
+      "regressionValue": "high",
+      "nextAction": "Confirm fix commit; add focus regression coverage"
+    },
+    {
+      "number": 2811,
+      "title": "Collapsible list: unlabeled accessible button, decorative image",
+      "state": "CLOSED",
+      "closedAt": "2026-10-09",
+      "fix": {
+        "likelyPr": null,
+        "mergedAt": null,
+        "confidence": "reporter-confirmed-fixed-in-release"
+      },
+      "regressionValue": "high",
+      "nextAction": "Isolate the fix commit; PR #3133 is an open follow-up"
+    },
+    {
+      "number": 2812,
+      "title": "Docs editor: tab indentation not announced to assistive technologies",
+      "state": "CLOSED",
+      "closedAt": "2026-11-20",
+      "fix": {
+        "likelyPr": 3290,
+        "mergedAt": "2026-11-20",
+        "confidence": "likely"
+      },
+      "regressionValue": "high",
+      "nextAction": "Add live-announcement regression test"
+    },
+    {
+      "number": 2824,
+      "title": "Comment thread actions: hover-only controls and unlabeled buttons",
+      "state": "CLOSED",
+      "closedAt": "2026-11-20",
+      "fix": {
+        "likelyPr": 3221,
+        "mergedAt": "2026-11-20",
+        "confidence": "likely"
+      },
+      "regressionValue": "high",
+      "nextAction": "Add keyboard access regression test"
+    },
+    {
+      "number": 2827,
+      "title": "Some table colors do not meet contrast requirements",
+      "state": "CLOSED",
+      "closedAt": "2026-11-04",
+      "fix": {
+        "likelyPr": 3206,
+        "mergedAt": "2026-11-04",
+        "confidence": "likely"
+      },
+      "regressionValue": "medium",
+      "nextAction": "Add contrast/forced-colours regression check"
+    },
+    {
+      "number": 2852,
+      "title": "Improve color palette accessibility",
+      "state": "CLOSED",
+      "closedAt": "2026-11-04",
+      "fix": {
+        "likelyPr": 3206,
+        "mergedAt": "2026-11-04",
+        "confidence": "likely"
+      },
+      "regressionValue": "medium",
+      "nextAction": "Add contrast regression check"
+    },
+    {
+      "number": 2855,
+      "title": "Improve placeholder and side menu icon contrast for WCAG compliance",
+      "state": "CLOSED",
+      "closedAt": "2026-11-20",
+      "fix": {
+        "likelyPr": 3338,
+        "mergedAt": "2026-11-20",
+        "confidence": "likely"
+      },
+      "regressionValue": "medium",
+      "nextAction": "Add placeholder/side-menu contrast regression check"
+    }
+  ],
+  "candidates": [
+    {
+      "number": 2854,
+      "rank": 1,
+      "reason": "Verified; small source surface; clear keyboard/focus impact; prototype available"
+    },
+    {
+      "number": 977,
+      "rank": 2,
+      "reason": "Core keyboard behavior; needs a clear selection-state matrix before patching"
+    },
+    {
+      "number": 2822,
+      "rank": 3,
+      "reason": "High-impact authoring workflow, but PR #3337 already exists; validate rather than duplicate"
+    },
+    {
+      "number": 2825,
+      "rank": 4,
+      "reason": "Semantic table relationships with PR #3215; useful for screen-reader and export verification"
+    },
+    {
+      "number": 2809,
+      "rank": 5,
+      "reason": "High-impact list semantics; requires a wrapper/plugin design, not a one-line fix"
+    }
+  ],
+  "downstream": [
+    {
+      "number": 2829,
+      "owner": "Docs content",
+      "reason": "Documentation defect; runtime change would be misdirected"
+    },
+    {
+      "number": 2809,
+      "owner": "Docs reading mode plus shared rendering",
+      "reason": "Observed downstream, but list wrappers are absent in shared block rendering"
+    },
+    {
+      "number": 2822,
+      "owner": "Docs UI plus BlockNote file/image block",
+      "reason": "Authoring surface is upstream; PR #3337 addresses it"
+    },
+    {
+      "number": 2854,
+      "owner": "Upstream; Drupal module has a local workaround",
+      "reason": "Default UI defect; workaround is not a fix"
+    }
+  ],
+  "assumptions": [
+    "The checkout at 9cb988f is the 0.57.0 source matching the issue report.",
+    "Only Chromium 148 was exercised; Firefox and Safari are unverified.",
+    "Only the default Mantine UI was exercised; shared components suggest Ariakit/shadcn behave similarly but were not tested.",
+    "inert is assumed supported; no polyfill was added.",
+    "The prototype prevents focus loss and fixes activation, but does not make the side menu discoverable by keyboard alone.",
+    "The upstream Docker e2e suite was not run; the proposed upstream regression test is not executed.",
+    "No human screen-reader session was performed."
+  ],
+  "artifacts": {
+    "inventoryMarkdown": "reports/ISSUE-INVENTORY.md",
+    "issue": "issues/2854/ISSUE.md",
+    "reproduction": "issues/2854/reproduction.md",
+    "hypothesis": "issues/2854/hypothesis.md",
+    "results": "issues/2854/RESULTS.md",
+    "patch": "issues/2854/patch/2854.patch",
+    "beforeEvidence": "issues/2854/evidence/before/",
+    "afterEvidence": "issues/2854/evidence/after/"
+  }
+}

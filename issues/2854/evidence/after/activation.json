@@ -1,0 +1,22 @@
+{
+  "side": "after",
+  "port": 5174,
+  "enter": {
+    "key": "Enter",
+    "buttonInfo": {
+      "reactProps": 1,
+      "tabIndex": 0
+    },
+    "suggestionMenus": 1,
+    "active": "DIV"
+  },
+  "space": {
+    "key": "Space",
+    "buttonInfo": {
+      "reactProps": 1,
+      "tabIndex": 0
+    },
+    "suggestionMenus": 1,
+    "active": "DIV"
+  }
+}

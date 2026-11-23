@@ -36,7 +36,15 @@ This starter kit is **not** a completed BlockNote regression suite or a WCAG con
 - `site/`: comparison viewer and observation export. It is intended to be accessible, but it has not been independently audited and should itself be treated as a test target.
 - `docs/IMPLEMENTATION_PROMPT.md`: phased instructions for expanding and validating the kit with another LLM.
 - `tests/`: unit tests that run without downloading BlockNote or installing JS packages.
-- Generated, ignored directories: `.lab/` (source, worktrees, state, Chromium profile) and `reports/` (capture evidence).
+- `issues/`: issue-specific investigations, reproductions, experimental patches and evidence, starting with #2854.
+- `reports/ISSUE-INVENTORY.md` and `reports/issue-inventory.json`: verified open/closed accessibility issue inventory and machine-readable data.
+- Generated directories: `.lab/` (source, worktrees, state, local browser/toolchain) is ignored; timestamped `reports/<timestamp>/` capture output is ignored. The two inventory files above are tracked.
+
+## Accessibility investigations
+
+[`reports/ISSUE-INVENTORY.md`](reports/ISSUE-INVENTORY.md) records the current open and closed issues, which are upstream versus downstream, and the five strongest before/after candidates. The first verified comparison is **#2854** in [`issues/2854/`](issues/2854/): a side-menu Tab/focus defect, with a two-file experimental patch, before/after evidence across light, dark, forced-colours light/dark, reduced motion and 320px, and a documented limitation that keyboard-only discoverability is not yet solved.
+
+No upstream BlockNote PR has been opened from this lab.
 
 ## Requirements
 

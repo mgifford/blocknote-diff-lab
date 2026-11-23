@@ -1,0 +1,71 @@
+[
+  {
+    "side": "after",
+    "run": 1,
+    "preTab": {
+      "active": "tiptap ProseMirror bn-editor bn-default-styles placeholder-selector-d2a69bad-068d-4bfa-9d89-b5905f4b2595 ProseMirror-focused",
+      "activeIsEditor": true,
+      "liveAdd": true,
+      "sideMenus": 1
+    },
+    "immediate": {
+      "tag": "BUTTON",
+      "id": "after-editor",
+      "ariaLabel": null,
+      "inSideMenu": false,
+      "reactProps": 0
+    },
+    "later": {
+      "tag": "BUTTON",
+      "id": "after-editor",
+      "ariaLabel": null,
+      "inSideMenu": false
+    }
+  },
+  {
+    "side": "after",
+    "run": 2,
+    "preTab": {
+      "active": "tiptap ProseMirror bn-editor bn-default-styles placeholder-selector-07d73bce-154e-41a8-99d5-a39093693f63 ProseMirror-focused",
+      "activeIsEditor": true,
+      "liveAdd": true,
+      "sideMenus": 1
+    },
+    "immediate": {
+      "tag": "BUTTON",
+      "id": "after-editor",
+      "ariaLabel": null,
+      "inSideMenu": false,
+      "reactProps": 0
+    },
+    "later": {
+      "tag": "BUTTON",
+      "id": "after-editor",
+      "ariaLabel": null,
+      "inSideMenu": false
+    }
+  },
+  {
+    "side": "after",
+    "run": 3,
+    "preTab": {
+      "active": "tiptap ProseMirror bn-editor bn-default-styles placeholder-selector-8aafd4e9-0097-4982-bd9a-a83784c7bc15 ProseMirror-focused",
+      "activeIsEditor": true,
+      "liveAdd": true,
+      "sideMenus": 1
+    },
+    "immediate": {
+      "tag": "BUTTON",
+      "id": "after-editor",
+      "ariaLabel": null,
+      "inSideMenu": false,
+      "reactProps": 0
+    },
+    "later": {
+      "tag": "BUTTON",
+      "id": "after-editor",
+      "ariaLabel": null,
+      "inSideMenu": false
+    }
+  }
+]
