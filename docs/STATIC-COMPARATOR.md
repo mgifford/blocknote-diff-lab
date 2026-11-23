@@ -31,6 +31,7 @@ The page now follows the FOSDEM architecture and adds an issue catalog:
 - editor theme Light/Dark/Follow OS (reloads both frames), half/phone/tablet widths and synced scrolling;
 - URL hash state (`issue`, `variant`, `page`, optional `theme`);
 - prefilled validation checklists with local progress; each issue states what to do and what should change;
+- for #2822, #2825 and #2826, links to the upstream PR and its real Vercel Playground preview (the preview is the After build; compare it with the current editor);
 - real **Focus before/after editor** controls around each iframe and a same-origin focus readout that can name the dead closing copy;
 - problem, prefilled validation checklist, observed results, evidence links, patch diff and provenance.
 
@@ -56,7 +57,7 @@ The page now follows the FOSDEM architecture and adds an issue catalog:
 
 ## Remaining differences
 
-1. **One interactive issue, nine reported issues.** Only #2854 has local static before/after bundles; #2822, #2825 and #2826 link to open upstream PRs instead. The other issues have prefilled validation steps but no local fix. Adding pages would mean more fixtures; adding interactive bundles for the PRs would mean building their heads.
+1. **One interactive issue, nine reported issues.** Only #2854 has local static before/after bundles. #2822, #2825 and #2826 link to open upstream PRs and their Playground previews, but those are After-only and are not bundled side by side in this page. The other issues have prefilled validation steps but no local fix. Adding pages would mean more fixtures; bundling the PR heads locally would mean building their heads.
 2. **No build-time automated-check table.** FOSDEM generates checks into `results.json`; our page links the lab evidence and shows an observed table, but the static page does not run axe or keyboard checks itself.
 3. **No dark-OS CSS simulation.** The theme buttons force the Mantine theme; they are not the same as FOSDEM's rewrite of the `prefers-color-scheme` media query. Follow OS uses the actual OS preference.
 4. **No forced-colours or CDP media emulation.** Pages cannot run the controlled Chromium layer. Use the local lab for forced-colours light/dark, reduced motion and capture.

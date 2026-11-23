@@ -211,7 +211,7 @@
 
   function issueFixLabel(issue) {
     if (issue.fix.kind === 'local') return 'Interactive';
-    if (issue.fix.kind === 'pr') return 'PR open';
+    if (issue.fix.kind === 'pr') return issue.fix.previewUrl ? 'PR preview' : 'PR open';
     if (issue.fix.kind === 'docs') return 'Docs';
     return 'No fix';
   }
@@ -296,6 +296,15 @@
       link.textContent = issue.fix.kind === 'pr' ? 'Open the upstream PR' : issue.fix.kind === 'docs' ? 'Open the issue' : 'Open the investigation';
       fix.append(link);
     }
+    if (issue.fix.previewUrl) {
+      fix.append(document.createTextNode(' · '));
+      const preview = document.createElement('a');
+      preview.href = issue.fix.previewUrl;
+      preview.target = '_blank';
+      preview.rel = 'noopener';
+      preview.textContent = issue.fix.previewLabel || 'Open the PR preview';
+      fix.append(preview);
+    }
     updateProgress(issue);
   }
 
@@ -327,7 +336,7 @@
     $('issue-2854-diff').hidden = !issue.variants;
     $('issue-limits').hidden = !issue.variants;
     $('no-local').hidden = issue.variants;
-    $('no-local-text').textContent = 'No local static before/after bundle is available for this issue. The checklist above records current behavior and the expected result; use the upstream issue or pull request to inspect the fix.';
+    $('no-local-text').textContent = issue.fix.previewUrl ? 'No local before/after bundle is available, but the PR has a real Playground preview. Open it and repeat the steps above against the current editor and the preview.' : 'No local static before/after bundle is available for this issue. The checklist above records current behavior and the expected result; use the upstream issue or pull request to inspect the fix.';
     const noLocalFix = $('no-local-fix');
     noLocalFix.textContent = '';
     if (issue.issueUrl) {
@@ -346,6 +355,15 @@
       link.rel = 'noopener';
       link.textContent = issue.fix.kind === 'pr' ? 'Open the upstream PR' : 'Open the fix';
       noLocalFix.append(link);
+    }
+    if (issue.fix.previewUrl) {
+      noLocalFix.append(document.createTextNode(' · '));
+      const preview = document.createElement('a');
+      preview.href = issue.fix.previewUrl;
+      preview.target = '_blank';
+      preview.rel = 'noopener';
+      preview.textContent = issue.fix.previewLabel || 'Open the PR preview';
+      noLocalFix.append(preview);
     }
     for (const button of document.querySelectorAll('.issue-card')) {
       button.setAttribute('aria-current', String(Number(button.dataset.issue) === currentIssue));

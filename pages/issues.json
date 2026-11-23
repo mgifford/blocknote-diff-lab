@@ -95,7 +95,9 @@
         "kind": "pr",
         "label": "PR #3337 (open)",
         "url": "https://github.com/TypeCellOS/BlockNote/pull/3337",
-        "note": "The PR is not bundled in this static page. Open it, or run its head locally, to compare the media toolbar and alt fallback."
+        "note": "The PR is not bundled in this static page. Open it, or run its head locally, to compare the media toolbar and alt fallback.",
+        "previewUrl": "https://blocknote-git-file-ux-update-typecell.vercel.app",
+        "previewLabel": "Open the PR preview playground"
       },
       "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2822",
       "wcag": [
@@ -137,7 +139,9 @@
         "kind": "pr",
         "label": "PR #3215 (open)",
         "url": "https://github.com/TypeCellOS/BlockNote/pull/3215",
-        "note": "The PR is not bundled here. Its source changes are large and include tests and snapshots."
+        "note": "The PR is not bundled here. Its source changes are large and include tests and snapshots.",
+        "previewUrl": "https://blocknote-git-tables-a11y-typecell.vercel.app",
+        "previewLabel": "Open the PR preview playground"
       },
       "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2825",
       "wcag": [
@@ -217,7 +221,9 @@
         "kind": "pr",
         "label": "PR #3215 (open)",
         "url": "https://github.com/TypeCellOS/BlockNote/pull/3215",
-        "note": "Not bundled here; validate the merged-cell cases against the PR."
+        "note": "Not bundled here; validate the merged-cell cases against the PR.",
+        "previewUrl": "https://blocknote-git-tables-a11y-typecell.vercel.app",
+        "previewLabel": "Open the PR preview playground"
       },
       "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2826",
       "wcag": [
