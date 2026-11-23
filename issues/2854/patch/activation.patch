@@ -1,0 +1,16 @@
+diff --git a/packages/react/src/components/SideMenu/DefaultButtons/AddBlockButton.tsx b/packages/react/src/components/SideMenu/DefaultButtons/AddBlockButton.tsx
+index ac1209f..26fc8bc 100644
+--- a/packages/react/src/components/SideMenu/DefaultButtons/AddBlockButton.tsx
++++ b/packages/react/src/components/SideMenu/DefaultButtons/AddBlockButton.tsx
+@@ -55,9 +55,8 @@ export const AddBlockButton = () => {
+     <Components.SideMenu.Button
+       className={"bn-button"}
+       label={dict.side_menu.add_block_label}
+-      icon={
+-        <AiOutlinePlus size={24} onClick={onClick} data-test="dragHandleAdd" />
+-      }
++      onClick={onClick}
++      icon={<AiOutlinePlus size={24} data-test="dragHandleAdd" />}
+     />
+   );
+ };

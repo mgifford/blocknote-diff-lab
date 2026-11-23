@@ -74,5 +74,6 @@ footer { font-size: .86rem; color: var(--muted); border-top: 1px solid var(--lin
 .info h3 { margin: 1rem 0 .25rem; }
 .info ol { margin: .2rem 0; padding-left: 1.4rem; }
 .info table { font-size: .9rem; }
+.table-wrap { max-width: 100%; overflow-x: auto; }
 .diff pre { max-height: 45vh; }
 @media (max-width: 800px) { .panes { flex-direction: column; } .pane { width: 100% !important; } }

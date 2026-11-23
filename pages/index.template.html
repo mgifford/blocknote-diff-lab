@@ -12,18 +12,28 @@
 <header>
   <p class="eyebrow">BlockNote Accessibility Diff Lab · static before/after</p>
   <h1>#2854 — side menu “Add block” and keyboard focus</h1>
-  <p class="lede" id="intro">Left: upstream BlockNote 0.57.0. Right: the same source with a two-file experimental patch. Both frames are built static editors; the problem, reproduction steps and results are below.</p>
-  <p class="meta">Upstream base <code>9cb988f</code> (0.57.0) · Fixture <code>4611ae1</code> (local) · After patch: two files · Recorded 2026-11-23</p>
+  <p class="lede" id="intro">Left: upstream BlockNote 0.57.0. Right: the same source with one of three patch combinations — both fixes, inert-only, or activation-only. Both frames are built static editors; the problem, reproduction steps and results are below.</p>
+  <p class="meta">Upstream base <code>9cb988f</code> (0.57.0) · Fixture <code>4611ae1</code> (local) · Three After variants · Recorded 2026-11-23</p>
   <p><span class="tag">Verified defect</span> <span class="tag">Experimental patch</span> <span class="tag">Partial fix</span></p>
 </header>
 
 <nav class="changes" aria-labelledby="changes-h">
   <h2 id="changes-h">Changes you can compare</h2>
   <ul id="changes">
-    <li data-slug="2854" aria-current="true">
-      <a class="main" href="#variant=2854&amp;page=minimal">Side menu focus and Add block activation</a>
-      <p>Closing popover snapshots are made inert, and Add block activation is moved from the icon to the button. Stops Tab landing on a dead clone and restores Enter/Space.</p>
+    <li data-slug="both" aria-current="true">
+      <a class="main" href="#variant=both&amp;page=minimal">Both fixes</a>
+      <p>Closing snapshots are inert and Add block activation moves to the button. Tab reaches the next control and Enter/Space work.</p>
       <p class="meta">2 files differ · Partial fix · No upstream PR</p>
+    </li>
+    <li data-slug="inert">
+      <a class="main" href="#variant=inert&amp;page=minimal">Inert only</a>
+      <p>Only the closing snapshot is inert. Tab reaches the next control, but Add block still ignores Enter and Space.</p>
+      <p class="meta">1 file differs · Focus fixed · Activation broken</p>
+    </li>
+    <li data-slug="activation">
+      <a class="main" href="#variant=activation&amp;page=minimal">Activation only</a>
+      <p>Only Add block activation is fixed. Enter/Space work, but Tab still lands on the dead clone and focus still falls to <code>body</code>.</p>
+      <p class="meta">1 file differs · Activation fixed · Focus broken</p>
     </li>
   </ul>
 </nav>
@@ -31,7 +41,11 @@
 <section class="controls" aria-label="Comparison controls">
   <div>
     <label for="variant">Compare upstream with</label>
-    <select id="variant"><option value="2854">Side menu focus + activation</option></select>
+    <select id="variant">
+      <option value="both">Both fixes (2 files)</option>
+      <option value="inert">Inert only (1 file)</option>
+      <option value="activation">Activation only (1 file)</option>
+    </select>
   </div>
   <div>
     <label for="page">Editor page</label>
@@ -62,9 +76,9 @@
     <div class="pane-focus-controls next"><button id="before-next" type="button">Focus after editor</button></div>
   </section>
   <section class="pane" aria-labelledby="ha">
-    <div class="panehead"><h2 id="ha">After (with the patch)</h2><a id="open-after" target="_blank" rel="noopener" href="after/index.html">Open after in a new window</a></div>
+    <div class="panehead"><h2 id="ha">After (<span id="after-label">both fixes</span>)</h2><a id="open-after" target="_blank" rel="noopener" href="after/index.html">Open after in a new window</a></div>
     <div class="pane-focus-controls prev"><button id="after-prev" type="button">Focus before editor</button></div>
-    <iframe id="after" title="After: patched BlockNote editor"></iframe>
+    <iframe id="after" title="After: selected patched BlockNote editor"></iframe>
     <div class="pane-focus-controls next"><button id="after-next" type="button">Focus after editor</button></div>
   </section>
 </div>
@@ -73,7 +87,7 @@
 <main id="main">
   <section class="info" aria-labelledby="info-h">
     <h2 id="info-h">What this compares</h2>
-    <p>Both frames are built from the same BlockNote source and the same two-paragraph fixture. The After frame differs only by the experimental patch (two files in <code>packages/react</code>). The left frame is the unmodified baseline.</p>
+    <p>Both frames are built from the same BlockNote source and the same two-paragraph fixture. The Before frame is the unmodified baseline; the After frame can be switched between the combined patch and each isolated file. This shows which change fixes focus and which fixes activation.</p>
     <h3>The problem</h3>
     <p>With the side menu showing and the caret in a block, Tab can focus a cloned Add block button from the closing transition. That copy has no React handlers; Enter and Space do nothing, and about 250 ms later it is removed and focus falls to the document body. The live Add block button also ignores Enter and Space because its click handler is on the icon.</p>
     <h3>Steps to replicate</h3>
@@ -84,18 +98,22 @@
       <li>Use the theme and width controls; test the keyboard separately in each frame. Tab and Enter are not mirrored.</li>
     </ol>
     <h3>What to expect</h3>
+    <div class="table-wrap">
     <table>
       <caption>Observed in the local lab; the static frames reproduce the same DOM and focus behavior</caption>
-      <thead><tr><th scope="col">Check</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+      <thead><tr><th scope="col">Check</th><th scope="col">Before</th><th scope="col">Both</th><th scope="col">Inert only</th><th scope="col">Activation only</th></tr></thead>
       <tbody>
-        <tr><th scope="row">Tab from the hovered first paragraph</th><td>Cloned Add block button → focus falls to <code>body</code></td><td>Adjacent “Focus after editor” control; focus stays there</td></tr>
-        <tr><th scope="row">Enter or Space on the live Add block</th><td>No suggestion menu</td><td>One suggestion menu</td></tr>
-        <tr><th scope="row">Light / dark / reduced motion / 320px</th><td>Same focus loss in all tested conditions</td><td>Same next-control result in all tested conditions</td></tr>
+        <tr><th scope="row">Tab from the hovered first paragraph</th><td>Clone → <code>body</code></td><td>Next control</td><td>Next control</td><td>Clone → <code>body</code></td></tr>
+        <tr><th scope="row">Enter or Space on the live Add block</th><td>No menu</td><td>Menu</td><td>No menu</td><td>Menu</td></tr>
+        <tr><th scope="row">Keyboard-only side-menu discovery</th><td>No</td><td>No</td><td>No</td><td>No</td></tr>
       </tbody>
     </table>
+    </div>
     <p><strong>Important:</strong> the static build does not emulate forced colours or CDP media preferences. Use the local Diff Lab for forced-colours light/dark, reduced motion, capture and controlled Chromium. The theme buttons here force the editor’s Mantine theme; they do not claim to reproduce OS contrast themes.</p>
     <div class="links">
-      <a href="assets/2854.patch">Download the patch</a>
+      <a href="assets/2854.patch">Download both fixes</a>
+      <a href="assets/inert.patch">Download inert-only patch</a>
+      <a href="assets/activation.patch">Download activation-only patch</a>
       <a href="assets/fixture.patch">Download the fixture patch</a>
       <a href="assets/before-focus.json">Before focus JSON</a>
       <a href="assets/after-focus.json">After focus JSON</a>
@@ -107,17 +125,19 @@
 
   <section class="diff" aria-labelledby="diff-h">
     <h2 id="diff-h">What differs in the built editor</h2>
-    <p>Both sides share the fixture and build. The After bundle differs only by this source patch; generated asset filenames also change because the bundles are content-addressed.</p>
-    <pre><code>{{PATCH}}</code></pre>
+    <p id="diff-note">Both fixes: the closing popover snapshot becomes inert and Add block activation moves to the button. Generated asset filenames also change because the bundles are content-addressed.</p>
+    <div data-patch="both"><pre tabindex="0" aria-label="Both fixes patch"><code>{{PATCH_BOTH}}</code></pre></div>
+    <div data-patch="inert" hidden><pre tabindex="0" aria-label="Inert-only patch"><code>{{PATCH_INERT}}</code></pre></div>
+    <div data-patch="activation" hidden><pre tabindex="0" aria-label="Activation-only patch"><code>{{PATCH_ACTIVATION}}</code></pre></div>
   </section>
 
   <section class="info" aria-labelledby="limits-h">
     <h2 id="limits-h">Limits and provenance</h2>
     <ul>
-      <li>This is a <strong>partial</strong> fix: it prevents focus loss and fixes activation, but the side menu is still only revealed by pointer hover. Keyboard-only discovery needs a maintainer decision.</li>
+      <li>Even “both fixes” is <strong>partial</strong>: it prevents focus loss and fixes activation, but the side menu is still only revealed by pointer hover. Keyboard-only discovery needs a maintainer decision.</li>
       <li>Only the default Mantine UI and Chromium were exercised. Ariakit, shadcn, Firefox and Safari are unverified; no human screen-reader session was recorded.</li>
       <li>The proposed upstream regression test is in the repository but has not been run because BlockNote requires its browser suite to run in Docker.</li>
-      <li>Static bundles are prebuilt from upstream <code>9cb988ff94b60979bbbc62b0ded5cf62fdac88c8</code> plus local fixture <code>4611ae1b</code> and committed to <code>pages/before</code>/<code>pages/after</code>; the Pages workflow assembles the page but does not rebuild BlockNote. BlockNote remains MPL-2.0; see <a href="LICENSE-BlockNote.txt">LICENSE-BlockNote.txt</a>.</li>
+      <li>Static bundles are prebuilt from upstream <code>9cb988ff94b60979bbbc62b0ded5cf62fdac88c8</code> plus local fixture <code>4611ae1b</code> and committed to <code>pages/before</code>, <code>pages/after</code>, <code>pages/after-inert</code> and <code>pages/after-activation</code>; the Pages workflow assembles the page but does not rebuild BlockNote. BlockNote remains MPL-2.0; see <a href="LICENSE-BlockNote.txt">LICENSE-BlockNote.txt</a>.</li>
       <li>No upstream BlockNote PR was opened. This is a local experimental comparison, not a conformance claim.</li>
     </ul>
   </section>
@@ -134,34 +154,60 @@
   const frames = { before: $('before'), after: $('after') };
   const params = new URLSearchParams(location.hash.slice(1));
   const state = {
-    variant: params.get('variant') || '2854',
+    variant: params.get('variant') || 'both',
     page: params.get('page') || 'minimal',
     theme: params.get('theme') || 'auto',
   };
   if (!['light', 'dark', 'auto'].includes(state.theme)) state.theme = 'auto';
+  const variants = ['both', 'inert', 'activation'];
+  if (!variants.includes(state.variant)) state.variant = 'both';
+  const afterDirs = { both: 'after', inert: 'after-inert', activation: 'after-activation' };
+  const variantLabels = { both: 'both fixes', inert: 'inert only', activation: 'activation only' };
+  const variantNotes = {
+    both: 'Both fixes: the closing popover snapshot becomes inert and Add block activation moves to the button. Generated asset filenames also change because the bundles are content-addressed.',
+    inert: 'Inert only: just GenericPopover.tsx. The next Tab target is reachable, but the live Add block button still ignores Enter and Space.',
+    activation: 'Activation only: just AddBlockButton.tsx. Enter and Space work, but Tab still lands on the dead closing clone and focus falls to the body.',
+  };
 
   const frameSrc = (side) => {
     const query = state.theme === 'auto' ? '' : `?theme=${state.theme}`;
-    return `${side}/index.html${query}`;
+    const dir = side === 'before' ? 'before' : afterDirs[state.variant];
+    return `${dir}/index.html${query}`;
   };
 
   function applyState(reload = true) {
     $('variant').value = state.variant;
     $('page').value = state.page;
+    $('after-label').textContent = variantLabels[state.variant];
+    $('diff-note').textContent = variantNotes[state.variant];
     for (const button of document.querySelectorAll('[data-theme]')) {
       button.setAttribute('aria-pressed', String(button.dataset.theme === state.theme));
+    }
+    for (const item of document.querySelectorAll('#changes li[data-slug]')) {
+      item.setAttribute('aria-current', String(item.dataset.slug === state.variant));
+    }
+    for (const panel of document.querySelectorAll('[data-patch]')) {
+      panel.hidden = panel.dataset.patch !== state.variant;
     }
     for (const side of ['before', 'after']) {
       const src = frameSrc(side);
       if (reload && frames[side].getAttribute('src') !== src) frames[side].src = src;
       $(`open-${side}`).href = src;
     }
+    frames.after.title = `After: ${variantLabels[state.variant]}`;
     const suffix = state.theme === 'auto' ? '' : `&theme=${state.theme}`;
     history.replaceState(null, '', `#variant=${state.variant}&page=${state.page}${suffix}`);
-    $('status').textContent = `Showing ${state.page === 'minimal' ? 'the minimal editor' : state.page}. Both frames are static builds.`;
+    $('status').textContent = `Showing the minimal editor with ${variantLabels[state.variant]}. Both frames are static builds.`;
   }
 
   $('variant').addEventListener('change', (event) => { state.variant = event.target.value; applyState(); });
+  for (const link of document.querySelectorAll('#changes a.main')) {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      state.variant = link.closest('li').dataset.slug;
+      applyState();
+    });
+  }
   $('page').addEventListener('change', (event) => { state.page = event.target.value; applyState(); });
   for (const button of document.querySelectorAll('[data-theme]')) {
     button.addEventListener('click', () => { state.theme = button.dataset.theme; applyState(); });

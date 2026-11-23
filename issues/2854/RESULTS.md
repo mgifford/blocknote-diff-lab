@@ -82,6 +82,19 @@ Evidence: `evidence/viewer-fixture.json` and `evidence/viewer-fixture.png`.
 
 The fixture is opt-in via `?fixture2854`, so the standalone reproduction scripts still use the stock empty route and type their own content. The fixture commit and its patch are recorded in `fixture.json` and `fixture.patch`; the After diff remains only the two-file #2854 patch.
 
+## Variant isolation
+
+The static Pages comparator serves three After bundles, each built from the same fixture with one or both changes. This attributes the two symptoms to the two files:
+
+| Variant | Tab from the hovered paragraph | Enter/Space on live Add block |
+| --- | --- | --- |
+| Before | dead clone → `body` | no menu |
+| Both fixes | adjacent focus target | menu |
+| Inert only (`patch/inert.patch`) | adjacent focus target | no menu |
+| Activation only (`patch/activation.patch`) | dead clone → `body` | menu |
+
+Verified in the static comparator with Chromium at 1280×1000: exact parent/iframe active element, the clone's missing React props, and the suggestion menu count. No console errors. This supports the claim that `GenericPopover` owns the focus loss and `AddBlockButton` owns the activation failure; neither change makes the side menu keyboard-discoverable.
+
 ## Patch
 
 `patch/2854.patch` changes:

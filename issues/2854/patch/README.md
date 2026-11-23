@@ -16,6 +16,14 @@ This is an **experimental** patch, not an upstream submission.
 2. `packages/react/src/components/SideMenu/DefaultButtons/AddBlockButton.tsx`
    - Moves `onClick` from the `AiOutlinePlus` icon to the shared side-menu button, so Enter and Space activate it.
 
+## Variant patches
+
+- `2854.patch` combines both changes.
+- `inert.patch` contains only the `GenericPopover` change: Tab reaches the next control, but Add block still ignores Enter/Space.
+- `activation.patch` contains only the `AddBlockButton` change: Enter/Space work, but Tab still lands on the dead clone and focus falls to `body`.
+
+The Pages comparator uses all three variants. The standalone bundle builder applies them in turn and restores the After worktree.
+
 ## Apply
 
 From a clean checkout at the pinned SHA:

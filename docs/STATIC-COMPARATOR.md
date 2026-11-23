@@ -26,7 +26,7 @@ The first deployment was a static **evidence report**: screenshots, a results ta
 The page now follows the FOSDEM architecture:
 
 - two prebuilt BlockNote editors in same-origin iframes (`pages/before`, `pages/after`);
-- one variant and one page (the #2854 minimal-editor fixture), with selectors;
+- three variants (both fixes, inert-only, activation-only) and one page (the #2854 minimal-editor fixture), with selectors;
 - editor theme Light/Dark/Follow OS (reloads both frames), half/phone/tablet widths and synced scrolling;
 - URL hash state (`variant`, `page`, optional `theme`);
 - real **Focus before/after editor** controls around each iframe and a same-origin focus readout that can name the dead closing copy;
@@ -38,12 +38,12 @@ The page now follows the FOSDEM architecture:
 | --- | --- | --- | --- |
 | Static before/after iframes | Yes, built sites | No | Yes, built editors |
 | Same-origin scroll/theme sync | Yes | No | Yes (scroll; theme reloads frames) |
-| Variant selector | 6 variants | No | 1 variant |
+| Variant selector | 6 variants | No | 3 variants |
 | Page selector | 10 pages | No | 1 page |
 | Theme controls | Site theme + dark-OS CSS simulation | No | Editor Light/Dark/Follow OS |
 | Frame widths | Half/phone/tablet | No | Half/phone/tablet |
 | URL state | variant/page/os | No | variant/page/theme |
-| Change cards | 6 | No | 1 |
+| Change cards | 6 | No | 3 |
 | Build-time automated checks | Yes | No | Observed table + evidence JSON; no build-time check table |
 | Diff section | Built-site diff | No | Source patch diff |
 | Focus controls/readout | Test each frame separately | No | Yes, with real host targets and same-origin inspection |
@@ -52,7 +52,7 @@ The page now follows the FOSDEM architecture:
 
 ## Remaining differences
 
-1. **One variant and one page.** The #2854 fixture is a single interaction comparison, not a multi-page site. Adding variants would mean building more static bundles or parameterising the app; adding pages would mean more fixtures.
+1. **Three variants, one page.** The variants isolate the combined fix, the inert-only fix and the activation-only fix; they show which file fixes which behavior. Adding pages would mean more fixtures or a different static app; adding more variants would mean more bundles.
 2. **No build-time automated-check table.** FOSDEM generates checks into `results.json`; our page links the lab evidence and shows an observed table, but the static page does not run axe or keyboard checks itself.
 3. **No dark-OS CSS simulation.** The theme buttons force the Mantine theme; they are not the same as FOSDEM's rewrite of the `prefers-color-scheme` media query. Follow OS uses the actual OS preference.
 4. **No forced-colours or CDP media emulation.** Pages cannot run the controlled Chromium layer. Use the local lab for forced-colours light/dark, reduced motion and capture.
@@ -68,7 +68,7 @@ scripts/build-static-bundles.sh .lab/worktrees/before .lab/worktrees/after
 pnpm pages:build
 ```
 
-The first command copies `pages/app` into each worktree's playground, builds with Vite+, and replaces `pages/before`/`pages/after`. The second assembles `_site` from the bundles, evidence, patch and template. The Pages workflow runs only the second step.
+The first command builds `pages/before`, `pages/after` (both fixes), `pages/after-inert` and `pages/after-activation` from a clean After worktree, then restores it. The second assembles `_site` from the bundles, evidence, patches and template. The Pages workflow runs only the second step.
 
 ## Accessibility caveats
 
