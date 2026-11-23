@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>BlockNote Diff Lab</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <header class="page-header">
+    <div class="eyebrow">Reproducible before / after testing</div>
+    <h1>BlockNote Diff Lab</h1>
+    <p id="summary">Loading comparison configuration…</p>
+    <div id="source" class="meta" aria-live="polite"></div>
+    <p><a id="issue-link" target="_blank" rel="noopener noreferrer" hidden>View upstream issue</a></p>
+    <div id="warning" class="notice" role="status"></div>
+  </header>
+
+  <main>
+    <section aria-labelledby="controls-heading" class="toolbar">
+      <h2 id="controls-heading">Comparison controls</h2>
+      <div class="control-grid">
+        <div>
+          <label for="viewport">Target layout viewport</label>
+          <select id="viewport">
+            <option value="320">320px reflow</option>
+            <option value="390">390px mobile</option>
+            <option value="768">768px tablet</option>
+            <option value="1280" selected>1280px desktop</option>
+          </select>
+        </div>
+        <div>
+          <label for="mode">Browser preference</label>
+          <select id="mode">
+            <option value="normal">Follow browser / OS</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+            <option value="forced-light">Forced colours: light</option>
+            <option value="forced-dark">Forced colours: dark</option>
+            <option value="reduced-motion">Reduced motion</option>
+          </select>
+        </div>
+        <div class="buttons">
+          <button id="browser" type="button">Open controlled Chromium</button>
+          <button id="apply" type="button">Apply browser mode</button>
+        </div>
+      </div>
+      <div id="demo-controls" class="demo-controls" hidden>
+        <button id="collaborate" type="button">Simulate concurrent editing</button>
+        <button id="reset-demo" type="button">Reset demo</button>
+        <p id="demo-status" class="status" role="status">Scripted demo only — not BlockNote, Yjs or a real multi-user session.</p>
+      </div>
+      <p class="help">The viewport control changes the <strong>real iframe CSS layout width</strong>; the preview is visually scaled to fit. Browser preference controls apply only to the separately opened Chromium window, not an ordinary browser tab. Forced colours are emulated via CDP in each isolated frame, not by altering the viewer's styles.</p>
+      <p id="browser-status" role="status" class="status">Controlled browser not started.</p>
+    </section>
+
+    <section aria-labelledby="preview-heading" class="previews">
+      <h2 id="preview-heading">Live editor comparison</h2>
+      <div class="columns">
+        <section class="pane" aria-labelledby="before-heading">
+          <div class="pane-heading"><h3 id="before-heading">Before · original Git revision</h3><a id="before-link" target="_blank" rel="noopener noreferrer">Open independently</a></div>
+          <div class="preview-stage" id="before-stage"><iframe id="before" title="Unmodified BlockNote editor"></iframe></div>
+        </section>
+        <section class="pane" aria-labelledby="after-heading">
+          <div class="pane-heading"><h3 id="after-heading">After · revision with proposed patch</h3><a id="after-link" target="_blank" rel="noopener noreferrer">Open independently</a></div>
+          <div class="preview-stage" id="after-stage"><iframe id="after" title="Patched BlockNote editor"></iframe></div>
+        </section>
+      </div>
+      <p class="help">Each editor has its own state and runs independently. Perform the same steps on each side. Simulating keyboard events across iframe boundaries would not demonstrate reliable focus or editing behavior. Same-click mirroring is deliberately not implemented in this starter.</p>
+    </section>
+
+    <section aria-labelledby="steps-heading" class="steps">
+      <div class="section-title"><h2 id="steps-heading">Steps to reproduce</h2><button type="button" id="download">Download observations (JSON)</button></div>
+      <p>Record what actually happened in both builds. Expected results are guidance, not automated verdicts. The proposed patch has not passed until the behavior has been observed and tested.</p>
+      <div id="steps"></div>
+      <label for="notes">Additional notes, assistive technology and browser details</label>
+      <textarea id="notes" rows="3" placeholder="E.g. keyboard focus sequence, screen reader announcement, browser version…"></textarea>
+    </section>
+
+    <section aria-labelledby="evidence-heading" class="evidence">
+      <h2 id="evidence-heading">Automated evidence</h2>
+      <p>The headless Playwright capture can generate screenshots for light, dark, forced-colours light, forced-colours dark and 320px reflow, together with keyboard interaction signals, axe-core results and ARIA snapshots. Run <code>pnpm capture</code> while both editor servers are running.</p>
+      <div id="evidence-results" role="status">No reports loaded.</div>
+    </section>
+  </main>
+  <footer>
+    <p>MIT-licensed comparison harness. The upstream BlockNote source remains separately licensed. This lab produces partial accessibility evidence, not a WCAG conformance claim.</p>
+  </footer>
+</body>
+</html>
