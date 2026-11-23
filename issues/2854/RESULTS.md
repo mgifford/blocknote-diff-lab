@@ -97,6 +97,7 @@ The fixture is opt-in via `?fixture2854`, so the standalone reproduction scripts
 - Only Mantine was exercised. Ariakit and shadcn share `GenericPopover` and `AddBlockButton`, but their rendered buttons/menus were not tested.
 - Only Chromium was tested; Firefox and Safari are unverified.
 - No human screen-reader session was performed. The focus target after Tab is a host-page button, not the editor; screen-reader announcement of that move still needs a person.
+- The shared fixture commit `4611ae1` is local to this checkout, not an upstream commit. `prepare` will treat it as a different snapshot; use the README reset procedure to return to the upstream SHA. `fixture.patch` recreates the opt-in seed.
 - The `inert` attribute requires a modern browser. No fallback/polyfill was added.
 - An open-menu forced-dark screenshot rendered black text/icons on black despite computed white styles; it is excluded from visual evidence and needs a separate forced-colours rendering investigation.
 - The patch changes a generic popover closing path, not just the side menu. It should be reviewed for any popover that expects to remain interactive while closing. No such case was found, but the upstream test suite was not run.
