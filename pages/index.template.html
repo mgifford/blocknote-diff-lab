@@ -4,71 +4,81 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
-  <title>BlockNote #2854 — before and after</title>
+  <title>BlockNote accessibility issue comparator</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header>
-  <p class="eyebrow">BlockNote Accessibility Diff Lab · static before/after</p>
-  <h1>#2854 — side menu “Add block” and keyboard focus</h1>
-  <p class="lede" id="intro">Left: upstream BlockNote 0.57.0. Right: the same source with one of three patch combinations — both fixes, inert-only, or activation-only. Both frames are built static editors; the problem, reproduction steps and results are below.</p>
-  <p class="meta">Upstream base <code>9cb988f</code> (0.57.0) · Fixture <code>4611ae1</code> (local) · Three After variants · Recorded 2026-11-23</p>
-  <p><span class="tag">Verified defect</span> <span class="tag">Experimental patch</span> <span class="tag">Partial fix</span></p>
+  <p class="eyebrow">BlockNote Accessibility Diff Lab · static issue comparator</p>
+  <h1 id="issue-title">BlockNote accessibility issue comparator</h1>
+  <p class="lede" id="issue-summary">Choose a reported issue to see what to test, what should change, and whether a fix is available.</p>
+  <p class="meta" id="issue-meta">Loading…</p>
+  <p id="issue-tags"></p>
 </header>
 
-<nav class="changes" aria-labelledby="changes-h">
-  <h2 id="changes-h">Changes you can compare</h2>
-  <ul id="changes">
-    <li data-slug="both" aria-current="true">
-      <a class="main" href="#variant=both&amp;page=minimal">Both fixes</a>
-      <p>Closing snapshots are inert and Add block activation moves to the button. Tab reaches the next control and Enter/Space work.</p>
-      <p class="meta">2 files differ · Partial fix · No upstream PR</p>
-    </li>
-    <li data-slug="inert">
-      <a class="main" href="#variant=inert&amp;page=minimal">Inert only</a>
-      <p>Only the closing snapshot is inert. Tab reaches the next control, but Add block still ignores Enter and Space.</p>
-      <p class="meta">1 file differs · Focus fixed · Activation broken</p>
-    </li>
-    <li data-slug="activation">
-      <a class="main" href="#variant=activation&amp;page=minimal">Activation only</a>
-      <p>Only Add block activation is fixed. Enter/Space work, but Tab still lands on the dead clone and focus still falls to <code>body</code>.</p>
-      <p class="meta">1 file differs · Activation fixed · Focus broken</p>
-    </li>
-  </ul>
-</nav>
-
-<section class="controls" aria-label="Comparison controls">
+<section class="controls" aria-label="Issue and comparison controls">
   <div>
-    <label for="variant">Compare upstream with</label>
+    <label for="issue">Reported issue</label>
+    <select id="issue"></select>
+  </div>
+  <div id="compare-controls">
+    <label for="variant">Fix variant</label>
     <select id="variant">
       <option value="both">Both fixes (2 files)</option>
       <option value="inert">Inert only (1 file)</option>
       <option value="activation">Activation only (1 file)</option>
     </select>
-  </div>
-  <div>
     <label for="page">Editor page</label>
     <select id="page"><option value="minimal">Minimal editor (two-paragraph fixture)</option></select>
+    <fieldset>
+      <legend>Editor theme</legend>
+      <button type="button" data-theme="light">Light</button>
+      <button type="button" data-theme="dark">Dark</button>
+      <button type="button" data-theme="auto">Follow OS</button>
+    </fieldset>
+    <fieldset>
+      <legend>Frame width</legend>
+      <label><input type="radio" name="w" value="calc(50% - .5rem)" checked> Half</label>
+      <label><input type="radio" name="w" value="390px"> Phone</label>
+      <label><input type="radio" name="w" value="820px"> Tablet</label>
+    </fieldset>
+    <label class="inline"><input type="checkbox" id="syncscroll" checked> Sync scrolling</label>
   </div>
-  <fieldset>
-    <legend>Editor theme (reloads both frames)</legend>
-    <button type="button" data-theme="light">Light</button>
-    <button type="button" data-theme="dark">Dark</button>
-    <button type="button" data-theme="auto">Follow OS</button>
-  </fieldset>
-  <fieldset>
-    <legend>Frame width</legend>
-    <label><input type="radio" name="w" value="calc(50% - .5rem)" checked> Half</label>
-    <label><input type="radio" name="w" value="390px"> Phone</label>
-    <label><input type="radio" name="w" value="820px"> Tablet</label>
-  </fieldset>
-  <label><input type="checkbox" id="syncscroll" checked> Sync scrolling</label>
 </section>
 
 <p class="status" id="status" role="status"></p>
 
-<div class="panes">
+<nav class="changes" aria-labelledby="issues-h">
+  <h2 id="issues-h">Reported issues</h2>
+  <ul id="issue-list" class="issue-list"></ul>
+</nav>
+
+<section class="validate" aria-labelledby="validate-h">
+  <h2 id="validate-h">Validate this issue</h2>
+  <p id="validate-summary" class="lede"></p>
+  <div class="validate-grid">
+    <div>
+      <h3>Do this</h3>
+      <ol id="validate-steps"></ol>
+      <p id="validate-progress" class="meta" role="status"></p>
+      <button id="reset-checks" type="button">Reset checklist</button>
+    </div>
+    <div>
+      <h3>What you should see</h3>
+      <div class="table-wrap">
+        <table id="validate-table">
+          <caption>Current behavior and the expected result after a fix</caption>
+          <thead><tr><th scope="col">Check</th><th scope="col">Current</th><th scope="col">Expected</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <p id="fix-status" class="fix-status"></p>
+</section>
+
+<div class="panes" id="compare-panes">
   <section class="pane" aria-labelledby="hb">
     <div class="panehead"><h2 id="hb">Before (upstream)</h2><a id="open-before" target="_blank" rel="noopener" href="before/index.html">Open before in a new window</a></div>
     <div class="pane-focus-controls prev"><button id="before-prev" type="button">Focus before editor</button></div>
@@ -85,30 +95,11 @@
 <p id="focus-status" class="status">Keyboard focus: not in a preview control.</p>
 
 <main id="main">
-  <section class="info" aria-labelledby="info-h">
+  <section class="info" id="issue-2854-info" aria-labelledby="info-h">
     <h2 id="info-h">What this compares</h2>
-    <p>Both frames are built from the same BlockNote source and the same two-paragraph fixture. The Before frame is the unmodified baseline; the After frame can be switched between the combined patch and each isolated file. This shows which change fixes focus and which fixes activation.</p>
+    <p>Both frames are built from the same BlockNote source and the same two-paragraph fixture. Before is the unmodified baseline; After can be switched between the combined patch and each isolated file. This shows which change fixes focus and which fixes activation.</p>
     <h3>The problem</h3>
     <p>With the side menu showing and the caret in a block, Tab can focus a cloned Add block button from the closing transition. That copy has no React handlers; Enter and Space do nothing, and about 250 ms later it is removed and focus falls to the document body. The live Add block button also ignores Enter and Space because its click handler is on the icon.</p>
-    <h3>Steps to replicate</h3>
-    <ol>
-      <li>Hover the first paragraph in either frame so the side menu appears, then click it to place the caret.</li>
-      <li>Press Tab. Compare where focus lands in Before and After; the focus status reports the active control inside the frames.</li>
-      <li>With the side menu showing, focus <strong>Focus after editor</strong>, press Shift+Tab twice to reach Add block, then press Enter and Space.</li>
-      <li>Use the theme and width controls; test the keyboard separately in each frame. Tab and Enter are not mirrored.</li>
-    </ol>
-    <h3>What to expect</h3>
-    <div class="table-wrap">
-    <table>
-      <caption>Observed in the local lab; the static frames reproduce the same DOM and focus behavior</caption>
-      <thead><tr><th scope="col">Check</th><th scope="col">Before</th><th scope="col">Both</th><th scope="col">Inert only</th><th scope="col">Activation only</th></tr></thead>
-      <tbody>
-        <tr><th scope="row">Tab from the hovered first paragraph</th><td>Clone → <code>body</code></td><td>Next control</td><td>Next control</td><td>Clone → <code>body</code></td></tr>
-        <tr><th scope="row">Enter or Space on the live Add block</th><td>No menu</td><td>Menu</td><td>No menu</td><td>Menu</td></tr>
-        <tr><th scope="row">Keyboard-only side-menu discovery</th><td>No</td><td>No</td><td>No</td><td>No</td></tr>
-      </tbody>
-    </table>
-    </div>
     <p><strong>Important:</strong> the static build does not emulate forced colours or CDP media preferences. Use the local Diff Lab for forced-colours light/dark, reduced motion, capture and controlled Chromium. The theme buttons here force the editor’s Mantine theme; they do not claim to reproduce OS contrast themes.</p>
     <div class="links">
       <a href="assets/2854.patch">Download both fixes</a>
@@ -123,15 +114,15 @@
     </div>
   </section>
 
-  <section class="diff" aria-labelledby="diff-h">
+  <section class="diff" id="issue-2854-diff" aria-labelledby="diff-h">
     <h2 id="diff-h">What differs in the built editor</h2>
-    <p id="diff-note">Both fixes: the closing popover snapshot becomes inert and Add block activation moves to the button. Generated asset filenames also change because the bundles are content-addressed.</p>
+    <p id="diff-note"></p>
     <div data-patch="both"><pre tabindex="0" aria-label="Both fixes patch"><code>{{PATCH_BOTH}}</code></pre></div>
     <div data-patch="inert" hidden><pre tabindex="0" aria-label="Inert-only patch"><code>{{PATCH_INERT}}</code></pre></div>
     <div data-patch="activation" hidden><pre tabindex="0" aria-label="Activation-only patch"><code>{{PATCH_ACTIVATION}}</code></pre></div>
   </section>
 
-  <section class="info" aria-labelledby="limits-h">
+  <section class="info" id="issue-limits" aria-labelledby="limits-h">
     <h2 id="limits-h">Limits and provenance</h2>
     <ul>
       <li>Even “both fixes” is <strong>partial</strong>: it prevents focus loss and fixes activation, but the side menu is still only revealed by pointer hover. Keyboard-only discovery needs a maintainer decision.</li>
@@ -141,6 +132,13 @@
       <li>No upstream BlockNote PR was opened. This is a local experimental comparison, not a conformance claim.</li>
     </ul>
   </section>
+
+  <section class="info" id="no-local" hidden aria-labelledby="no-local-h">
+    <h2 id="no-local-h">No local static before/after build for this issue yet</h2>
+    <p id="no-local-text"></p>
+    <p id="no-local-fix"></p>
+    <p>The validation checklist above is still usable: it records the current behavior and the expected result, and links to the upstream issue or pull request. Interactive static bundles are currently built only for #2854; adding more requires a fixture, a patch, and a matching static bundle.</p>
+  </section>
 </main>
 
 <footer>
@@ -148,11 +146,16 @@
   <p>Lab-authored comparison code is MIT-licensed. BlockNote source and the experimental patch remain under BlockNote’s MPL-2.0 terms. Modeled on the <a href="https://mgifford.github.io/FOSDEM-website/compare/">FOSDEM before/after comparator</a>.</p>
 </footer>
 
+<script id="issues-data" type="application/json">{{ISSUES}}</script>
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
-  const frames = { before: $('before'), after: $('after') };
+  const data = JSON.parse($('issues-data').textContent);
+  const issues = data.issues;
+  const byNumber = new Map(issues.map((issue) => [issue.number, issue]));
   const params = new URLSearchParams(location.hash.slice(1));
+  let currentIssue = Number(params.get('issue') || '2854');
+  if (!byNumber.has(currentIssue)) currentIssue = 2854;
   const state = {
     variant: params.get('variant') || 'both',
     page: params.get('page') || 'minimal',
@@ -168,6 +171,7 @@
     inert: 'Inert only: just GenericPopover.tsx. The next Tab target is reachable, but the live Add block button still ignores Enter and Space.',
     activation: 'Activation only: just AddBlockButton.tsx. Enter and Space work, but Tab still lands on the dead closing clone and focus falls to the body.',
   };
+  const frames = { before: $('before'), after: $('after') };
 
   const frameSrc = (side) => {
     const query = state.theme === 'auto' ? '' : `?theme=${state.theme}`;
@@ -175,16 +179,23 @@
     return `${dir}/index.html${query}`;
   };
 
-  function applyState(reload = true) {
+  function updateHash() {
+    const issue = byNumber.get(currentIssue);
+    if (issue?.variants) {
+      const suffix = state.theme === 'auto' ? '' : `&theme=${state.theme}`;
+      history.replaceState(null, '', `#issue=${currentIssue}&variant=${state.variant}&page=${state.page}${suffix}`);
+    } else {
+      history.replaceState(null, '', `#issue=${currentIssue}`);
+    }
+  }
+
+  function applyCompare(reload = true) {
     $('variant').value = state.variant;
     $('page').value = state.page;
     $('after-label').textContent = variantLabels[state.variant];
     $('diff-note').textContent = variantNotes[state.variant];
     for (const button of document.querySelectorAll('[data-theme]')) {
       button.setAttribute('aria-pressed', String(button.dataset.theme === state.theme));
-    }
-    for (const item of document.querySelectorAll('#changes li[data-slug]')) {
-      item.setAttribute('aria-current', String(item.dataset.slug === state.variant));
     }
     for (const panel of document.querySelectorAll('[data-patch]')) {
       panel.hidden = panel.dataset.patch !== state.variant;
@@ -195,28 +206,179 @@
       $(`open-${side}`).href = src;
     }
     frames.after.title = `After: ${variantLabels[state.variant]}`;
-    const suffix = state.theme === 'auto' ? '' : `&theme=${state.theme}`;
-    history.replaceState(null, '', `#variant=${state.variant}&page=${state.page}${suffix}`);
-    $('status').textContent = `Showing the minimal editor with ${variantLabels[state.variant]}. Both frames are static builds.`;
+    updateHash();
   }
 
-  $('variant').addEventListener('change', (event) => { state.variant = event.target.value; applyState(); });
-  for (const link of document.querySelectorAll('#changes a.main')) {
-    link.addEventListener('click', (event) => {
-      event.preventDefault();
-      state.variant = link.closest('li').dataset.slug;
-      applyState();
-    });
+  function issueFixLabel(issue) {
+    if (issue.fix.kind === 'local') return 'Interactive';
+    if (issue.fix.kind === 'pr') return 'PR open';
+    if (issue.fix.kind === 'docs') return 'Docs';
+    return 'No fix';
   }
-  $('page').addEventListener('change', (event) => { state.page = event.target.value; applyState(); });
+
+  function renderIssueList() {
+    const list = $('issue-list');
+    list.textContent = '';
+    for (const issue of issues) {
+      const li = document.createElement('li');
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'issue-card';
+      button.dataset.issue = String(issue.number);
+      button.setAttribute('aria-current', String(issue.number === currentIssue));
+      const num = document.createElement('span');
+      num.className = 'issue-num';
+      num.textContent = `#${issue.number}`;
+      const title = document.createElement('span');
+      title.className = 'issue-title';
+      title.textContent = issue.title;
+      const meta = document.createElement('span');
+      meta.className = 'issue-meta';
+      meta.textContent = `${issue.priority} · ${issue.state} · ${issueFixLabel(issue)}`;
+      button.append(num, title, meta);
+      button.addEventListener('click', () => selectIssue(issue.number));
+      li.append(button);
+      list.append(li);
+    }
+  }
+
+  function renderValidate(issue) {
+    $('validate-summary').textContent = issue.summary;
+    const steps = $('validate-steps');
+    steps.textContent = '';
+    issue.steps.forEach((text, index) => {
+      const li = document.createElement('li');
+      const label = document.createElement('label');
+      label.className = 'step-label';
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.dataset.step = String(index);
+      const key = `a11y-lab:${issue.number}:step:${index}`;
+      checkbox.checked = localStorage.getItem(key) === '1';
+      checkbox.addEventListener('change', () => {
+        localStorage.setItem(key, checkbox.checked ? '1' : '0');
+        updateProgress(issue);
+      });
+      const span = document.createElement('span');
+      span.textContent = text;
+      label.append(checkbox, span);
+      li.append(label);
+      steps.append(li);
+    });
+    const tbody = $('validate-table').querySelector('tbody');
+    tbody.textContent = '';
+    for (const row of issue.checks) {
+      const tr = document.createElement('tr');
+      const th = document.createElement('th');
+      th.scope = 'row';
+      th.textContent = row.check;
+      const current = document.createElement('td');
+      current.textContent = row.current;
+      const expected = document.createElement('td');
+      expected.textContent = row.expected;
+      tr.append(th, current, expected);
+      tbody.append(tr);
+    }
+    const fix = $('fix-status');
+    fix.textContent = '';
+    const strong = document.createElement('strong');
+    strong.textContent = issue.fix.kind === 'local' ? 'Fix in this lab: ' : issue.fix.kind === 'pr' ? 'Upstream fix: ' : issue.fix.kind === 'docs' ? 'Documentation fix: ' : 'Fix status: ';
+    fix.append(strong);
+    const detail = document.createElement('span');
+    detail.textContent = `${issue.fix.label}. ${issue.fix.note}`;
+    fix.append(detail);
+    if (issue.fix.url) {
+      fix.append(document.createTextNode(' '));
+      const link = document.createElement('a');
+      link.href = issue.fix.url;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.textContent = issue.fix.kind === 'pr' ? 'Open the upstream PR' : issue.fix.kind === 'docs' ? 'Open the issue' : 'Open the investigation';
+      fix.append(link);
+    }
+    updateProgress(issue);
+  }
+
+  function updateProgress(issue) {
+    const checked = issue.steps.filter((_, index) => localStorage.getItem(`a11y-lab:${issue.number}:step:${index}`) === '1').length;
+    $('validate-progress').textContent = `${checked} of ${issue.steps.length} steps checked. This checklist is local to your browser.`;
+  }
+
+  function applyIssue() {
+    const issue = byNumber.get(currentIssue) || byNumber.get(2854);
+    currentIssue = issue.number;
+    $('issue').value = String(issue.number);
+    document.title = `#${issue.number} — ${issue.title} · BlockNote Diff Lab`;
+    $('issue-title').textContent = `#${issue.number} — ${issue.title}`;
+    $('issue-summary').textContent = issue.summary;
+    $('issue-meta').textContent = `${issue.priority} · ${issue.state} · ${issue.classification}`;
+    const tags = $('issue-tags');
+    tags.textContent = '';
+    for (const text of [issue.state, issue.priority, issueFixLabel(issue), ...(issue.wcag || [])]) {
+      const tag = document.createElement('span');
+      tag.className = 'tag';
+      tag.textContent = text;
+      tags.append(tag);
+    }
+    $('compare-controls').hidden = !issue.variants;
+    $('compare-panes').hidden = !issue.variants;
+    $('focus-status').hidden = !issue.variants;
+    $('issue-2854-info').hidden = !issue.variants;
+    $('issue-2854-diff').hidden = !issue.variants;
+    $('issue-limits').hidden = !issue.variants;
+    $('no-local').hidden = issue.variants;
+    $('no-local-text').textContent = 'No local static before/after bundle is available for this issue. The checklist above records current behavior and the expected result; use the upstream issue or pull request to inspect the fix.';
+    const noLocalFix = $('no-local-fix');
+    noLocalFix.textContent = '';
+    if (issue.issueUrl) {
+      const link = document.createElement('a');
+      link.href = issue.issueUrl;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.textContent = `Open upstream issue #${issue.number}`;
+      noLocalFix.append(link);
+    }
+    if (issue.fix.url) {
+      noLocalFix.append(document.createTextNode(' · '));
+      const link = document.createElement('a');
+      link.href = issue.fix.url;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.textContent = issue.fix.kind === 'pr' ? 'Open the upstream PR' : 'Open the fix';
+      noLocalFix.append(link);
+    }
+    for (const button of document.querySelectorAll('.issue-card')) {
+      button.setAttribute('aria-current', String(Number(button.dataset.issue) === currentIssue));
+    }
+    renderValidate(issue);
+    $('status').textContent = issue.variants
+      ? `Showing #${issue.number} with ${variantLabels[state.variant]}. The Before and After frames are built editors.`
+      : `Showing #${issue.number}. No local Before/After bundle is available; use the steps and upstream links.`;
+    if (issue.variants) applyCompare(); else updateHash();
+  }
+
+  function selectIssue(number) {
+    currentIssue = number;
+    applyIssue();
+  }
+
+  $('issue').innerHTML = issues.map((issue) => `<option value="${issue.number}">#${issue.number} — ${issue.title}</option>`).join('');
+  $('issue').addEventListener('change', (event) => selectIssue(Number(event.target.value)));
+  $('variant').addEventListener('change', (event) => { state.variant = event.target.value; applyCompare(); });
+  $('page').addEventListener('change', (event) => { state.page = event.target.value; applyCompare(); });
   for (const button of document.querySelectorAll('[data-theme]')) {
-    button.addEventListener('click', () => { state.theme = button.dataset.theme; applyState(); });
+    button.addEventListener('click', () => { state.theme = button.dataset.theme; applyCompare(); });
   }
   for (const radio of document.querySelectorAll('input[name="w"]')) {
     radio.addEventListener('change', () => {
       document.querySelector('.panes').style.setProperty('--w', radio.value);
     });
   }
+  $('reset-checks').addEventListener('click', () => {
+    const issue = byNumber.get(currentIssue);
+    issue.steps.forEach((_, index) => localStorage.removeItem(`a11y-lab:${issue.number}:step:${index}`));
+    renderValidate(issue);
+  });
 
   // Sync scrolling between the same-origin frames.
   let syncing = false;
@@ -247,6 +409,7 @@
   };
   let lastFocus = '';
   function focusText() {
+    if (!byNumber.get(currentIssue)?.variants) return '';
     const parent = document.activeElement;
     if (parent && targetNames[parent.id]) return `Keyboard focus: ${targetNames[parent.id]}.`;
     for (const side of ['before', 'after']) {
@@ -267,14 +430,15 @@
   }
   const updateFocus = () => {
     const text = focusText();
-    if (text !== lastFocus) {
+    if (text && text !== lastFocus) {
       lastFocus = text;
       $('focus-status').textContent = text;
     }
   };
   document.addEventListener('focusin', updateFocus);
   setInterval(updateFocus, 250);
-  applyState();
+  renderIssueList();
+  applyIssue();
   updateFocus();
 })();
 </script>

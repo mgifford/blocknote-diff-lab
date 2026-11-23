@@ -1,0 +1,355 @@
+{
+  "issues": [
+    {
+      "number": 2854,
+      "title": "Side menu \"Add block\" (+) not usable with keyboard",
+      "state": "OPEN",
+      "priority": "P1",
+      "classification": "Verified defect",
+      "summary": "Tab lands on a cloned Add block button from the closing side-menu snapshot; Enter and Space do nothing, then focus falls to the page body. The live Add block button also ignores Enter and Space.",
+      "variants": true,
+      "fix": {
+        "kind": "local",
+        "label": "3 local static variants",
+        "url": "https://github.com/mgifford/blocknote-diff-lab/tree/main/issues/2854",
+        "note": "Both fixes, inert-only and activation-only are built in this lab. No upstream PR was opened."
+      },
+      "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2854",
+      "wcag": [
+        "2.1.1 Keyboard",
+        "2.4.3 Focus Order",
+        "2.4.7 Focus Visible",
+        "4.1.2 Name, Role, Value"
+      ],
+      "steps": [
+        "Hover the first paragraph in either editor so the side menu appears, then click it to place the caret.",
+        "Press Tab. In Before, focus lands on the cloned Add block button and then falls to the body. In Both/Inert, it reaches the adjacent Focus after editor control.",
+        "Focus Focus after editor, press Shift+Tab twice to reach Add block, then press Enter and Space. The menu opens only in Both/Activation.",
+        "Switch the Fix variant between Both, Inert only and Activation only and record which symptom changes."
+      ],
+      "checks": [
+        {
+          "check": "Tab from the hovered first paragraph",
+          "current": "Dead clone \u2192 body",
+          "expected": "Next focus control"
+        },
+        {
+          "check": "Enter/Space on the live Add block",
+          "current": "No suggestion menu",
+          "expected": "Suggestion menu"
+        },
+        {
+          "check": "Keyboard-only side-menu discovery",
+          "current": "Not possible; pointer hover required",
+          "expected": "Still unsolved; partial fix only"
+        }
+      ]
+    },
+    {
+      "number": 977,
+      "title": "Tab does not work when highlighting multiple items",
+      "state": "OPEN",
+      "priority": "P3",
+      "classification": "Keyboard behavior",
+      "summary": "Tab does not move focus predictably when several blocks are selected. The core selection and focus interaction needs a state matrix before a patch.",
+      "variants": false,
+      "fix": {
+        "kind": "none",
+        "label": "No fix yet",
+        "url": null,
+        "note": "No local or upstream patch is bundled on this page. Use these steps to record the current behavior."
+      },
+      "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/977",
+      "wcag": [
+        "2.1.1 Keyboard",
+        "2.4.3 Focus Order"
+      ],
+      "steps": [
+        "Select several blocks, for example by Shift+clicking or dragging across them.",
+        "Press Tab and record document.activeElement and whether focus leaves the editor.",
+        "Repeat with a text selection, a multi-block selection and a list selection.",
+        "Record whether Escape clears the selection and restores a predictable focus position."
+      ],
+      "checks": [
+        {
+          "check": "Tab with multiple blocks selected",
+          "current": "Tab does not work as expected; record the actual focus",
+          "expected": "Focus leaves the editor predictably"
+        },
+        {
+          "check": "Tab after Escape clears the selection",
+          "current": "Record behavior",
+          "expected": "Baseline behavior is unchanged"
+        }
+      ]
+    },
+    {
+      "number": 2822,
+      "title": "Missing alternative text field for images",
+      "state": "OPEN",
+      "priority": "P1",
+      "classification": "Media accessibility",
+      "summary": "Image and file blocks do not expose a clear alternative-text field; the formatting toolbar exposes a preview toggle instead. PR #3337 changes the media controls and adds an alt fallback.",
+      "variants": false,
+      "fix": {
+        "kind": "pr",
+        "label": "PR #3337 (open)",
+        "url": "https://github.com/TypeCellOS/BlockNote/pull/3337",
+        "note": "The PR is not bundled in this static page. Open it, or run its head locally, to compare the media toolbar and alt fallback."
+      },
+      "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2822",
+      "wcag": [
+        "1.1.1 Non-text Content"
+      ],
+      "steps": [
+        "Insert an image block and select it.",
+        "Open the formatting toolbar / file controls and look for the alternative-text field.",
+        "Check whether the old preview toggle is still present.",
+        "Clear the image name and inspect the rendered alt attribute for a fallback."
+      ],
+      "checks": [
+        {
+          "check": "Alternative-text field on a selected image",
+          "current": "Missing",
+          "expected": "Present; PR #3337 adds the alt hint/control"
+        },
+        {
+          "check": "Preview toggle",
+          "current": "Present",
+          "expected": "Removed by PR #3337"
+        },
+        {
+          "check": "Alt fallback when name is empty",
+          "current": "Empty alt",
+          "expected": "Fallback derived from the URL"
+        }
+      ]
+    },
+    {
+      "number": 2825,
+      "title": "Table headers are not associated with data cells",
+      "state": "OPEN",
+      "priority": "P1",
+      "classification": "Table semantics",
+      "summary": "Table header cells do not expose id/scope relationships and data cells do not reference their headers. PR #3215 adds decorations and serialization for explicit header relationships.",
+      "variants": false,
+      "fix": {
+        "kind": "pr",
+        "label": "PR #3215 (open)",
+        "url": "https://github.com/TypeCellOS/BlockNote/pull/3215",
+        "note": "The PR is not bundled here. Its source changes are large and include tests and snapshots."
+      },
+      "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2825",
+      "wcag": [
+        "1.3.1 Info and Relationships"
+      ],
+      "steps": [
+        "Create a table with at least one header row and one header column.",
+        "Inspect the DOM: each th should have id and scope, and each td should reference its header(s).",
+        "Navigate the table with a screen reader's table commands.",
+        "Copy or export the table and inspect the serialized HTML."
+      ],
+      "checks": [
+        {
+          "check": "th id/scope",
+          "current": "Missing",
+          "expected": "Present with PR #3215"
+        },
+        {
+          "check": "td headers references",
+          "current": "Missing",
+          "expected": "Present with PR #3215"
+        },
+        {
+          "check": "Screen-reader header announcement",
+          "current": "Ambiguous",
+          "expected": "Header relationship announced"
+        }
+      ]
+    },
+    {
+      "number": 2809,
+      "title": "Structure document lists correctly in reading mode",
+      "state": "OPEN",
+      "priority": "P1",
+      "classification": "Reading mode / list semantics",
+      "summary": "Read-only list output does not consistently expose list, listitem and group relationships. A wrapper or plugin design is likely needed; there is no one-line fix.",
+      "variants": false,
+      "fix": {
+        "kind": "none",
+        "label": "No fix yet",
+        "url": null,
+        "note": "No local or upstream patch is bundled. Record the current read-only/accessibility-tree output."
+      },
+      "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2809",
+      "wcag": [
+        "1.3.1 Info and Relationships",
+        "4.1.2 Name, Role, Value"
+      ],
+      "steps": [
+        "Open a read-only editor containing nested bullet, numbered and check lists.",
+        "Inspect the accessibility tree or DOM for list, listitem and group roles.",
+        "Export the document and inspect the serialized list HTML.",
+        "Compare the read-only output with the editable editor."
+      ],
+      "checks": [
+        {
+          "check": "Nested list structure in reading mode",
+          "current": "Incomplete; record actual output",
+          "expected": "List/listitem/group relationships exposed"
+        },
+        {
+          "check": "Exported list HTML",
+          "current": "Record actual output",
+          "expected": "Semantic list structure preserved"
+        }
+      ]
+    },
+    {
+      "number": 2826,
+      "title": "Merged table cells do not expose clear header relationships",
+      "state": "OPEN",
+      "priority": "P2",
+      "classification": "Table semantics",
+      "summary": "Merged cells can have multiple applicable headers, but the current output does not make those relationships explicit. PR #3215 is intended to cover this case.",
+      "variants": false,
+      "fix": {
+        "kind": "pr",
+        "label": "PR #3215 (open)",
+        "url": "https://github.com/TypeCellOS/BlockNote/pull/3215",
+        "note": "Not bundled here; validate the merged-cell cases against the PR."
+      },
+      "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2826",
+      "wcag": [
+        "1.3.1 Info and Relationships"
+      ],
+      "steps": [
+        "Create a table with merged rows and columns and at least two headers.",
+        "Inspect the merged cell's headers/scope relationships in the DOM.",
+        "Navigate it with a screen reader and record which headers are announced.",
+        "Repeat for row spans and column spans."
+      ],
+      "checks": [
+        {
+          "check": "Header relationships on merged cells",
+          "current": "Ambiguous",
+          "expected": "All applicable headers referenced"
+        },
+        {
+          "check": "Screen-reader announcement",
+          "current": "Record actual announcement",
+          "expected": "Clear header context"
+        }
+      ]
+    },
+    {
+      "number": 2823,
+      "title": "Bilingual documents: unable to declare language on foreign language passages",
+      "state": "OPEN",
+      "priority": "P2",
+      "classification": "Language semantics",
+      "summary": "There is no way to declare the language of a passage inside a document. The representation (inline mark vs block attribute) needs design before code.",
+      "variants": false,
+      "fix": {
+        "kind": "none",
+        "label": "No fix yet",
+        "url": null,
+        "note": "No local or upstream patch is bundled; this needs a design decision first."
+      },
+      "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2823",
+      "wcag": [
+        "3.1.2 Language of Parts"
+      ],
+      "steps": [
+        "Create a paragraph containing a passage in a different language.",
+        "Look for a way to mark that passage's language.",
+        "Inspect whether any lang attribute is emitted in the DOM or export.",
+        "Record the closest workaround and its limitations."
+      ],
+      "checks": [
+        {
+          "check": "Declare language on a passage",
+          "current": "Not possible",
+          "expected": "A documented representation and UI"
+        },
+        {
+          "check": "lang attribute in output",
+          "current": "Missing",
+          "expected": "Emitted for the marked passage"
+        }
+      ]
+    },
+    {
+      "number": 2853,
+      "title": "Improve table and videos accessibility in BlockNote",
+      "state": "OPEN",
+      "priority": "P2",
+      "classification": "Table and video accessibility",
+      "summary": "A broad request covering table captions/names and video accessibility. It needs to be split into concrete table and video work items.",
+      "variants": false,
+      "fix": {
+        "kind": "none",
+        "label": "No fix yet",
+        "url": null,
+        "note": "No local or upstream patch is bundled; split the request before implementing."
+      },
+      "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2853",
+      "wcag": [
+        "1.1.1 Non-text Content",
+        "1.3.1 Info and Relationships",
+        "1.2.2 Captions"
+      ],
+      "steps": [
+        "Insert a table and try to add a visible or accessible caption/name.",
+        "Inspect the table's accessible name and header relationships.",
+        "Insert a video and inspect its controls, captions track and accessible name.",
+        "Record which parts belong to table work and which belong to video work."
+      ],
+      "checks": [
+        {
+          "check": "Table caption/accessible name",
+          "current": "Record actual behavior",
+          "expected": "A clear, documented table name"
+        },
+        {
+          "check": "Video controls/captions",
+          "current": "Record actual behavior",
+          "expected": "Accessible controls and captions path"
+        }
+      ]
+    },
+    {
+      "number": 2829,
+      "title": "Keyboard workflow for deleting a table is not explained",
+      "state": "OPEN",
+      "priority": "P2",
+      "classification": "Downstream documentation",
+      "summary": "The downstream documentation does not explain how to delete a table with a keyboard. This is a docs fix, not a BlockNote runtime change.",
+      "variants": false,
+      "fix": {
+        "kind": "docs",
+        "label": "Downstream docs change",
+        "url": "https://github.com/TypeCellOS/BlockNote/issues/2829",
+        "note": "No local runtime bundle; improve the downstream documentation after #2854 is resolved."
+      },
+      "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2829",
+      "wcag": [
+        "2.1.1 Keyboard",
+        "3.3.5 Help"
+      ],
+      "steps": [
+        "Open the downstream docs for tables and keyboard shortcuts.",
+        "Try to find the documented way to delete a table without a pointer.",
+        "Follow the current instructions and record where they stop.",
+        "Draft the missing keyboard route and add it to the docs."
+      ],
+      "checks": [
+        {
+          "check": "Keyboard table deletion documented",
+          "current": "Not explained",
+          "expected": "A tested step-by-step route"
+        }
+      ]
+    }
+  ]
+}

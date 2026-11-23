@@ -77,3 +77,34 @@ footer { font-size: .86rem; color: var(--muted); border-top: 1px solid var(--lin
 .table-wrap { max-width: 100%; overflow-x: auto; }
 .diff pre { max-height: 45vh; }
 @media (max-width: 800px) { .panes { flex-direction: column; } .pane { width: 100% !important; } }
+
+/* Issue catalog and validation */
+[hidden] { display: none !important; }
+.controls #compare-controls { flex-direction: row; flex-wrap: wrap; gap: .75rem 1.5rem; align-items: end; }
+.controls .inline { display: inline-flex; align-items: center; gap: .35rem; }
+.issue-list { list-style: none; margin: .5rem 0 1rem; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: .75rem; }
+.issue-list li { border: 0; background: none; padding: 0; margin: 0; }
+.issue-card { display: grid; grid-template-columns: auto 1fr; gap: .15rem .55rem; width: 100%; text-align: left; font: inherit; color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: .4rem; padding: .6rem .75rem; cursor: pointer; }
+.issue-card:hover { border-color: var(--fg); }
+.issue-card[aria-current="true"] { border: 2px solid var(--focus); }
+.issue-num { font-weight: 700; color: var(--muted); }
+.issue-title { font-weight: 600; }
+.issue-meta { grid-column: 2; font-size: .8rem; color: var(--muted); }
+.validate { max-width: 1120px; margin: 1rem auto; padding: 0 1.25rem; }
+.validate-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: .85rem; margin: .75rem 0; }
+.validate-grid > div { border: 1px solid var(--line); background: var(--panel); padding: .75rem .9rem; }
+.validate h3 { margin-top: 0; }
+.validate ol { padding-left: 1.5rem; margin: .2rem 0; }
+.validate li { margin: .4rem 0; }
+.step-label { display: flex; align-items: flex-start; gap: .5rem; }
+.step-label input { margin-top: .35rem; flex: none; }
+.validate table { font-size: .9rem; }
+.fix-status { border-inline-start: 5px solid var(--line); background: var(--panel); padding: .6rem .8rem; margin: .75rem 0; }
+.fix-status a { font-weight: 600; }
+input:focus-visible, select:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.controls > div { min-width: 0; max-width: 100%; }
+.controls select { max-width: 100%; }
+@media (max-width: 800px) {
+  .controls > div, .controls #compare-controls { flex: 1 1 100%; width: 100%; }
+  .controls select { width: 100%; }
+}

@@ -60,6 +60,12 @@ for (const [name, patch] of Object.entries(patches)) {
   if (!template.includes(placeholder)) throw new Error(`Template is missing ${placeholder}`);
   template = template.replace(placeholder, escapeHtml(patch));
 }
+const issuesJson = fs.readFileSync(path.join(root, 'pages', 'issues.json'), 'utf8');
+JSON.parse(issuesJson);
+const safeIssuesJson = JSON.stringify(JSON.parse(issuesJson)).replace(/</g, '\\u003c');
+if (!template.includes('{{ISSUES}}')) throw new Error('Template is missing the {{ISSUES}} placeholder');
+template = template.replace('{{ISSUES}}', safeIssuesJson);
 fs.writeFileSync(path.join(out, 'index.html'), template);
+fs.copyFileSync(path.join(root, 'pages', 'issues.json'), path.join(out, 'issues.json'));
 fs.writeFileSync(path.join(out, '.nojekyll'), '');
 console.log(`Built ${out} with ${files.length} evidence files and the patch.`);
