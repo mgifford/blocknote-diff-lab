@@ -1,0 +1,5 @@
+.lab/
+.pnpm-store/
+node_modules/
+reports/
+.DS_Store

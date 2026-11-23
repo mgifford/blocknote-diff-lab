@@ -1,0 +1,24 @@
+{
+  "name": "blocknote-diff-lab-starter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local before/after comparison harness for pinned BlockNote Git revisions",
+  "scripts": {
+    "doctor": "node bin/diff-lab.mjs doctor",
+    "lab:prepare": "node bin/diff-lab.mjs prepare",
+    "install:before": "node bin/diff-lab.mjs install --side before",
+    "install:after": "node bin/diff-lab.mjs install --side after",
+    "start": "node bin/diff-lab.mjs start",
+    "demo": "node bin/diff-lab.mjs demo",
+    "capture": "node bin/diff-lab.mjs capture",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.60.0",
+    "axe-core": "4.13.0"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  }
+}
