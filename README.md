@@ -147,6 +147,15 @@ node bin/diff-lab.mjs install --side after
 
 `--side both` runs the two installs sequentially. The command uses `pnpm install --frozen-lockfile`. `pnpm` shares its global content-addressed store, but each worktree gets its own workspace links and generated outputs. Do **not** symlink one worktree's `node_modules` into the other, since that risks accidentally loading Before code on the After side.
 
+For the initial `@blocknote/example-editor` route, a filtered install is much smaller and was sufficient for the live smoke test:
+
+```sh
+cd .lab/worktrees/after
+pnpm install --frozen-lockfile --filter . --filter '@blocknote/example-editor...'
+```
+
+Run the same command in `.lab/worktrees/before`. The playground's generated example registry can still make Vite warn about unresolved dependencies for other examples; the configured minimal route loads. Use the unfiltered `install` command above if you need other example routes.
+
 A separate installation of the kit's Playwright dependencies is needed for Chromium control and screenshot/axe captures:
 
 ```sh
@@ -166,7 +175,7 @@ node bin/diff-lab.mjs start
 
 Open **http://localhost:8100/**.
 
-The kit starts upstream's Vite+ playground twice, one instance from each worktree, using the `ports.before` and `ports.after` values in `compare.config.json` (default `5173` and `5174`). The initial route is `comparison.path` (default `/basic/minimal?hideMenu`), a small existing upstream example. The launcher does not run `vp run -r build` and does not pre-build other examples; the dev server may still transform examples on demand. Changing root toolchain requirements may require launcher adjustments. If a port is already in use, the Vite+ server exits rather than choosing another port; change the config and restart.
+The kit starts upstream's Vite+ playground twice, one instance from each worktree, using the `ports.before` and `ports.after` values in `compare.config.json` (default `5173` and `5174`). The initial route is `comparison.path` (default `/basic/minimal?hideMenu`), a small existing upstream example. The launcher does not run `vp run -r build` and does not pre-build other examples; the dev server may still transform examples on demand. This launcher was smoke-tested against upstream `9cb988f` with Node 24.15.0 and pnpm 11.8.0 using the filtered install above. Changing root toolchain requirements may require launcher adjustments. If a port is already in use, the Vite+ server exits rather than choosing another port; change the config and restart.
 
 Each iframe has an independent editor. Perform the step checklist separately in Before and After. Light and dark can be set through the controlled Chromium mode selector; normal operating-system preferences continue to work in an ordinary browser. Changing the viewport width scales the display to fit but preserves the iframe's actual CSS viewport size.
 
@@ -247,7 +256,7 @@ If a patch was authored against another commit and cannot apply cleanly, fetch t
 
 ## Known limits of the starter
 
-- The Git orchestration, configuration validation and static-file helper are covered by synthetic-fixture unit tests. The viewer, browser control and capture have been exercised manually against demo fixtures only; none of it has been validated against an installed full BlockNote monorepo in this environment. The current upstream Vite+ CLI and dependency install need validation on your machine.
+- The Git orchestration, configuration validation and static-file helper are covered by synthetic-fixture unit tests. The demo path and the live minimal route have both been exercised. A live smoke run at upstream `9cb988f` with Node 24.15.0 and pnpm 11.8.0 loaded both `/basic/minimal?hideMenu` editors, started both Vite+ servers through the kit launcher, and produced 10 capture runs with the pinned SHA and a local, uncommitted After-only focus-outline patch. That run reported `aria-input-field-name` on the editor textbox on both sides — a starting observation, not a conformance result. The full workspace install, other example routes and other upstream commits remain unvalidated.
 - Demo captures are labelled, but they are still synthetic; never cite them as editor evidence.
 - Public GitHub Pages publication is a later phase. Static previews must be compiled and deployed with correct subpath/base configuration; GitHub Pages cannot run Vite+ dev servers or a local CDP controller.
 - The upstream playground is a large workspace. Even a shallow Git clone does not make dependency installation small. A more minimal source-bound editor fixture is an appropriate second optimization if this baseline proves too expensive.
@@ -255,7 +264,7 @@ If a patch was authored against another commit and cannot apply cleanly, fetch t
 - The demo's two-author history, presence and simultaneous editing are a local scripted animation. They do not use Yjs, WebSockets or multiple clients, and they are not a BlockNote collaboration implementation. Real BlockNote collaboration would require the upstream collaboration example and a provider.
 - The viewer supports side by side only. Onion/difference modes, full accessibility-tree semantic diffs, production Lighthouse audits and comprehensive keyboard automation are future work, specified in the implementation prompt.
 - Screenshot comparison does not control all sources of nondeterminism (fonts, timing, random block IDs, animations). The next phase needs a deterministic document fixture and masking policy.
-- The viewer's own accessibility has not been independently audited. Its step controls and live regions are known to need improvement.
+- The viewer's own accessibility has not been independently audited. Step controls now carry step-specific accessible names and the evidence report is no longer an atomic live region, but a full audit is still needed.
 - This lab makes no WCAG conformance claims. axe checks only part of accessibility, and Lighthouse scores vary by environment.
 
 ## Glossary

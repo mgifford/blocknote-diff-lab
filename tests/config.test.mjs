@@ -1,7 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { validateConfig } from '../lib/config.mjs';
+import os from 'node:os';
+import path from 'node:path';
+import { validateConfig, readState, projectPaths } from '../lib/config.mjs';
 import { BROWSER_MODES } from '../lib/browser.mjs';
 
 function base() {
@@ -35,4 +37,15 @@ test('the lab does not occupy the npm prepare lifecycle hook', () => {
   const pkg = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
   assert.equal(pkg.scripts.prepare, undefined, 'a prepare script would clone BlockNote on pnpm install');
   assert.equal(typeof pkg.scripts['lab:prepare'], 'string');
+});
+test('a corrupt state file is reported clearly', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'diff-lab-state-'));
+  try {
+    const paths = projectPaths(root);
+    fs.mkdirSync(path.dirname(paths.state), { recursive: true });
+    fs.writeFileSync(paths.state, '{not json');
+    assert.throws(() => readState(root), /Cannot read .*state\.json/);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
 });

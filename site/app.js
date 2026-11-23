@@ -34,21 +34,28 @@ function saveDraft() {
 
 function renderSteps() {
   let stored = {};
-  try { stored = JSON.parse(localStorage.getItem(itemKey()) || '{}'); } catch { /* ignore stale data */ }
+  try {
+    const parsed = JSON.parse(localStorage.getItem(itemKey()) || '{}');
+    stored = parsed && typeof parsed === 'object' ? parsed : {};
+  } catch { /* ignore stale data */ }
   const wrapper = $('steps');
   wrapper.replaceChildren();
   config.comparison.steps.forEach((step, i) => {
     const row = element('section', undefined, 'step');
     const top = element('div', undefined, 'step-header');
-    top.append(element('h3', `${i + 1}. ${step.instruction}`));
+    const heading = element('h3', `${i + 1}. ${step.instruction}`);
+    heading.id = `step-${step.id}-heading`;
+    top.append(heading);
     const checkLabel = element('label');
     const checked = document.createElement('input');
     checked.type = 'checkbox';
     checked.checked = !!stored[step.id]?.completed;
+    checked.setAttribute('aria-label', `Step ${i + 1}: reviewed both before and after`);
     checkLabel.append(checked, document.createTextNode(' Reviewed both'));
     top.append(checkLabel);
     const verdictLabel = element('label', ' Overall result: ');
     const verdict = element('select');
+    verdict.setAttribute('aria-label', `Step ${i + 1}: overall result`);
     for (const [value, text] of [['unassessed', 'Not assessed'], ['improved', 'Improved'], ['unchanged', 'Unchanged'], ['regressed', 'Regressed'], ['inconclusive', 'Inconclusive']]) {
       const option = element('option', text);
       option.value = value;
@@ -69,6 +76,7 @@ function renderSteps() {
       const label = element('label', `${side} observation`);
       const input = element('textarea');
       input.rows = 2;
+      input.setAttribute('aria-label', `Step ${i + 1}: ${side} observation`);
       input.placeholder = `What happened in ${side.toLowerCase()}?`;
       const key = side.toLowerCase();
       input.value = stored[step.id]?.[key] || '';
@@ -172,10 +180,16 @@ function displayReport(report) {
 
 async function init() {
   const response = await fetch('/api/status', { cache: 'no-store' });
-  if (!response.ok) throw new Error('Could not read lab status');
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({}));
+    throw new Error(body.error || `Could not read lab status (${response.status})`);
+  }
   const status = await response.json();
   config = status.config;
   state = status.state;
+  const demoMode = status.mode.startsWith('DEMO');
+  const afterChanged = Boolean(status.changes?.after?.trim());
+  const changesError = status.changes?.error;
   $('summary').textContent = `${config.comparison.title}. ${config.comparison.description}`;
   if (config.comparison.issueUrl) {
     try {
@@ -183,13 +197,17 @@ async function init() {
       if (url.protocol === 'https:') { $('issue-link').href = url.href; $('issue-link').hidden = false; }
     } catch { /* optional invalid link remains hidden */ }
   }
-  $('source').textContent = state ? `Source Git SHA: ${state.sha}. Patch: ${state.patched ? state.patchFile : 'none (both versions are identical unless After was manually edited)'}.` : 'No source snapshot prepared.';
-  const warning = status.mode.startsWith('DEMO') ? 'DEMO MODE: Both panes contain synthetic fixtures. They are not BlockNote. Use this only to validate the viewer.'
-    : !state ? 'No snapshot prepared. Run pnpm prepare and pnpm start.'
-    : !state.patched ? 'NO PATCH CONFIGURED. Both worktrees start at the same Git commit. Supply a patch or edit only the After worktree to see a real difference.' : '';
+  $('source').textContent = state
+    ? `Source Git SHA: ${state.sha}. Patch: ${state.patched ? state.patchFile : afterChanged ? 'none (After has local changes; run capture to record the diff)' : 'none (both versions are identical unless After was manually edited)'}.`
+    : 'No source snapshot prepared.';
+  const warning = demoMode ? 'DEMO MODE: Both panes contain synthetic fixtures. They are not BlockNote. Use this only to validate the viewer.'
+    : !state ? 'No snapshot prepared. Run pnpm lab:prepare (or node bin/diff-lab.mjs prepare) and pnpm start.'
+    : state.patched ? ''
+    : changesError ? `Could not inspect After changes: ${changesError}`
+    : afterChanged ? 'AFTER WORKTREE HAS LOCAL CHANGES. Run pnpm capture to record the diff. This is not a prepared patch file.'
+    : 'NO PATCH CONFIGURED. Both worktrees start at the same Git commit. Supply a patch or edit only the After worktree to see a real difference.';
   $('warning').textContent = warning;
   const isolated = new URLSearchParams(location.search).get('controlled') === '1';
-  const demoMode = status.mode.startsWith('DEMO');
   $('demo-controls').hidden = !demoMode;
   if (demoMode) {
     $('collaborate').addEventListener('click', () => {
