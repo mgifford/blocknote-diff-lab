@@ -5,3 +5,4 @@ reports/*
 !reports/ISSUE-INVENTORY.md
 !reports/issue-inventory.json
 .DS_Store
+_site/

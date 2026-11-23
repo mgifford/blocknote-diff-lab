@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>BlockNote #2854 — side-menu keyboard focus</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header>
+  <p class="eyebrow">BlockNote Accessibility Diff Lab · static evidence</p>
+  <h1>#2854 — side menu “Add block” and keyboard focus</h1>
+  <p class="lede">A verified BlockNote 0.57.0 defect: with the side menu showing, Tab can focus a cloned Add block button from a closing transition, Enter and Space do nothing, and focus falls to <code>document.body</code>. A two-file experimental patch stops the dead focus stop and restores button activation.</p>
+  <p class="meta">Upstream base: <code>9cb988ff94b60979bbbc62b0ded5cf62fdac88c8</code> (0.57.0) · Fixture: <code>4611ae1b</code> (local) · Browser: Chromium 148 / Playwright 1.60 · Recorded 2026-11-23</p>
+  <p><span class="tag">Verified defect</span> <span class="tag">Experimental patch</span> <span class="tag">Partial fix</span></p>
+</header>
+
+<main id="main">
+  <div class="notice status-partial">
+    <strong>This is a static evidence report, not the live editor comparison.</strong>
+    GitHub Pages cannot run BlockNote’s Vite+ dev servers or the local Chromium CDP controller. The live before/after editors and forced-colours emulation run locally with the Diff Lab. The interactive viewer and the source are in the <a href="https://github.com/mgifford/blocknote-diff-lab">repository</a>.
+  </div>
+
+  <h2>Problem and affected users</h2>
+  <p>The side menu beside a block contains <strong>Add block</strong> (+) and <strong>Open block menu</strong> (six-dot). With the default editor:</p>
+  <ol>
+    <li>Hover a paragraph so the side menu appears and place the caret in that block.</li>
+    <li>Press Tab.</li>
+    <li>Focus lands on a cloned, non-interactive copy of Add block. Enter or Space does nothing.</li>
+    <li>About 250 ms later the copy is removed and focus falls to <code>document.body</code>.</li>
+  </ol>
+  <p>Keyboard-only users lose their place, screen-reader users hear a control that does not work, and switch/voice users cannot activate Add block from the keyboard. The live Add block button also ignores Enter and Space because its click handler is on the icon, not the button.</p>
+  <p><strong>WCAG 2.2 indicators:</strong> 2.1.1 Keyboard, 2.4.3 Focus Order, 2.4.7 Focus Visible, 4.1.2 Name, Role, Value. These are investigation targets, not a conformance finding.</p>
+
+  <h2>Before and after</h2>
+  <table>
+    <caption>Tab from the hovered first paragraph with the side menu showing</caption>
+    <thead>
+      <tr><th scope="col">Condition</th><th scope="col">Before</th><th scope="col">After the patch</th></tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row">Light, 1280×840</th><td>Cloned Add block button → <code>BODY</code></td><td><code>#after-next</code> (“Focus after editor”), stays there</td></tr>
+      <tr><th scope="row">Dark</th><td>Cloned Add block button → <code>BODY</code></td><td><code>#after-next</code>, stays there</td></tr>
+      <tr><th scope="row">Forced colours light</th><td>Cloned Add block button → <code>BODY</code></td><td><code>#after-next</code>, stays there</td></tr>
+      <tr><th scope="row">Forced colours dark</th><td>Cloned Add block button → <code>BODY</code></td><td><code>#after-next</code>, stays there</td></tr>
+      <tr><th scope="row">Reduced motion</th><td>Cloned Add block button → <code>BODY</code></td><td><code>#after-next</code>, stays there</td></tr>
+      <tr><th scope="row">320×800 reflow</th><td>Cloned Add block button → <code>BODY</code></td><td><code>#after-next</code>, stays there</td></tr>
+    </tbody>
+  </table>
+  <p>Repeated light runs: Before 3/3 clone → <code>BODY</code>; After 3/3 next control immediately and after 450 ms. The clone has no React props. Pressing Enter or Space on the live Add block opens a suggestion menu only after the patch.</p>
+
+  <div class="grid">
+    <figure>
+      <img src="assets/before-forced-light-menu.png" alt="Before editor in forced-colours light, with the side menu Add block and block menu buttons visible beside the first paragraph.">
+      <figcaption>Before: the side menu is shown by pointer hover; the Add block button is not reliably keyboard-operable.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/after-forced-light-after-tab.png" alt="After editor in forced-colours light, with focus on the host button after the editor rather than on a disappearing menu copy.">
+      <figcaption>After the patch: Tab leaves the editor for the adjacent focus target instead of the cloned menu.</figcaption>
+    </figure>
+  </div>
+
+  <h2>Root cause</h2>
+  <p>The core side-menu extension hides the menu on any keydown while the editor is focused. <code>SideMenuController</code> then removes the live children, and <code>GenericPopover</code> clones the last rendered DOM for the closing transition. That clone is still in the tab order. A separate bug attaches Add block’s <code>onClick</code> to the icon rather than the shared side-menu button.</p>
+
+  <h2>Experimental patch</h2>
+  <p>Two files in <code>packages/react</code>: mark closing popover snapshots <code>inert</code>, and move Add block activation to the button. The patch applies cleanly to the pinned base. It is not an upstream submission.</p>
+  <div class="links">
+    <a href="assets/2854.patch">Download the patch</a>
+    <a href="assets/fixture.patch">Download the viewer fixture patch</a>
+    <a href="assets/after-focus.json">After focus JSON</a>
+    <a href="assets/before-focus.json">Before focus JSON</a>
+    <a href="assets/after-activation.json">After activation JSON</a>
+    <a href="assets/before-activation.json">Before activation JSON</a>
+    <a href="https://github.com/mgifford/blocknote-diff-lab/tree/main/issues/2854">Full investigation</a>
+  </div>
+  <details>
+    <summary>Show the two-file patch</summary>
+    <pre><code>{{PATCH}}</code></pre>
+  </details>
+
+  <h2>Reproduction steps</h2>
+  <ol>
+    <li>Open the live comparison locally with the Diff Lab: <code>node bin/diff-lab.mjs start</code>.</li>
+    <li>Both editors start with the shared two-paragraph fixture. Hover the first paragraph and click it to place the caret.</li>
+    <li>Press Tab. In Before, focus stays inside the editor after the dead clone disappears; in After, focus reaches <strong>Focus after editor</strong>.</li>
+    <li>With the side menu showing, focus <strong>Focus after editor</strong>, press Shift+Tab twice to reach Add block, then press Enter and Space. The suggestion menu opens only in After.</li>
+    <li>Repeat at 320px, light, dark, forced-colours light/dark and reduced motion.</li>
+  </ol>
+
+  <h2>Limits</h2>
+  <ul>
+    <li>This is a <strong>partial</strong> fix. It prevents focus loss and fixes button activation, but it does not make the side menu discoverable by keyboard alone; that interaction still needs a maintainer decision.</li>
+    <li>Only the default Mantine UI and Chromium 148 were exercised. Ariakit, shadcn, Firefox and Safari are unverified.</li>
+    <li>No human screen-reader session was recorded.</li>
+    <li>The proposed upstream regression test has not been run because BlockNote requires its browser suite to run in Docker.</li>
+    <li>axe-core and Lighthouse are not used to claim a pass for this focus-order defect.</li>
+  </ul>
+
+  <h2>Run the live lab</h2>
+  <p>The live comparison, forced-colours emulation, capture reports and issue scripts are in the <a href="https://github.com/mgifford/blocknote-diff-lab">BlockNote Accessibility Diff Lab</a>. Start with the README’s local workflow; GitHub Pages intentionally hosts only this static report.</p>
+
+  <figure>
+    <img src="assets/viewer-fixture.png" alt="The full BlockNote Diff Lab viewer showing the seeded two-paragraph fixture in Before and After, focus before/after editor buttons around each pane, a focus status line reading Focus after editor, and the reproduction steps.">
+    <figcaption>The local live viewer with the seeded fixture and real focus targets. This interactive view requires the local Vite+ servers and is not available on GitHub Pages.</figcaption>
+  </figure>
+</main>
+
+<footer>
+  <p>Lab-authored code is MIT-licensed. BlockNote source and the experimental patch remain under BlockNote’s MPL-2.0 terms. This report contains partial accessibility evidence, not a WCAG conformance claim. No upstream BlockNote PR was opened.</p>
+</footer>
+</body>
+</html>
