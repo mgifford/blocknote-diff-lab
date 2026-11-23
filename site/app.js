@@ -146,7 +146,9 @@ function displayReport(report) {
     container.append(element('p', 'No pinned source snapshot was present for this capture.', 'meta'));
   } else if (source.sha) {
     const patch = source.patched ? `patch SHA-256 ${source.patchHash}` : 'no patch configured';
-    container.append(element('p', `Source ${source.sha}; ${patch}; diff base ${source.diffBase || source.sha}.`, 'meta'));
+    const upstream = source.upstreamSha && source.upstreamSha !== source.sha ? ` Upstream base ${source.upstreamSha}.` : '';
+    const fixture = source.fixture ? ` Fixture ${source.fixture.query}.` : '';
+    container.append(element('p', `Source ${source.sha}; ${patch}; diff base ${source.diffBase || source.sha}.${upstream}${fixture}`, 'meta'));
   }
   if (source.currentDiff?.error) container.append(element('p', source.currentDiff.error, 'meta'));
   else if (source.currentDiff) container.append(element('p', `Tracked change from the pinned SHA: ${source.currentDiff.changed ? 'yes' : 'none'}.`, 'meta'));
@@ -198,7 +200,7 @@ async function init() {
     } catch { /* optional invalid link remains hidden */ }
   }
   $('source').textContent = state
-    ? `Source Git SHA: ${state.sha}. Patch: ${state.patched ? state.patchFile : afterChanged ? 'none (After has local changes; run capture to record the diff)' : 'none (both versions are identical unless After was manually edited)'}.`
+    ? `Source Git SHA: ${state.sha}.${state.upstreamSha && state.upstreamSha !== state.sha ? ` Upstream base: ${state.upstreamSha}.` : ''}${state.fixture ? ` Fixture: ${state.fixture.query}.` : ''} Patch: ${state.patched ? state.patchFile : afterChanged ? 'none (After has local changes; run capture to record the diff)' : 'none (both versions are identical unless After was manually edited)'}.`
     : 'No source snapshot prepared.';
   const warning = demoMode ? 'DEMO MODE: Both panes contain synthetic fixtures. They are not BlockNote. Use this only to validate the viewer.'
     : !state ? 'No snapshot prepared. Run pnpm lab:prepare (or node bin/diff-lab.mjs prepare) and pnpm start.'
@@ -264,7 +266,7 @@ async function init() {
   $('viewport').addEventListener('change', fitFrames);
   $('notes').addEventListener('input', saveDraft);
   $('download').addEventListener('click', () => {
-    const payload = { exportedAt: new Date().toISOString(), comparison: config.comparison, git: state ? { sha: state.sha, patchHash: state.patchHash } : null,
+    const payload = { exportedAt: new Date().toISOString(), comparison: config.comparison, git: state ? { sha: state.sha, upstreamSha: state.upstreamSha, fixture: state.fixture, patchHash: state.patchHash } : null,
       viewport: Number($('viewport').value), preferenceRequested: $('mode').value,
       observations, notes: $('notes').value,
       warning: 'Manual observations do not establish WCAG conformance.' };

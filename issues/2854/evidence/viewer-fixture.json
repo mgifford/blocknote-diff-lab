@@ -1,0 +1,37 @@
+{
+  "results": [
+    {
+      "side": "before",
+      "pre": {
+        "activeIsEditor": true,
+        "liveAdd": true
+      },
+      "immediate": {
+        "tag": "IFRAME",
+        "id": "before"
+      },
+      "status": "Keyboard focus: still inside the Before editor preview; the adjacent focus target has not received focus.",
+      "later": {
+        "tag": "IFRAME",
+        "id": "before"
+      }
+    },
+    {
+      "side": "after",
+      "pre": {
+        "activeIsEditor": true,
+        "liveAdd": true
+      },
+      "immediate": {
+        "tag": "BUTTON",
+        "id": "after-next"
+      },
+      "status": "Keyboard focus: Focus after editor (After).",
+      "later": {
+        "tag": "BUTTON",
+        "id": "after-next"
+      }
+    }
+  ],
+  "errors": []
+}

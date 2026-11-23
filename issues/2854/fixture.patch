@@ -1,0 +1,42 @@
+From 4611ae1b9347bad09f243f9b264d8754ffc660e5 Mon Sep 17 00:00:00 2001
+From: Mike Gifford <mike.gifford@gmail.com>
+Date: Mon, 23 Nov 2026 13:50:42 -0500
+Subject: [PATCH] test fixture: seed two paragraphs for #2854 viewer
+
+---
+ examples/01-basic/01-minimal/src/App.tsx | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/examples/01-basic/01-minimal/src/App.tsx b/examples/01-basic/01-minimal/src/App.tsx
+index a3b92ba..cf393a4 100644
+--- a/examples/01-basic/01-minimal/src/App.tsx
++++ b/examples/01-basic/01-minimal/src/App.tsx
+@@ -1,11 +1,24 @@
+ import "@blocknote/core/fonts/inter.css";
++import type { PartialBlock } from "@blocknote/core";
+ import { BlockNoteView } from "@blocknote/mantine";
+ import "@blocknote/mantine/style.css";
+ import { useCreateBlockNote } from "@blocknote/react";
+ 
++// Seeded only for the Diff Lab #2854 comparison. The stock example remains
++// empty when the fixture query parameter is absent.
++const fixtureContent: PartialBlock<any, any, any>[] = [
++  { type: "paragraph", content: "First paragraph" },
++  { type: "paragraph", content: "Second paragraph" },
++];
++
+ export default function App() {
++  const useFixture = new URLSearchParams(window.location.search).has(
++    "fixture2854",
++  );
+   // Creates a new editor instance.
+-  const editor = useCreateBlockNote();
++  const editor = useCreateBlockNote(
++    useFixture ? { initialContent: fixtureContent } : {},
++  );
+ 
+   // Renders the editor instance using a React component.
+   return <BlockNoteView editor={editor} />;
+-- 
+2.54.0 (Apple Git-157)
+

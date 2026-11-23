@@ -2,15 +2,16 @@
 
 ## Environment
 
-- Upstream: `9cb988ff94b60979bbbc62b0ded5cf62fdac88c8` (0.57.0).
-- Worktrees: `.lab/worktrees/before` (pristine) and `.lab/worktrees/after` (same SHA plus the experimental #2854 patch).
+- Upstream base: `9cb988ff94b60979bbbc62b0ded5cf62fdac88c8` (0.57.0).
+- Shared local fixture commit: `4611ae1b9347bad09f243f9b264d8754ffc660e5`, adding opt-in `?fixture2854` seed content to the minimal example (`fixture.patch`).
+- Worktrees: `.lab/worktrees/before` and `.lab/worktrees/after` are both at the fixture commit; After also carries the two-file experimental #2854 patch.
 - Node 24.15.0, pnpm 11.8.0, Playwright 1.60.0, Chromium 148.0.7778.96.
 - Default Mantine editor at `/basic/minimal?hideMenu`; 1280×840 unless stated.
 - Real keyboard events through Playwright; no synthetic event mirroring between editors.
 
 ## Fixture
 
-The minimal example starts empty. The script types two paragraphs and inserts host-page controls before and after the editor container:
+The viewer route seeds two paragraphs via `?fixture2854` and supplies real focus controls around each iframe. The standalone scripts use the unseeded `/basic/minimal?hideMenu` route, type two paragraphs, and insert host-page controls before and after the editor container:
 
 ```html
 <button id="before-editor">Before editor</button>
@@ -18,7 +19,7 @@ The minimal example starts empty. The script types two paragraphs and inserts ho
 <button id="after-editor">After editor</button>
 ```
 
-This matches the issue reporter's host page and makes the intended “next control” observable. A future Diff Lab fixture route should pass the two paragraphs as `initialContent` and render the same host controls.
+This matches the issue reporter's host page and makes the intended “next control” observable. The viewer's `?fixture2854` route supplies the same two paragraphs as `initialContent` and adds the focus controls in the viewer; the standalone script keeps the stock empty route so its evidence does not depend on the fixture.
 
 ## Steps
 
@@ -101,6 +102,8 @@ The scripts use `@playwright/test` and real `page.keyboard` input. `focus.mjs` a
 - `evidence/before/activation.json`, `evidence/after/activation.json`
 - `evidence/before/keyboard-route.json`, `evidence/after/keyboard-route.json`
 - `evidence/before/reflow-320.json`, `evidence/after/reflow-320.json`
+- `evidence/viewer-fixture.png` — integrated viewer with seeded content and focus targets
+- `evidence/viewer-fixture.json` — before/after focus results from the viewer
 - `evidence/before/menu-light.png`
 - `evidence/{before,after}/forced-light-menu.png`
 - `evidence/{before,after}/forced-light-after-tab.png`

@@ -59,6 +59,8 @@ Open-menu forced-dark screenshots were excluded: computed styles were white on b
 
 ## Tests performed
 
+- Proposed upstream regression test: `upstream-test/sideMenuKeyboardFocus.test.tsx` (not executed; upstream requires Docker e2e).
+
 - `node --check` on the lab scripts.
 - Targeted `vp lint` on the two patched files: 0 warnings, 0 errors.
 - Real-keyboard Playwright runs in Chromium 148 (Playwright 1.60.0, Chromium revision 1223).
@@ -69,16 +71,16 @@ Open-menu forced-dark screenshots were excluded: computed styles were white on b
 
 ## Lab integration status
 
-The Diff Lab comparison now targets #2854 (`compare.config.json` → `side-menu-keyboard-focus`). Each live pane has a **Focus before editor** button before the iframe and a **Focus after editor** button after it, plus a focus-status line:
+The Diff Lab comparison now targets #2854 (`compare.config.json` → `side-menu-keyboard-focus`) and loads a shared two-paragraph fixture from local commit `4611ae1` (based on upstream `9cb988f`). Each live pane has a **Focus before editor** button before the iframe and a **Focus after editor** button after it, plus a focus-status line:
 
 - **Before:** after Tab from the hovered editor, the top-level active element remains the Before iframe; the status reads “Keyboard focus: still inside the Before editor preview; the adjacent focus target has not received focus.” The adjacent control does not receive focus.
 - **After:** Tab moves to `#after-next` (Focus after editor); the status reads “Keyboard focus: Focus after editor (After).”
 - Clicking either focus button directly updates the status and shows a visible focus ring.
 - No console errors; the existing 4-step reproduction checklist now describes the #2854 focus and activation checks.
 
-Evidence: `evidence/viewer-integration.json` and `evidence/viewer-integration.png`.
+Evidence: `evidence/viewer-fixture.json` and `evidence/viewer-fixture.png`.
 
-Remaining integration gap: `/basic/minimal` starts empty, so the steps ask the user to type two paragraphs. A shared deterministic fixture route with initial content would make the comparison more repeatable; the current viewer still exercises the real editor and the real focus sequence.
+The fixture is opt-in via `?fixture2854`, so the standalone reproduction scripts still use the stock empty route and type their own content. The fixture commit and its patch are recorded in `fixture.json` and `fixture.patch`; the After diff remains only the two-file #2854 patch.
 
 ## Patch
 
@@ -109,7 +111,8 @@ Remaining integration gap: `/basic/minimal` starts empty, so the steps ask the u
 ## Provenance
 
 - Upstream SHA: `9cb988ff94b60979bbbc62b0ded5cf62fdac88c8`.
-- After worktree: same SHA plus the two-file experimental patch.
+- Shared fixture commit: `4611ae1b9347bad09f243f9b264d8754ffc660e5` (two-paragraph opt-in seed).
+- After worktree: fixture commit plus the two-file experimental patch.
 - Date: 2026-11-23.
 - Browser: Chromium 148.0.7778.96; OS macOS arm64.
 - No upstream PR was opened and no upstream repository was pushed.

@@ -1,7 +1,11 @@
 {
   "id": "2854-side-menu-focus",
   "issue": 2854,
-  "route": "/basic/minimal?hideMenu",
+  "upstreamSha": "9cb988ff94b60979bbbc62b0ded5cf62fdac88c8",
+  "fixtureCommit": "4611ae1b9347bad09f243f9b264d8754ffc660e5",
+  "fixturePatch": "fixture.patch",
+  "viewerRoute": "/basic/minimal?hideMenu&fixture2854",
+  "scriptRoute": "/basic/minimal?hideMenu",
   "editor": "default Mantine BlockNote editor",
   "initialContent": [
     {
@@ -15,17 +19,27 @@
       "content": "Second paragraph"
     }
   ],
-  "hostControls": [
+  "viewerFocusControls": [
     {
-      "id": "before-editor",
-      "position": "before .bn-container",
-      "label": "Before editor"
+      "id": "before-prev",
+      "position": "before the Before iframe",
+      "label": "Focus before editor"
     },
     {
-      "id": "after-editor",
-      "position": "after .bn-container",
-      "label": "After editor"
+      "id": "before-next",
+      "position": "after the Before iframe",
+      "label": "Focus after editor"
+    },
+    {
+      "id": "after-prev",
+      "position": "before the After iframe",
+      "label": "Focus before editor"
+    },
+    {
+      "id": "after-next",
+      "position": "after the After iframe",
+      "label": "Focus after editor"
     }
   ],
-  "note": "The current /basic/minimal example starts empty, so the reproduction scripts type the blocks. A future fixture route should pass initialContent and render the same host controls identically in both worktrees."
+  "note": "The fixture is a local commit shared by both worktrees, based on upstream 9cb988f. It is opt-in via ?fixture2854, so the reproduction scripts can keep using the stock empty /basic/minimal route and type their own content. The viewer supplies the host focus controls outside each iframe."
 }

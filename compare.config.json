@@ -9,12 +9,12 @@
     "title": "Side menu keyboard focus",
     "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2854",
     "patchFile": null,
-    "path": "/basic/minimal?hideMenu",
-    "description": "Verified baseline for #2854. With the side menu showing, Tab can focus a cloned Add block button and then drop focus to the document body; the live Add block button also ignores Enter and Space. After carries a local experimental patch that makes closing popover copies inert and activates Add block from the button. This is a partial fix: keyboard-only discovery of the side menu is not solved.",
+    "path": "/basic/minimal?hideMenu&fixture2854",
+    "description": "Verified baseline for #2854. The viewer loads a shared local two-paragraph fixture so both sides start with the same real content. With the side menu showing, Tab can focus a cloned Add block button and then drop focus to the document body; the live Add block button also ignores Enter and Space. After carries a local experimental patch that makes closing popover copies inert and activates Add block from the button. This is a partial fix: keyboard-only discovery of the side menu is not solved.",
     "steps": [
       {
         "id": "focus-entry",
-        "instruction": "Click into the editor, type two short paragraphs, and hover the first paragraph so the side menu appears. Leave the pointer over the block.",
+        "instruction": "The editor already contains the two-paragraph fixture. Hover the first paragraph so the side menu appears and leave the pointer over that block.",
         "expectedBefore": "Record how the side menu appears and whether it is reachable without a pointer.",
         "expectedAfter": "The side menu still appears on hover. Record whether anything about focus or activation changed."
       },

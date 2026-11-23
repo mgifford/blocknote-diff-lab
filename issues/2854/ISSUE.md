@@ -65,6 +65,8 @@ These are indicators for investigation, not a conformance determination.
 - `evidence/before/keyboard-route.json` — after a pointer reveal and two Shift+Tabs, the live Add block is focused but Enter does nothing.
 - `evidence/before/reflow-320.json` — the same focus loss occurs at 320×800.
 - `evidence/after/` — equivalent evidence after the experimental patch.
+- `evidence/viewer-fixture.png` / `.json` — integrated viewer with the seeded two-paragraph fixture and focus targets.
+- `upstream-test/sideMenuKeyboardFocus.test.tsx` — proposed upstream regression test (not executed).
 - `issues/2854/reproduction.md` — exact steps and commands.
 
 ## Downstream notes

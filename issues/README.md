@@ -27,7 +27,7 @@ issues/
 
 ## Current findings
 
-- **#2854** is a confirmed upstream defect. The closing side-menu snapshot is focusable, so Tab lands on a dead Add block clone and focus falls to `body`; the live Add block also lacks button-level activation. The experimental patch makes closing snapshots inert and moves activation to the button. It fixes focus loss and activation but not keyboard-only discoverability; maintainer input is still needed for the full route. The Diff Lab viewer now targets #2854 and provides real **Focus before/after editor** buttons and a focus-status line around each live pane.
+- **#2854** is a confirmed upstream defect. The closing side-menu snapshot is focusable, so Tab lands on a dead Add block clone and focus falls to `body`; the live Add block also lacks button-level activation. The experimental patch makes closing snapshots inert and moves activation to the button. It fixes focus loss and activation but not keyboard-only discoverability; maintainer input is still needed for the full route. The Diff Lab viewer now targets #2854, loads a shared two-paragraph fixture from local commit `4611ae1`, and provides real **Focus before/after editor** buttons and a focus-status line around each live pane. A proposed upstream regression test is in `2854/upstream-test/`; it has not been run because BlockNote requires its e2e suite to run in Docker.
 - **#2822** and **#2825/#2826** have open upstream PRs. Validate those PRs rather than duplicating the work.
 - **#2829** is downstream documentation. **#2809** is a shared rendering issue observed through Docs reading mode.
 - The seven closed issues listed in the inventory are regression candidates, not items to re-fix.

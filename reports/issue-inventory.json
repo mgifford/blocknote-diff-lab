@@ -4,7 +4,9 @@
     "repository": "https://github.com/TypeCellOS/BlockNote",
     "sha": "9cb988ff94b60979bbbc62b0ded5cf62fdac88c8",
     "version": "0.57.0",
-    "branch": "main"
+    "branch": "main",
+    "fixtureCommit": "4611ae1b9347bad09f243f9b264d8754ffc660e5",
+    "fixtureQuery": "fixture2854"
   },
   "environment": {
     "os": "macOS arm64",
@@ -48,7 +50,7 @@
         "screen-reader"
       ],
       "fixtureSuitable": true,
-      "nextAction": "Viewer comparison integrated; add upstream regression test; obtain maintainer decision on the full keyboard route",
+      "nextAction": "Seeded viewer comparison integrated; upstream regression test proposed; obtain maintainer decision on the full keyboard route",
       "url": "https://github.com/TypeCellOS/BlockNote/issues/2854",
       "reportedVersions": "0.56.0, 0.57.0 (reported); reproduced on 0.57.0"
     },
@@ -436,6 +438,9 @@
     "results": "issues/2854/RESULTS.md",
     "patch": "issues/2854/patch/2854.patch",
     "beforeEvidence": "issues/2854/evidence/before/",
-    "afterEvidence": "issues/2854/evidence/after/"
+    "afterEvidence": "issues/2854/evidence/after/",
+    "fixturePatch": "issues/2854/fixture.patch",
+    "upstreamTest": "issues/2854/upstream-test/sideMenuKeyboardFocus.test.tsx",
+    "viewerEvidence": "issues/2854/evidence/viewer-fixture.png"
   }
 }

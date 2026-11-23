@@ -2,7 +2,7 @@
 
 **Generated:** 2026-11-23  
 **Upstream:** `TypeCellOS/BlockNote` at `9cb988ff94b60979bbbc62b0ded5cf62fdac88c8` (packages `0.57.0`)  
-**Environment:** macOS arm64; Node 24.15.0; pnpm 11.8.0; Chromium 148.0.7778.96 via Playwright 1.60.0; filtered `@blocknote/example-editor` install; two Git worktrees under `.lab/worktrees/`.
+**Environment:** macOS arm64; Node 24.15.0; pnpm 11.8.0; Chromium 148.0.7778.96 via Playwright 1.60.0; filtered `@blocknote/example-editor` install; two Git worktrees under `.lab/worktrees/`, both at local fixture commit `4611ae1` based on upstream `9cb988f` (`?fixture2854` adds two paragraphs).
 
 ## Method and scope
 
@@ -16,7 +16,7 @@
 
 | Issue | Title | State | Priority | Classification | Reproduction confidence | Main component(s) | Upstream activity | Recommended next action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [#2854](https://github.com/TypeCellOS/BlockNote/issues/2854) | Side menu "Add block" (+) not usable with keyboard | OPEN | P1 | **Verified defect** | **Verified** 3/3 runs; light, dark, forced-light, forced-dark, reduced motion; 320px | `packages/core/src/extensions/SideMenu/`, `packages/react/src/components/SideMenu/`, `packages/react/src/components/Popovers/GenericPopover.tsx` | Maintainer discussion 2026-06-17; detailed reproduction 2026-10-30; no fix PR | Viewer comparison integrated; add upstream regression test; maintainer decision on full keyboard route |
+| [#2854](https://github.com/TypeCellOS/BlockNote/issues/2854) | Side menu "Add block" (+) not usable with keyboard | OPEN | P1 | **Verified defect** | **Verified** 3/3 runs; light, dark, forced-light, forced-dark, reduced motion; 320px | `packages/core/src/extensions/SideMenu/`, `packages/react/src/components/SideMenu/`, `packages/react/src/components/Popovers/GenericPopover.tsx` | Maintainer discussion 2026-06-17; detailed reproduction 2026-10-30; no fix PR | Seeded viewer comparison integrated; upstream regression test proposed; maintainer decision on full keyboard route |
 | [#977](https://github.com/TypeCellOS/BlockNote/issues/977) | Tab does not work when highlighting multiple items | OPEN | P3 | Reported; partly intentional | Not reproduced | `KeyboardShortcutsExtension`, multi-block selection, block nesting | Maintainer: toolbar focus is intentional, but checklist/video override the built-in Tab handling | Build the caret / text selection / multi-block / list / exit state matrix |
 | [#2822](https://github.com/TypeCellOS/BlockNote/issues/2822) | Missing alternative text field for images | OPEN | P1 | Fix in review | High report; PR #3337 open | `packages/core/src/blocks/File/`, image toolbar, serialization | PR #3337 open; reporter tested the alt field and reported remaining concerns | Validate PR #3337, then add import/export and keyboard regression tests |
 | [#2825](https://github.com/TypeCellOS/BlockNote/issues/2825) | Table headers are not associated with data cells | OPEN | P1 | Fix in review | High report; PR #3215 open; axe does not flag it | `packages/core/src/blocks/Table/`, table decorations/export | PR #3215 open; maintainer asks for concrete screen-reader callouts | Validate scopes/headers with a screen reader and add export tests |

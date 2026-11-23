@@ -42,7 +42,7 @@ This starter kit is **not** a completed BlockNote regression suite or a WCAG con
 
 ## Accessibility investigations
 
-[`reports/ISSUE-INVENTORY.md`](reports/ISSUE-INVENTORY.md) records the current open and closed issues, which are upstream versus downstream, and the five strongest before/after candidates. The first verified comparison is **#2854** in [`issues/2854/`](issues/2854/): a side-menu Tab/focus defect, with a two-file experimental patch, before/after evidence across light, dark, forced-colours light/dark, reduced motion and 320px, and a documented limitation that keyboard-only discoverability is not yet solved. The viewer comparison now targets #2854 and adds real **Focus before editor** / **Focus after editor** buttons around each live pane plus a focus-status line.
+[`reports/ISSUE-INVENTORY.md`](reports/ISSUE-INVENTORY.md) records the current open and closed issues, which are upstream versus downstream, and the five strongest before/after candidates. The first verified comparison is **#2854** in [`issues/2854/`](issues/2854/): a side-menu Tab/focus defect, with a two-file experimental patch, before/after evidence across light, dark, forced-colours light/dark, reduced motion and 320px, and a documented limitation that keyboard-only discoverability is not yet solved. The viewer comparison now targets #2854 and adds real **Focus before editor** / **Focus after editor** buttons around each live pane plus a focus-status line. Both live panes start from a shared local two-paragraph fixture commit (`4611ae1`, based on upstream `9cb988f`); the standalone reproduction scripts keep using the stock empty minimal route.
 
 No upstream BlockNote PR has been opened from this lab.
 

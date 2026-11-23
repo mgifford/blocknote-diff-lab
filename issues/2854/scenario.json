@@ -6,6 +6,13 @@
     "sha": "9cb988ff94b60979bbbc62b0ded5cf62fdac88c8",
     "version": "0.57.0"
   },
+  "fixture": {
+    "commit": "4611ae1b9347bad09f243f9b264d8754ffc660e5",
+    "patch": "fixture.patch",
+    "viewerRoute": "/basic/minimal?hideMenu&fixture2854",
+    "scriptRoute": "/basic/minimal?hideMenu",
+    "note": "The fixture commit adds an opt-in ?fixture2854 seed to the minimal example. Both worktrees are checked out at this local fixture commit; the After diff remains only the two-file #2854 patch. The scripts use the unseeded route and type their own content."
+  },
   "ports": {
     "before": 5173,
     "after": 5174
@@ -17,13 +24,12 @@
     "viewport": [1280, 840]
   },
   "steps": [
-    "Open /basic/minimal?hideMenu in the default Mantine editor.",
-    "Type 'First paragraph', press Enter, type 'Second paragraph'.",
-    "Insert focusable host buttons before and after .bn-container.",
+    "Open the viewer comparison, which loads the two-paragraph fixture in both editors.",
     "Hover the first paragraph and click it to place the caret.",
     "Wait for .bn-side-menu to be visible and verify the Add block button is live (has React props).",
     "Ensure document.activeElement is .bn-editor.",
     "Press Tab and record document.activeElement immediately and after 450 ms.",
+    "Use the viewer's Focus before/after editor buttons to check the intended exit targets.",
     "Separately focus the live Add block button and press Enter or Space.",
     "Separately focus #after-editor, press Shift+Tab twice to reach the live Add block, and press Enter."
   ],
@@ -31,8 +37,8 @@
     "editor": ".bn-editor",
     "sideMenu": ".bn-side-menu",
     "addBlock": "button[aria-label='Add block']",
-    "beforeControl": "#before-editor",
-    "afterControl": "#after-editor",
+    "beforeControl": "#before-next",
+    "afterControl": "#after-next",
     "suggestionMenu": ".bn-suggestion-menu, [role='listbox']"
   },
   "conditions": [
@@ -45,14 +51,14 @@
   ],
   "assertions": {
     "before": {
-      "tabImmediate": "A button inside .bn-side-menu with aria-label 'Add block' and no __reactProps key",
-      "tabAfter450ms": "document.body",
+      "tabImmediate": "A button inside .bn-side-menu with aria-label 'Add block' and no __reactProps key (standalone script); in the viewer the top-level active element remains the iframe",
+      "tabAfter450ms": "document.body in the standalone script; the viewer's adjacent focus target has not received focus",
       "enterOnLiveAdd": "no suggestion menu",
       "spaceOnLiveAdd": "no suggestion menu"
     },
     "after": {
-      "tabImmediate": "#after-editor",
-      "tabAfter450ms": "#after-editor",
+      "tabImmediate": "#after-next in the viewer; #after-editor in the standalone script",
+      "tabAfter450ms": "same target",
       "enterOnLiveAdd": "one suggestion menu",
       "spaceOnLiveAdd": "one suggestion menu"
     }
@@ -66,6 +72,7 @@
   },
   "evidence": {
     "before": "evidence/before/",
-    "after": "evidence/after/"
+    "after": "evidence/after/",
+    "viewer": "evidence/viewer-fixture.png and evidence/viewer-fixture.json"
   }
 }
