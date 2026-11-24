@@ -95,6 +95,14 @@ This register does **not**:
 - claim ATAG 2.0 Part B conformance, assign upstream work, or promise a fix.
 - assess the comparator's own UI except where a test explicitly says so.
 
+## How to read the ATAG mapping
+
+The gap records are product findings, not an ATAG conformance audit. The
+standards-version, component/host scope, example-content, simulator, and
+preview-evidence limits are recorded in
+[`../ATAG-ALIGNMENT-ISSUES.md`](../ATAG-ALIGNMENT-ISSUES.md). Read that register
+before treating any row as a conformance claim.
+
 ## How to update a gap
 
 1. Reproduce or re-check on the pinned current-main revision.
@@ -109,6 +117,7 @@ This register does **not**:
 ## Related files
 
 - [ATAG 2.0 and A11yFirst evidence map](../ATAG-2.0-A11YFIRST.md)
+- [ATAG 2.0 alignment issues](../ATAG-ALIGNMENT-ISSUES.md)
 - [A11y test suite](../../tests/a11y/)
 - [Issue inventory](../../reports/ISSUE-INVENTORY.md)
 - [ATAG 2.0 Recommendation](https://www.w3.org/TR/ATAG20/)

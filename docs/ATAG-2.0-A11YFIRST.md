@@ -16,7 +16,17 @@ A11yFirst model.
 > people evaluation. Upstream PR previews are context only; real AT is a separate
 > activity outside this lab.
 >
-> The per-gap records are in the **[gap register](gaps/README.md)**.
+> **Version note:** ATAG 2.0 defines accessible content against **WCAG 2.0**. The
+> tests use WCAG 2.1/2.2 A/AA tags as a broader internal quality target; a WCAG
+> 2.2 result is not automatically an ATAG 2.0 requirement or claim.
+>
+> **Scope note:** BlockNote is a component library. A complete authoring tool
+> includes the host application, author roles, content technologies, help, and
+> documentation. The lab tests component surfaces, not a complete product.
+>
+> The per-gap records are in the **[gap register](gaps/README.md)**. The
+> standards, scope, and evidence misalignments are in the
+> **[ATAG alignment register](ATAG-ALIGNMENT-ISSUES.md)**.
 
 ## North star
 
@@ -57,13 +67,16 @@ testing with disabled people are out of scope for this lab.
 
 ## ATAG 2.0 Part A — authoring UI accessibility
 
+Part A coverage is partial. Many checkpoints are not assessed; the full table and
+rationale are in the [ATAG alignment register](ATAG-ALIGNMENT-ISSUES.md#atag-part-a-coverage).
+
 | Checkpoint | Level | Lab evidence | Status |
 | --- | --- | --- | --- |
-| [A.1.1.1 Web-Based Accessible (WCAG)](https://www.w3.org/TR/ATAG20/#sc_a111) | A | `axe.spec.mjs` scans the comparator shell and all four #2854 bundles. The shell has no WCAG A/AA violations; every editor bundle exposes the known `aria-input-field-name` finding on `.tiptap` | **Partial** — the editor textbox still lacks an accessible name |
-| [A.2.1.1 Text Alternatives for Rendered Non-Text Content](https://www.w3.org/TR/ATAG20/#sc_a211) | A | `guidepup.spec.mjs` shows the current-main #2822 image is not announced. The upstream preview context announces `image, 332x322.jpg`, but it is not evaluated here | **Gap** — the current-main authoring UI has no alt control |
+| [A.1.1.1 Web-Based Accessible (WCAG)](https://www.w3.org/TR/ATAG20/#sc_a111) | A/AA/AAA (WCAG-dependent) | `axe.spec.mjs` scans the comparator shell and all four #2854 bundles. The shell has no WCAG A/AA violations; every editor bundle exposes the known `aria-input-field-name` finding on `.tiptap` | **Partial** — the editor textbox still lacks an accessible name |
+| [A.2.1.1 Text Alternatives for Rendered Non-Text Content](https://www.w3.org/TR/ATAG20/#sc_a211) | A | `guidepup.spec.mjs` shows the current-main #2822 image is presentational (`alt=""`) and only its visible caption is announced. The upstream preview context announces `image, 332x322.jpg`, but it is not evaluated here | **Partial** — the rendered image is presentational; the missing authoring control is a separate Part B gap ([AF-02](gaps/a11yfirst-02-image-alt-authoring.md)) |
 | [A.3.1.1 Keyboard Access (Minimum)](https://www.w3.org/TR/ATAG20/#sc_a311) | A | `keyboard-2854.spec.mjs`: before the fix, Tab reaches a dead closing Add block clone; the inert variant moves focus to the next real control. Activation variant makes Enter open the suggestion menu | **Partial** — the side menu is still pointer-hover-dependent |
 | [A.3.1.2 No Keyboard Traps](https://www.w3.org/TR/ATAG20/#sc_a312) | A | The same keyboard trace shows Tab leaving the editor and reaching the parent focus control in the inert variant | **Tested for this path** |
-| [A.3.4.1 Navigate By Structure](https://www.w3.org/TR/ATAG20/#sc_a341) | A | Virtual Screen Reader traversal announces headings, tables, rows, and cells in the Default Schema example | **Partial** — table header association is not exposed by the virtual reader; real AT is out of scope here |
+| [A.3.4.1 Navigate By Structure](https://www.w3.org/TR/ATAG20/#sc_a341) | AA | Virtual Screen Reader traversal announces headings, tables, rows, and cells in the Default Schema example | **Partial** — table header association is not exposed by the virtual reader; real AT is out of scope here |
 | [A.4.2.1 Describe Accessibility Features](https://www.w3.org/TR/ATAG20/#sc_a421) | A | This document and the README describe the comparison, scripts, and known limits | **Lab documentation only** |
 | [A.4.2.2 Document All Features](https://www.w3.org/TR/ATAG20/#sc_a422) | AA | README, `docs/STATIC-COMPARATOR.md`, issue files, and this map | **Lab documentation only** |
 
@@ -146,5 +159,6 @@ independent evaluation:
 - [`tests/a11y/semantics.spec.mjs`](../tests/a11y/semantics.spec.mjs)
 - [`tests/a11y/a11yfirst.spec.mjs`](../tests/a11y/a11yfirst.spec.mjs)
 - [`docs/gaps/README.md`](gaps/README.md) — the gap register
+- [`docs/ATAG-ALIGNMENT-ISSUES.md`](ATAG-ALIGNMENT-ISSUES.md) — standards, scope and evidence alignment issues
 - [`docs/STATIC-COMPARATOR.md`](STATIC-COMPARATOR.md)
 - [`reports/ISSUE-INVENTORY.md`](../reports/ISSUE-INVENTORY.md)

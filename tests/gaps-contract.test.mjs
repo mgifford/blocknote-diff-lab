@@ -45,3 +45,29 @@ test('the register keeps PR review and real AT out of scope', () => {
   assert.match(index, /testing\s+with\s+disabled\s+people/i);
   assert.match(index, /does \*\*not\*\*/i);
 });
+
+test('the ATAG alignment register exists, is linked, and keeps the key scope issues', () => {
+  const alignmentPath = path.join(root, 'docs', 'ATAG-ALIGNMENT-ISSUES.md');
+  assert.ok(fs.existsSync(alignmentPath), 'missing docs/ATAG-ALIGNMENT-ISSUES.md');
+  const alignment = fs.readFileSync(alignmentPath, 'utf8');
+  for (const section of [
+    '## Issue register',
+    '## ATAG Part A coverage',
+    '## What a real ATAG claim would require',
+    '## Current wording corrections',
+  ]) {
+    assert.ok(alignment.includes(section), `alignment register is missing ${section}`);
+  }
+  for (const id of ['ALIGN-01', 'ALIGN-02', 'ALIGN-04', 'ALIGN-06', 'ALIGN-09', 'ALIGN-15']) {
+    assert.ok(alignment.includes(id), `alignment register is missing ${id}`);
+  }
+  assert.match(alignment, /WCAG 2\.0/, 'alignment register does not name the ATAG/WCAG version issue');
+  assert.match(alignment, /component library/i, 'alignment register does not state the component scope');
+  assert.match(alignment, /does not review or approve pull requests|not.*upstream pull request/i, 'alignment register does not state the PR boundary');
+  assert.match(alignment, /real assistive technology|real AT/i, 'alignment register does not state the real-AT boundary');
+
+  const atagMap = fs.readFileSync(path.join(root, 'docs', 'ATAG-2.0-A11YFIRST.md'), 'utf8');
+  assert.match(atagMap, /ATAG-ALIGNMENT-ISSUES\.md/, 'ATAG map does not link the alignment register');
+  assert.match(atagMap, /A\.3\.4\.1[^|]*\| AA \|/, 'A.3.4.1 is not recorded as Level AA');
+  assert.match(index, /ATAG-ALIGNMENT-ISSUES\.md/, 'gap index does not link the alignment register');
+});

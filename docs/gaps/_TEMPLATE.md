@@ -44,5 +44,6 @@
 ## References
 
 - [ATAG 2.0](https://www.w3.org/TR/ATAG20/)
+- [ATAG 2.0 alignment issues](../ATAG-ALIGNMENT-ISSUES.md)
 - [A11yFirst demo](https://a11yfirst.gitlab.io/custom/a11yfirst.html)
 - [Gap register](README.md)

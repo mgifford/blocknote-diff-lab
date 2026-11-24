@@ -61,6 +61,7 @@ open; do not bolt a `lang` attribute onto an unrelated wrapper.
 
 - [Gap register](README.md)
 - [ATAG 2.0 and A11yFirst evidence map](../ATAG-2.0-A11YFIRST.md)
+- [ATAG 2.0 alignment issues](../ATAG-ALIGNMENT-ISSUES.md)
 - [ATAG 2.0 Recommendation](https://www.w3.org/TR/ATAG20/)
 - [A11yFirst demo](https://a11yfirst.gitlab.io/custom/a11yfirst.html)
 - [A11yFirst CKEditor plugins](https://github.com/a11yfirst/ckeditor-plugins)

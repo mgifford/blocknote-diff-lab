@@ -68,4 +68,5 @@ collaboration updates). Then apply the B.1.1.1/2 decision to each path.
 
 - [Gap register](README.md)
 - [ATAG 2.0 and A11yFirst evidence map](../ATAG-2.0-A11YFIRST.md)
+- [ATAG 2.0 alignment issues](../ATAG-ALIGNMENT-ISSUES.md)
 - [ATAG 2.0 Recommendation](https://www.w3.org/TR/ATAG20/)
