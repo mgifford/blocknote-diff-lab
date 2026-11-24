@@ -172,10 +172,12 @@ try {
   await waitForIssue(977);
   await page.click('.issue-card[data-issue="2822"]');
   await waitForIssue(2822);
-  await page.goBack();
+  // Same-document pushState entries do not fire a load event, so use the
+  // history API directly and wait for the rendered issue title.
+  await page.evaluate(() => history.back());
   await waitForIssue(977);
   assert.match(page.url(), /#issue=977/);
-  await page.goForward();
+  await page.evaluate(() => history.forward());
   await waitForIssue(2822);
 
   await page.setViewportSize({ width: 390, height: 900 });
