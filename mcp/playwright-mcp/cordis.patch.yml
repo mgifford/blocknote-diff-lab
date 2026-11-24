@@ -1,0 +1,15 @@
+- insert:
+    - id: playwright-mcp
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: playwright
+        transport: stdio
+        command: node
+        args:
+          - node_modules/@playwright/mcp/cli.js
+          - --headless
+          - --isolated
+          - --browser
+          - chrome
+        cwd: /Users/mgifford/blocknote-diff-lab
+        failOnStartupError: true

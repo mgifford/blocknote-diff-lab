@@ -6,3 +6,7 @@ reports/*
 !reports/issue-inventory.json
 .DS_Store
 _site/
+
+.playwright-mcp/
+test-results/
+playwright-report/

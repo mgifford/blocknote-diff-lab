@@ -82,12 +82,17 @@ The first command builds `pages/before`, `pages/after` (both fixes), `pages/afte
 ## Tests
 
 ```sh
-pnpm test            # catalog contract tests plus the existing unit tests
-pnpm test:pages      # builds _site, serves it, and checks every issue's Before/After region in Chromium
-pnpm check:previews  # network check of the external Playground routes (not part of the deploy gate)
+pnpm test               # catalog contract tests plus the existing unit tests
+pnpm test:pages         # builds _site, serves it, and checks every issue's Before/After region in Chromium
+pnpm test:a11y:local    # axe + real-keyboard #2854 checks; no network
+pnpm test:a11y:previews # axe + Guidepup Virtual Screen Reader + semantic checks on the previews
+pnpm test:a11y          # all of the above
+pnpm check:previews     # network check of the external Playground routes (not part of the deploy gate)
 ```
 
 `tests/pages-contract.test.mjs` enforces the data contract (nine issues, steps/checks, PR before/after/patch URLs and a real Playground example route for every external frame, plus the observation-export, build-provenance and no-dead-page-control markup). `tests/pages.e2e.mjs` checks that every issue shows exactly one comparison region, that #2854 has visible local frames and a patch, that PR issues have visible current/PR frames and a patch, that external frames are not pointed at the Playground index, that unfixed issues show an explicit no-patch panel and a **Reproduction only** card, that observations persist across a reload and export with the build SHA, that reset clears them, that the legacy `page=` parameter is normalised away, that Back/Forward traverses issue selections, and that hash and issue-card navigation work. The Pages deployment depends on both test commands; `.github/workflows/pages-tests.yml` also runs them on pull requests.
+
+`tests/a11y/` adds the ATAG/A11yFirst evidence layer: axe scans of the editor UI and comparator shell, Guidepup Virtual Screen Reader announcements for #2822 and #2809, real-keyboard #2854 focus/activation traces, and DOM semantic before/after checks for image alt text and table headers. The mapping and gaps are documented in [`ATAG-2.0-A11YFIRST.md`](ATAG-2.0-A11YFIRST.md). These are detector and simulator results, not conformance or real-AT claims.
 
 ## Preview route regression
 
@@ -97,4 +102,4 @@ The external deployments can still drift independently of this repository. `scri
 
 ## Accessibility caveats
 
-The outer comparator page was scanned with axe-core 4.13.0 under WCAG 2.0/2.1/2.2 A/AA rules with no violations, and the phone layout was checked at 390px. BlockNote's editor textbox still exposes the separate `aria-input-field-name` finding on both sides. This is not a conformance claim and does not replace testing the frames with a keyboard and assistive technology; Tab and Enter are deliberately not mirrored between frames.
+The outer comparator page was scanned with axe-core 4.13.0 under WCAG 2.0/2.1/2.2 A/AA rules with no violations, and the phone layout was checked at 390px. BlockNote's editor textbox still exposes the separate `aria-input-field-name` finding on both sides. This is not a conformance claim and does not replace testing the frames with a keyboard and assistive technology; Tab and Enter are deliberately not mirrored between frames. Guidepup Virtual Screen Reader is a simulator; the real VoiceOver/NVDA protocol is in [`ATAG-2.0-A11YFIRST.md`](ATAG-2.0-A11YFIRST.md).

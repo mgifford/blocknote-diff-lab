@@ -30,6 +30,7 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test
       - run: pnpm test:pages
+      - run: pnpm test:a11y:local
 
   build:
     needs: test

@@ -35,7 +35,9 @@ This starter kit is **not** a completed BlockNote regression suite or a WCAG con
 - `lib/demo-fixture.mjs`: synthetic two-author document used by demo mode, including the scripted collaboration animation.
 - `site/`: comparison viewer and observation export. It is intended to be accessible, but it has not been independently audited and should itself be treated as a test target.
 - `docs/IMPLEMENTATION_PROMPT.md`: phased instructions for expanding and validating the kit with another LLM.
-- `tests/`: unit and browser tests. `tests/pages-contract.test.mjs` checks the issue catalog and observation-export contract; `tests/pages.e2e.mjs` checks every issue’s Before/After region, observation persistence, export and reset in Chromium.
+- `tests/`: unit and browser tests. `tests/pages-contract.test.mjs` checks the issue catalog and observation-export contract; `tests/pages.e2e.mjs` checks every issue’s Before/After region, observation persistence, export and reset in Chromium. `tests/a11y/` holds the axe, Guidepup Virtual Screen Reader, real-keyboard and semantic before/after tests; raw evidence goes to `reports/a11y/<timestamp>/`.
+- `docs/ATAG-2.0-A11YFIRST.md`: evidence map from the tests to ATAG 2.0 Part A/B and the A11yFirst authoring principles, with explicit gaps and a real-AT protocol.
+- `docs/PLAYWRIGHT-MCP.md` and `mcp/playwright-mcp/`: Playwright MCP configuration for interactive inspection. The MCP path is not keyboard or screen-reader evidence; the test suite is.
 - `issues/`: issue-specific investigations, reproductions, experimental patches and evidence, starting with #2854.
 - `pages/` and `scripts/build-pages.mjs`: static before/after comparator for GitHub Pages, including the prebuilt `pages/before`, `pages/after`, `pages/after-inert` and `pages/after-activation` BlockNote bundles, evidence and patches. It does not need the Vite+ dev servers.
 - `pages/issues.json`: the reported-issue catalog, validation steps, expected results and fix links used by the page.
@@ -63,8 +65,9 @@ GitHub Pages cannot run BlockNote’s Vite+ dev servers, the local viewer API or
 - **Node >=22.19** and **Git** for the kit's scripts and tests.
 - **pnpm 11.x** for the live workflow (worktree installs and the Vite+ launcher) and for the kit's Playwright/axe dependencies. Demo mode and the unit tests need only Node and Git.
 - **Network access** for the first kit `pnpm install`, the Chromium download, and the BlockNote clone/worktree installation. Allow substantial disk space and time for the two upstream worktrees and their `node_modules`.
-- **Chromium** installed through Playwright for the controlled forced-colours window and for capture.
-- Free ports `8100`, `5173` and `5174` by default; all are configurable in `compare.config.json`.
+- **Chromium** installed through Playwright for the controlled forced-colours window, capture, and the a11y test suite.
+- **Google Chrome** for `pnpm mcp:playwright`, which starts Playwright MCP with `--browser chrome`. The MCP and a11y test paths use the committed `_site` bundles and external previews; they do not need the BlockNote worktrees.
+- Free ports `8100`, `5173`, `5174` and `8130` by default; `8130` is the a11y test server. The first three are configurable in `compare.config.json`.
 
 For upstream BlockNote, read the Node version in its `.node-version` and the pnpm version in its root `package.json` **at the commit you are testing**. Those values change; do not copy version numbers from this README.
 
@@ -273,6 +276,10 @@ If a patch was authored against another commit and cannot apply cleanly, fetch t
 | `pnpm test` | Unit and catalog contract tests; no BlockNote download needed. |
 | `pnpm test:pages` | Builds `_site` and runs the browser test for every issue’s Before/After region, observation persistence/export and Back/Forward navigation. |
 | `pnpm check:previews` | Network smoke check of the external Playground routes and main/PR differences; not part of the deploy gate. |
+| `pnpm test:a11y:local` | axe on the four #2854 bundles and comparator shell; real-keyboard #2854 focus/activation. No network. |
+| `pnpm test:a11y:previews` | axe, Guidepup Virtual Screen Reader and semantic before/after checks against the external previews. |
+| `pnpm test:a11y` | All axe, Guidepup, keyboard and semantic checks. |
+| `pnpm mcp:playwright` | Start the Playwright MCP server over stdio for interactive inspection. |
 | `node bin/diff-lab.mjs status` | State metadata plus `git status --short` for both worktrees. |
 | `node bin/diff-lab.mjs help` | Command summary. |
 
@@ -281,6 +288,7 @@ If a patch was authored against another commit and cannot apply cleanly, fetch t
 - The Git orchestration, configuration validation and static-file helper are covered by synthetic-fixture unit tests. The demo path and the live minimal route have both been exercised. A live smoke run at upstream `9cb988f` with Node 24.15.0 and pnpm 11.8.0 loaded both `/basic/minimal?hideMenu` editors, started both Vite+ servers through the kit launcher, and produced 10 capture runs with the pinned SHA and a local, uncommitted After-only focus-outline patch. That run reported `aria-input-field-name` on the editor textbox on both sides — a starting observation, not a conformance result. The full workspace install, other example routes and other upstream commits remain unvalidated.
 - Demo captures are labelled, but they are still synthetic; never cite them as editor evidence.
 - The external PR previews are Vercel deployments outside this repository. `pnpm check:previews` (or the weekly **Preview route smoke check** workflow) detects route or semantic drift, but it is not part of the Pages deploy gate because it depends on network access and the upstream previews staying online.
+- **axe and Guidepup are detectors, not conformance verdicts.** Guidepup Virtual Screen Reader is a simulator; it does not replace VoiceOver/NVDA or testing with disabled people. The ATAG/A11yFirst map in [`docs/ATAG-2.0-A11YFIRST.md`](docs/ATAG-2.0-A11YFIRST.md) records what is tested, what is partial, and what is not met.
 - GitHub Pages serves a static #2854 before/after comparator built from prebuilt BlockNote bundles. It cannot run Vite+ dev servers or CDP forced-colours emulation; those remain local. More variants/pages and build-time automated-check summaries on Pages are future work.
 - The upstream playground is a large workspace. Even a shallow Git clone does not make dependency installation small. A more minimal source-bound editor fixture is an appropriate second optimization if this baseline proves too expensive.
 - Cross-origin iframe navigation and keyboard input are not mirrored. This is intentional for reliable test evidence.

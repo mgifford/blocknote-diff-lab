@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "title": "Playwright MCP — BlockNote Diff Lab",
+    "description": "Headless Chrome automation for interactive inspection of the BlockNote comparator and its before/after previews.",
+    "detail": "docs/DETAIL.md"
+  }
+}
