@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { previewUrl, saveEvidence } from './helpers.mjs';
 
+// Upstream previews are context only: this lab does not review or approve pull requests.
+
 test.describe('@semantics @previews — ATAG B.2.1.1 / B.2.2.2 accessible content production', () => {
   test.skip(process.env.SKIP_NETWORK === '1', 'external preview checks skipped (SKIP_NETWORK=1)');
 

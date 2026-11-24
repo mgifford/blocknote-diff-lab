@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { previewUrl, saveEvidence, spokenPhrases } from './helpers.mjs';
 
+// Upstream previews are context only: this lab does not review or approve pull requests.
+
 test.describe('@guidepup @previews — Virtual Screen Reader (Guidepup)', () => {
   test.skip(process.env.SKIP_NETWORK === '1', 'external preview checks skipped (SKIP_NETWORK=1)');
 

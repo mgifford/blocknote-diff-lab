@@ -55,8 +55,9 @@ pnpm test:a11y                # all axe + Guidepup + keyboard + semantics
 ```
 
 MCP is also not a substitute for VoiceOver/NVDA or testing with disabled
-people. See [`docs/ATAG-2.0-A11YFIRST.md`](ATAG-2.0-A11YFIRST.md) for the
-evidence map and the real-AT protocol.
+people. Real screen-reader evaluation is **out of scope** for this lab. See
+[`docs/ATAG-2.0-A11YFIRST.md`](ATAG-2.0-A11YFIRST.md) for the evidence map and
+[`docs/gaps/`](gaps/) for the gap records.
 
 ## Notes
 

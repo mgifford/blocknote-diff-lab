@@ -9,6 +9,14 @@ A11yFirst model.
 > requires a defined authoring-tool scope, all applicable success criteria, and
 > human/AT verification. The lab tests a small set of BlockNote authoring
 > surfaces and the comparison page. It does not claim ATAG A or AA conformance.
+>
+> **Scope boundary:** this lab records current-main evidence and gaps. It does
+> **not** review, approve, reject, or otherwise evaluate an upstream pull
+> request, and it does **not** perform real screen-reader or testing-with-disabled-
+> people evaluation. Upstream PR previews are context only; real AT is a separate
+> activity outside this lab.
+>
+> The per-gap records are in the **[gap register](gaps/README.md)**.
 
 ## North star
 
@@ -26,14 +34,15 @@ block formats, image text alternatives, meaningful link text, author help, and a
 accessibility checker.
 
 BlockNote does not yet provide an A11yFirst-style authoring assistant. The tests
-below show where it fails by default and where the open PRs improve it.
+below record where current main fails by default. Where an upstream PR preview
+shows a different result, it is context only; this lab does not evaluate the PR.
 
 ## Test layers
 
 | Command | What it runs | Network |
 | --- | --- | --- |
 | `pnpm test:a11y:local` | axe on the four local #2854 bundles, comparator shell, and real-keyboard #2854 focus/activation tests | No |
-| `pnpm test:a11y:previews` | axe and Guidepup Virtual Screen Reader against current-main and PR previews; semantic DOM checks | Yes |
+| `pnpm test:a11y:previews` | axe and Guidepup Virtual Screen Reader against current main and upstream preview context; semantic DOM checks | Yes |
 | `pnpm test:a11y:axe` | axe tests only | Mixed |
 | `pnpm test:a11y:guidepup` | Virtual Screen Reader tests only | Yes |
 | `pnpm test:a11y:keyboard` | #2854 keyboard focus and activation | No |
@@ -42,45 +51,57 @@ below show where it fails by default and where the open PRs improve it.
 
 Every run writes raw JSON evidence under `reports/a11y/<timestamp>/`. The tests
 use Playwright real keyboard events, axe-core, and Guidepup
-`@guidepup/virtual-screen-reader`; none of them replaces a real screen reader or
-testing with disabled people.
+`@guidepup/virtual-screen-reader`. They are automated evidence only; real AT and
+testing with disabled people are out of scope for this lab.
 
 ## ATAG 2.0 Part A — authoring UI accessibility
 
 | Checkpoint | Level | Lab evidence | Status |
 | --- | --- | --- | --- |
 | [A.1.1.1 Web-Based Accessible (WCAG)](https://www.w3.org/TR/ATAG20/#sc_a111) | A | `axe.spec.mjs` scans the comparator shell and all four #2854 bundles. The shell has no WCAG A/AA violations; every editor bundle exposes the known `aria-input-field-name` finding on `.tiptap` | **Partial** — the editor textbox still lacks an accessible name |
-| [A.2.1.1 Text Alternatives for Rendered Non-Text Content](https://www.w3.org/TR/ATAG20/#sc_a211) | A | `guidepup.spec.mjs` shows the #2822 before image is not announced; the PR preview announces `image, 332x322.jpg` | **Partial** — the PR supplies a fallback; the authoring UI still needs an alt control |
+| [A.2.1.1 Text Alternatives for Rendered Non-Text Content](https://www.w3.org/TR/ATAG20/#sc_a211) | A | `guidepup.spec.mjs` shows the current-main #2822 image is not announced. The upstream preview context announces `image, 332x322.jpg`, but it is not evaluated here | **Gap** — the current-main authoring UI has no alt control |
 | [A.3.1.1 Keyboard Access (Minimum)](https://www.w3.org/TR/ATAG20/#sc_a311) | A | `keyboard-2854.spec.mjs`: before the fix, Tab reaches a dead closing Add block clone; the inert variant moves focus to the next real control. Activation variant makes Enter open the suggestion menu | **Partial** — the side menu is still pointer-hover-dependent |
 | [A.3.1.2 No Keyboard Traps](https://www.w3.org/TR/ATAG20/#sc_a312) | A | The same keyboard trace shows Tab leaving the editor and reaching the parent focus control in the inert variant | **Tested for this path** |
-| [A.3.4.1 Navigate By Structure](https://www.w3.org/TR/ATAG20/#sc_a341) | A | Virtual Screen Reader traversal announces headings, tables, rows, and cells in the Default Schema example | **Partial** — table header association is not exposed by the virtual reader; real AT is required |
+| [A.3.4.1 Navigate By Structure](https://www.w3.org/TR/ATAG20/#sc_a341) | A | Virtual Screen Reader traversal announces headings, tables, rows, and cells in the Default Schema example | **Partial** — table header association is not exposed by the virtual reader; real AT is out of scope here |
 | [A.4.2.1 Describe Accessibility Features](https://www.w3.org/TR/ATAG20/#sc_a421) | A | This document and the README describe the comparison, scripts, and known limits | **Lab documentation only** |
 | [A.4.2.2 Document All Features](https://www.w3.org/TR/ATAG20/#sc_a422) | AA | README, `docs/STATIC-COMPARATOR.md`, issue files, and this map | **Lab documentation only** |
 
 ## ATAG 2.0 Part B — support for accessible content
 
-| Checkpoint | Level | Lab evidence | Status |
+Part B is recorded as a gap backlog, not as an evaluation of any upstream PR.
+Every success criterion is mapped in the [gap register coverage table](gaps/README.md#atag-20-part-b-coverage).
+
+| Checkpoint cluster | Level | Gap record | Current-main status |
 | --- | --- | --- | --- |
-| [B.2.1.1 Accessible Content Possible (WCAG)](https://www.w3.org/TR/ATAG20/#sc_b211) | A | `semantics.spec.mjs`: #2822 before has only `alt=""`; #2825/#2826 before has no `th[scope]`, `th[id]`, or `td[headers]`; after the PR previews all are present | **Partial** — PRs #3337 and #3215 are open, not merged |
-| [B.2.2.2 Setting Accessibility Properties (WCAG)](https://www.w3.org/TR/ATAG20/#sc_b222) | A | PR #3337 supplies the image alt fallback; PR #3215 serialises table header relationships | **Partial** — depends on the open PRs |
-| [B.2.3.1 Alternative Content is Editable (WCAG)](https://www.w3.org/TR/ATAG20/#sc_b231) | A | The #2822 PR preview image has a fallback name; the current main image does not | **Partial** — fallback is not the same as an editable authoring field |
-| [B.1.2.4 Text Alternatives Preserved](https://www.w3.org/TR/ATAG20/#sc_b124) | A | Not yet tested through copy/paste or export | **Not tested** |
-| [B.3.1.1 Checking Assistance (WCAG)](https://www.w3.org/TR/ATAG20/#sc_b311) | A | BlockNote has no in-product accessibility checker; the lab's axe/Guidepup runs are external | **Not met by BlockNote** |
-| [B.3.2.1 Repair Assistance (WCAG)](https://www.w3.org/TR/ATAG20/#sc_b321) | A | The PR's alt fallback derives a name from the URL; it does not guide a repair | **Partial / not verified** |
-| [B.4.1.1 Features Active by Default](https://www.w3.org/TR/ATAG20/#sc_b411) | A | No authoring feature is enabled by default that prevents the tested barriers | **Not met** |
-| [B.4.2.1 Model Practice (WCAG)](https://www.w3.org/TR/ATAG20/#sc_b421) | A | The docs model names, structure, and known limits, but BlockNote's own authoring UI is unchanged | **Lab documentation only** |
+| B.1.1.1–B.1.1.2 auto-generated content | A (WCAG-dependent) | [B-01](gaps/atag-b-01-auto-generated-content.md) | Evidence gap |
+| B.1.2.1–B.1.2.4 transformations/copy-paste | A (WCAG-dependent) | [B-02](gaps/atag-b-02-transform-preservation.md) | Evidence gap |
+| B.2.1.1 accessible content possible | A (WCAG-dependent) | [B-03](gaps/atag-b-03-accessible-content-possible.md) | **Product gap** — image alt, table headers, list wrappers |
+| B.2.2.1–B.2.2.2 accessible options/properties | A (WCAG-dependent) | [B-04](gaps/atag-b-04-accessibility-properties.md) | **Product gap** |
+| B.2.3.1–B.2.3.3 alternative content editable/repaired/reused | A / AAA | [B-05](gaps/atag-b-05-alternative-content.md) | **Product gap**, AAA for reuse |
+| B.2.4.1–B.2.5.2 templates/pre-authored content | A / AA / AAA | [B-06](gaps/atag-b-06-templates-pre-authored.md) | **Product/evidence gap**; templates N/A in tested surfaces |
+| B.3.1.1–B.3.1.5 checking assistance | A / AA | [B-07](gaps/atag-b-07-checking-assistance.md) | **Product gap** — no in-product checker |
+| B.3.2.1 repair assistance | A (WCAG-dependent) | [B-08](gaps/atag-b-08-repair-assistance.md) | **Product gap** |
+| B.4.1.1–B.4.1.4 features by default | A / AA | [B-09](gaps/atag-b-09-features-by-default.md) | **Product gap** |
+| B.4.2.1–B.4.2.4 documentation | A / AAA | [B-10](gaps/atag-b-10-documentation.md) | Evidence gap |
+
+Concrete current-main occurrences are recorded in
+[AF-02](gaps/a11yfirst-02-image-alt-authoring.md) (image alt),
+[AF-07](gaps/a11yfirst-07-table-structure.md) (table headers), and
+[AF-08](gaps/a11yfirst-08-list-structure.md) (lists).
 
 ## A11yFirst principle mapping
 
-| A11yFirst principle | What the lab tests | Outcome |
+| A11yFirst principle | What the lab records | Gap record |
 | --- | --- | --- |
-| **Structure first** — headings, lists, tables | `semantics.spec.mjs` (table headers), `guidepup.spec.mjs` (heading/table traversal), #2809 list wrappers | Tables are repaired by PR #3215; read-only lists still lack `ul`/`ol`/`li` |
-| **Text alternatives for images** | `guidepup.spec.mjs` and `semantics.spec.mjs` for #2822 | Current main is silent; PR #3337 adds a fallback name |
-| **Meaningful link text** | Not covered by the current catalog | **Gap** |
-| **Language of passages** | #2823 remains reproduction-only | **Gap** |
-| **Accessible by default** | #2822/#2825/#2826 before/after | Only after the open PRs; not true on current main |
-| **Author guidance and help** | A11yFirst's Help model; BlockNote has no equivalent in these surfaces | **Gap** |
-| **Built-in accessibility checking** | The lab checks externally with axe and Guidepup; BlockNote does not check in-product | **Gap** |
+| **Heading guidance** | No outline/level validation observed; not yet tested for skipped levels | [AF-01](gaps/a11yfirst-01-heading-guidance.md) |
+| **Text alternatives for images** | Current-main image is `alt=""` and silent to the virtual reader | [AF-02](gaps/a11yfirst-02-image-alt-authoring.md) |
+| **Meaningful link text** | No guidance/check observed; not yet tested | [AF-03](gaps/a11yfirst-03-link-text.md) |
+| **Language of passages** | No language marking; upstream report #2823, not reproduced here | [AF-04](gaps/a11yfirst-04-language-of-parts.md) |
+| **Author help** | No in-editor help surface observed | [AF-05](gaps/a11yfirst-05-author-help.md) |
+| **Built-in accessibility checking** | No in-product checker observed; lab checks are external | [AF-06](gaps/a11yfirst-06-in-product-checking.md) |
+| **Table structure** | No `scope`/`id`/`headers`; no caption control observed | [AF-07](gaps/a11yfirst-07-table-structure.md) |
+| **List structure** | Read-only output has no `ul`/`ol`/`li` | [AF-08](gaps/a11yfirst-08-list-structure.md) |
+| **Accessible by default** | The default path produces the barriers above | [AF-09](gaps/a11yfirst-09-accessible-by-default.md) |
 
 ## What axe can and cannot prove here
 
@@ -91,7 +112,7 @@ The axe tests are deliberate about detector limits:
   asserts that blind spot and relies on Guidepup for the spoken difference.
 - **#2825/#2826:** axe does **not** distinguish the header relationships with
   its standard rules. The test records the failure and relies on DOM assertions
-  (`th[scope]`, `th[id]`, `td[headers]`) and real AT for the announcement.
+  (`th[scope]`, `th[id]`, `td[headers]`). Real AT is out of scope here.
 - **#2809:** axe does **not** flag the absence of list wrappers when the markup
   contains no lists. The test asserts the absence and relies on Guidepup to show
   that the items are spoken as paragraphs.
@@ -99,26 +120,22 @@ The axe tests are deliberate about detector limits:
 Axe is therefore a regression guard for the editor UI and an evidence source, not
 a substitute for the semantic assertions or screen-reader testing.
 
-## Real AT is still required
+## Out of scope
 
-Guidepup Virtual Screen Reader is a simulator. It does **not** replace VoiceOver,
-NVDA, JAWS, or testing with disabled people. For the real-AT tier:
+The following are outside this lab's scope. They are not deferred work items for
+this repository; they are separate activities for the product team or an
+independent evaluation:
 
-```sh
-npx @guidepup/setup install        # one-time screen reader setup
-npx @guidepup/setup verify
-```
-
-Then run the relevant preview/editor in Safari or Chrome and record:
-
-1. image announcement on #2822 before/after;
-2. table header announcement on #2825/#2826 before/after, including the merged
-   cell;
-3. list/paragraph announcement on #2809;
-4. Tab sequence and Add block activation on #2854.
-
-Record the AT version, browser, OS, and date in the observation export. This is
-manual evidence, not a conformance claim.
+- **Real screen-reader evaluation** (VoiceOver, NVDA, JAWS, Orca) and testing with
+  disabled people. Guidepup Virtual Screen Reader is a simulator, not a
+  substitute. The tables above therefore say "virtual reader" where that is what
+  was measured.
+- **Upstream PR review.** This lab does not approve, reject, or validate a pull
+  request. PR previews are used only as upstream context for a before/after
+  comparison; the gap records describe current main.
+- **Fixing BlockNote or committing upstream work.** The gap records propose
+  directions, not accepted changes.
+- **ATAG conformance certification.** This map is evidence, not a claim.
 
 ## Related files
 
@@ -126,5 +143,6 @@ manual evidence, not a conformance claim.
 - [`tests/a11y/guidepup.spec.mjs`](../tests/a11y/guidepup.spec.mjs)
 - [`tests/a11y/keyboard-2854.spec.mjs`](../tests/a11y/keyboard-2854.spec.mjs)
 - [`tests/a11y/semantics.spec.mjs`](../tests/a11y/semantics.spec.mjs)
+- [`docs/gaps/README.md`](gaps/README.md) — the gap register
 - [`docs/STATIC-COMPARATOR.md`](STATIC-COMPARATOR.md)
 - [`reports/ISSUE-INVENTORY.md`](../reports/ISSUE-INVENTORY.md)

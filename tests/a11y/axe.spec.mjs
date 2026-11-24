@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { previewUrl, saveEvidence, scan } from './helpers.mjs';
 
+// Upstream previews are context only: this lab does not review or approve pull requests.
+
 const localVariants = [
   'before/index.html',
   'after/index.html',
