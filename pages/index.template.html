@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
+  <meta name="lab-build-sha" content="{{BUILD_SHA}}">
   <title>BlockNote accessibility issue comparator</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -62,18 +63,27 @@
       <h3>Do this</h3>
       <ol id="validate-steps"></ol>
       <p id="validate-progress" class="meta" role="status"></p>
-      <button id="reset-checks" type="button">Reset checklist</button>
+      <div class="validate-actions">
+        <button id="download-observations" type="button">Download observations (JSON)</button>
+        <button id="reset-checks" type="button">Reset this issue</button>
+      </div>
     </div>
     <div>
       <h3>What you should see</h3>
       <div class="table-wrap">
         <table id="validate-table">
-          <caption>Current behavior and the expected result after a fix</caption>
-          <thead><tr><th scope="col">Check</th><th scope="col">Current</th><th scope="col">Expected</th></tr></thead>
+          <caption>Current behavior, the expected result, and what you observed</caption>
+          <colgroup><col class="col-check"><col class="col-current"><col class="col-expected"><col class="col-observed"></colgroup>
+          <thead><tr><th scope="col">Check</th><th scope="col">Current</th><th scope="col">Expected</th><th scope="col">Observed</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
     </div>
+  </div>
+  <div class="issue-notes">
+    <label for="issue-notes">Observer notes</label>
+    <textarea id="issue-notes" rows="3" placeholder="Browser, assistive technology, anything unexpected"></textarea>
+    <p class="meta">Observations and notes are saved in this browser. Use Download observations to export a build-stamped JSON record.</p>
   </div>
   <p id="fix-status" class="fix-status"></p>
 </section>
@@ -170,6 +180,7 @@
 
 <footer>
   <p>The #2854 frames share one origin, so scrolling and the focus readout stay in step. PR preview frames are cross-origin external Playgrounds: test each frame separately. Navigation, Tab and Enter are not mirrored. The focus controls outside the #2854 iframes are real host-page targets, not simulated key events.</p>
+  <p>Static build <code>{{BUILD_SHA}}</code>. Manual observations are evidence, not a conformance claim.</p>
   <p>Lab-authored comparison code is MIT-licensed. BlockNote source and the experimental patch remain under BlockNote’s MPL-2.0 terms. Modeled on the <a href="https://mgifford.github.io/FOSDEM-website/compare/">FOSDEM before/after comparator</a>.</p>
 </footer>
 
@@ -241,6 +252,7 @@
     if (issue.fix.kind === 'local') return 'Interactive';
     if (issue.fix.kind === 'pr') return issue.fix.previewUrl ? 'PR preview' : 'PR open';
     if (issue.fix.kind === 'docs') return 'Docs';
+    if (issue.fix.kind === 'none') return 'Reproduction only';
     return 'No fix';
   }
 
@@ -270,6 +282,11 @@
     }
   }
 
+  const stepKey = (issue, index) => `a11y-lab:${issue.number}:step:${index}`;
+  const checkKey = (issue, index) => `a11y-lab:${issue.number}:check:${index}`;
+  const noteKey = (issue) => `a11y-lab:${issue.number}:notes`;
+  const readCheck = (issue, index) => localStorage.getItem(checkKey(issue, index)) || '';
+
   function renderValidate(issue) {
     $('validate-summary').textContent = issue.summary;
     const steps = $('validate-steps');
@@ -281,7 +298,7 @@
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.dataset.step = String(index);
-      const key = `a11y-lab:${issue.number}:step:${index}`;
+      const key = stepKey(issue, index);
       checkbox.checked = localStorage.getItem(key) === '1';
       checkbox.addEventListener('change', () => {
         localStorage.setItem(key, checkbox.checked ? '1' : '0');
@@ -295,7 +312,7 @@
     });
     const tbody = $('validate-table').querySelector('tbody');
     tbody.textContent = '';
-    for (const row of issue.checks) {
+    for (const [index, row] of issue.checks.entries()) {
       const tr = document.createElement('tr');
       const th = document.createElement('th');
       th.scope = 'row';
@@ -304,9 +321,21 @@
       current.textContent = row.current;
       const expected = document.createElement('td');
       expected.textContent = row.expected;
-      tr.append(th, current, expected);
+      const observedCell = document.createElement('td');
+      observedCell.className = 'observed-cell';
+      const observed = document.createElement('textarea');
+      observed.rows = 2;
+      observed.value = readCheck(issue, index);
+      observed.setAttribute('aria-label', `Observed result for: ${row.check}`);
+      observed.addEventListener('input', () => {
+        localStorage.setItem(checkKey(issue, index), observed.value);
+        updateProgress(issue);
+      });
+      observedCell.append(observed);
+      tr.append(th, current, expected, observedCell);
       tbody.append(tr);
     }
+    $('issue-notes').value = localStorage.getItem(noteKey(issue)) || '';
     const fix = $('fix-status');
     fix.textContent = '';
     const strong = document.createElement('strong');
@@ -337,8 +366,62 @@
   }
 
   function updateProgress(issue) {
-    const checked = issue.steps.filter((_, index) => localStorage.getItem(`a11y-lab:${issue.number}:step:${index}`) === '1').length;
-    $('validate-progress').textContent = `${checked} of ${issue.steps.length} steps checked. This checklist is local to your browser.`;
+    const checked = issue.steps.filter((_, index) => localStorage.getItem(stepKey(issue, index)) === '1').length;
+    const observed = issue.checks.filter((_, index) => readCheck(issue, index).trim().length > 0).length;
+    $('validate-progress').textContent = `${checked} of ${issue.steps.length} steps checked; ${observed} of ${issue.checks.length} checks recorded. This checklist is local to your browser.`;
+  }
+
+  function exportObservations() {
+    const buildSha = document.querySelector('meta[name="lab-build-sha"]')?.content || 'unknown';
+    const recorded = [];
+    const notRecorded = [];
+    for (const issue of issues) {
+      const steps = issue.steps.map((text, index) => ({ text, checked: localStorage.getItem(stepKey(issue, index)) === '1' }));
+      const checks = issue.checks.map((row, index) => ({ check: row.check, current: row.current, expected: row.expected, observed: readCheck(issue, index) }));
+      const notes = localStorage.getItem(noteKey(issue)) || '';
+      const hasData = steps.some((step) => step.checked) || checks.some((check) => check.observed.trim()) || notes.trim();
+      if (!hasData) { notRecorded.push(issue.number); continue; }
+      recorded.push({
+        number: issue.number,
+        title: issue.title,
+        state: issue.state,
+        priority: issue.priority,
+        fix: { kind: issue.fix.kind, label: issue.fix.label },
+        steps,
+        checks,
+        notes,
+      });
+    }
+    if (!recorded.length) {
+      $('status').textContent = 'No observations recorded yet. Record a check, tick a step, or add a note before exporting.';
+      return;
+    }
+    const payload = {
+      exportedAt: new Date().toISOString(),
+      page: location.href,
+      documentTitle: document.title,
+      buildSha,
+      warning: 'Manual observations record what one observer saw in one browser. They are not a WCAG conformance claim.',
+      issues: recorded,
+      notRecorded,
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `blocknote-diff-lab-observations-${payload.exportedAt.slice(0, 10)}.json`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(link.href), 5000);
+    $('status').textContent = `Exported observations for ${recorded.length} issue(s). ${notRecorded.length} issue(s) had no recorded data.`;
+  }
+
+  function resetIssue(issue) {
+    issue.steps.forEach((_, index) => localStorage.removeItem(stepKey(issue, index)));
+    issue.checks.forEach((_, index) => localStorage.removeItem(checkKey(issue, index)));
+    localStorage.removeItem(noteKey(issue));
+    renderValidate(issue);
+    $('status').textContent = `Cleared checklist, observations and notes for #${issue.number}.`;
   }
 
   function applyIssue() {
@@ -394,7 +477,7 @@
       const before = issue.fix.beforeUrl || MAIN_PLAYGROUND;
       $('nofix-before').src = before;
       $('open-nofix-before').href = before;
-      $('nofix-after-label').textContent = issue.fix.kind === 'docs' ? 'no runtime patch' : 'no fix yet';
+      $('nofix-after-label').textContent = issue.fix.kind === 'docs' ? 'no runtime patch' : 'no patch';
       $('nofix-title').textContent = issue.fix.afterTitle || 'No patch is available for this issue yet';
       $('nofix-text').textContent = issue.fix.afterText || `${issue.fix.note} There is no local or upstream patch to preview, so the After pane is intentionally empty.`;
       $('nofix-link').href = issue.issueUrl;
@@ -409,7 +492,7 @@
       ? `Showing #${issue.number} with ${variantLabels[state.variant]}. The Before and After frames are built editors.`
       : pr
         ? `Showing #${issue.number}. Before is current main; After is the real PR preview. Both frames are external Playgrounds.`
-        : `Showing #${issue.number}. Before is the current Playground; the After pane records that ${issue.fix.kind === 'docs' ? 'no runtime patch applies' : 'no fix exists yet'}.`;
+        : `Showing #${issue.number}. Before is the current Playground; the After pane records that ${issue.fix.kind === 'docs' ? 'no runtime patch applies' : 'no patch is available'}.`;
     updateHash();
   }
 
@@ -418,7 +501,12 @@
     applyIssue();
   }
 
-  $('issue').innerHTML = issues.map((issue) => `<option value="${issue.number}">#${issue.number} — ${issue.title}</option>`).join('');
+  for (const issue of issues) {
+    const option = document.createElement('option');
+    option.value = String(issue.number);
+    option.textContent = `#${issue.number} — ${issue.title}`;
+    $('issue').append(option);
+  }
   $('issue').addEventListener('change', (event) => selectIssue(Number(event.target.value)));
   window.addEventListener('hashchange', () => {
     const next = new URLSearchParams(location.hash.slice(1));
@@ -442,10 +530,14 @@
       document.querySelector('.panes').style.setProperty('--w', radio.value);
     });
   }
+  $('issue-notes').addEventListener('input', () => {
+    const issue = byNumber.get(currentIssue);
+    if (issue) localStorage.setItem(noteKey(issue), $('issue-notes').value);
+  });
+  $('download-observations').addEventListener('click', exportObservations);
   $('reset-checks').addEventListener('click', () => {
     const issue = byNumber.get(currentIssue);
-    issue.steps.forEach((_, index) => localStorage.removeItem(`a11y-lab:${issue.number}:step:${index}`));
-    renderValidate(issue);
+    if (issue && window.confirm(`Clear the checklist, observations and notes for #${issue.number}?`)) resetIssue(issue);
   });
 
   // Sync scrolling between the same-origin frames.

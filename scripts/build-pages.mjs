@@ -1,11 +1,19 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.join(root, '_site');
 const assets = path.join(out, 'assets');
 const evidence = path.join(root, 'issues', '2854', 'evidence');
+
+let buildSha = process.env.GITHUB_SHA || '';
+if (!buildSha) {
+  try { buildSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(); }
+  catch { buildSha = 'unknown'; }
+}
+if (!/^[0-9a-f]{7,40}$/i.test(buildSha)) buildSha = 'unknown';
 
 fs.rmSync(out, { recursive: true, force: true });
 fs.mkdirSync(assets, { recursive: true });
@@ -65,7 +73,9 @@ JSON.parse(issuesJson);
 const safeIssuesJson = JSON.stringify(JSON.parse(issuesJson)).replace(/</g, '\\u003c');
 if (!template.includes('{{ISSUES}}')) throw new Error('Template is missing the {{ISSUES}} placeholder');
 template = template.replace('{{ISSUES}}', safeIssuesJson);
+if (!template.includes('{{BUILD_SHA}}')) throw new Error('Template is missing the {{BUILD_SHA}} placeholder');
+template = template.replaceAll('{{BUILD_SHA}}', buildSha);
 fs.writeFileSync(path.join(out, 'index.html'), template);
 fs.copyFileSync(path.join(root, 'pages', 'issues.json'), path.join(out, 'issues.json'));
 fs.writeFileSync(path.join(out, '.nojekyll'), '');
-console.log(`Built ${out} with ${files.length} evidence files and the patch.`);
+console.log(`Built ${out} from ${buildSha} with ${files.length} evidence files and the patch.`);

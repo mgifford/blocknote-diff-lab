@@ -38,7 +38,7 @@ const server = http.createServer((req, res) => {
 await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
 const base = `http://127.0.0.1:${server.address().port}`;
 const browser = await chromium.launch({ headless: true });
-const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, acceptDownloads: true });
 const pageErrors = [];
 page.on('pageerror', (error) => pageErrors.push(error.message));
 
@@ -119,6 +119,49 @@ try {
   await waitForIssue(977);
   assert.equal((await comparisonState()).noFix, true, 'issue card did not switch to the no-fix comparison');
   assert.match(page.url(), /#issue=977/);
+  assert.match(await page.locator('.issue-card[data-issue="977"] .issue-meta').innerText(), /Reproduction only/);
+  assert.match(await page.locator('.issue-card[data-issue="2829"] .issue-meta').innerText(), /Docs/);
+
+  // Observations must survive a reload and export with build provenance.
+  await page.evaluate(() => localStorage.clear());
+  await page.goto(`${base}/#issue=2825`, { waitUntil: 'domcontentloaded' });
+  await waitForIssue(2825);
+  const expectedChecks = issues.find((issue) => issue.number === 2825).checks.length;
+  assert.equal(await page.locator('#validate-table tbody tr').count(), expectedChecks, 'observation rows do not match the catalog checks');
+  const observedInputs = page.locator('#validate-table tbody textarea');
+  assert.equal(await observedInputs.count(), expectedChecks, 'each check needs an observed field');
+  assert.match(await observedInputs.first().getAttribute('aria-label'), /Observed result for:/);
+
+  await observedInputs.first().fill('th scope=col and td headers present in the PR pane');
+  await page.locator('#issue-notes').fill('Chromium headless; screen reader still pending');
+  await page.locator('#validate-steps input[type="checkbox"]').first().check();
+  assert.match(await page.locator('#validate-progress').innerText(), /1 of 4 steps checked; 1 of 3 checks recorded/);
+
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await waitForIssue(2825);
+  assert.equal(await observedInputs.first().inputValue(), 'th scope=col and td headers present in the PR pane', 'observed value did not persist');
+  assert.equal(await page.locator('#issue-notes').inputValue(), 'Chromium headless; screen reader still pending', 'notes did not persist');
+
+  const [download] = await Promise.all([
+    page.waitForEvent('download'),
+    page.click('#download-observations'),
+  ]);
+  const downloadPath = await download.path();
+  assert.ok(downloadPath, 'observation download has no path');
+  const exported = JSON.parse(fs.readFileSync(downloadPath, 'utf8'));
+  assert.ok(exported.buildSha === 'unknown' || /^[0-9a-f]{7,40}$/i.test(exported.buildSha), `invalid build SHA: ${exported.buildSha}`);
+  assert.match(exported.page, /#issue=2825/);
+  const recorded = exported.issues.find((issue) => issue.number === 2825);
+  assert.ok(recorded, 'export omitted the issue with observations');
+  assert.equal(recorded.checks[0].observed, 'th scope=col and td headers present in the PR pane');
+  assert.equal(recorded.notes, 'Chromium headless; screen reader still pending');
+  assert.equal(recorded.steps[0].checked, true);
+
+  page.once('dialog', (dialog) => dialog.accept());
+  await page.click('#reset-checks');
+  await page.waitForTimeout(200);
+  assert.equal(await observedInputs.first().inputValue(), '', 'reset did not clear the observed value');
+  assert.equal(await page.locator('#issue-notes').inputValue(), '', 'reset did not clear the notes');
 
   await page.setViewportSize({ width: 390, height: 900 });
   await page.waitForTimeout(300);

@@ -54,11 +54,19 @@ test('external previews deep-link to a Playground example with the affected bloc
 });
 
 test('the page keeps local, PR, and no-fix comparison regions', () => {
-  for (const id of ['compare-panes', 'pr-compare', 'no-fix-compare', 'pr-patch', 'focus-status']) {
+  for (const id of ['compare-panes', 'pr-compare', 'no-fix-compare', 'pr-patch', 'focus-status', 'download-observations', 'issue-notes']) {
     assert.match(template, new RegExp(`id="${id}"`), `missing #${id}`);
   }
   assert.match(template, /hashchange/, 'missing hashchange navigation');
   assert.doesNotMatch(template, /id="no-local"/, 'stale no-local section');
+});
+
+test('the page records observations, notes and build provenance', () => {
+  assert.match(template, /name="lab-build-sha" content="\{\{BUILD_SHA\}\}"/, 'missing build SHA meta');
+  assert.match(template, /<th scope="col">Observed<\/th>/, 'missing Observed column');
+  assert.match(template, /observed-cell/, 'missing observed input cell');
+  assert.match(template, /Download observations \(JSON\)/, 'missing observation export');
+  assert.match(template, /Reproduction only/, 'missing reproduction-only label');
 });
 
 test('the PR-backed issues use real previews and patch links', () => {

@@ -98,10 +98,28 @@ footer { font-size: .86rem; color: var(--muted); border-top: 1px solid var(--lin
 .validate li { margin: .4rem 0; }
 .step-label { display: flex; align-items: flex-start; gap: .5rem; }
 .step-label input { margin-top: .35rem; flex: none; }
-.validate table { font-size: .9rem; }
+.validate table { font-size: .9rem; min-width: 480px; }
+#validate-table .col-check { width: 24%; }
+#validate-table .col-current { width: 14%; }
+#validate-table .col-expected { width: 28%; }
+#validate-table .col-observed { width: 34%; }
+.validate-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .6rem; }
+.validate-actions button { font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--fg); border-radius: .25rem; padding: .25rem .55rem; }
+.observed-cell { min-width: 0; }
+.observed-cell textarea, .issue-notes textarea {
+  width: 100%;
+  font: inherit;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: .25rem;
+  padding: .3rem .4rem;
+}
+.issue-notes { margin-top: .75rem; }
+.issue-notes label { display: block; font-weight: 700; margin-bottom: .25rem; }
 .fix-status { border-inline-start: 5px solid var(--line); background: var(--panel); padding: .6rem .8rem; margin: .75rem 0; }
 .fix-status a { font-weight: 600; }
-input:focus-visible, select:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .controls > div { min-width: 0; max-width: 100%; }
 .controls select { max-width: 100%; }
 @media (max-width: 800px) {

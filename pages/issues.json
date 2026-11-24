@@ -55,7 +55,7 @@
       "variants": false,
       "fix": {
         "kind": "none",
-        "label": "No fix yet",
+        "label": "Reproduction only",
         "url": null,
         "note": "No local or upstream patch is bundled on this page. Use these steps to record the current behavior.",
         "beforeUrl": "https://blocknote-git-main-typecell.vercel.app/basic/default-blocks",
@@ -193,7 +193,7 @@
       "variants": false,
       "fix": {
         "kind": "none",
-        "label": "No fix yet",
+        "label": "Reproduction only",
         "url": null,
         "note": "No local or upstream patch is bundled. Record the current read-only/accessibility-tree output.",
         "beforeUrl": "https://blocknote-git-main-typecell.vercel.app/basic/read-only-editor",
@@ -277,7 +277,7 @@
       "variants": false,
       "fix": {
         "kind": "none",
-        "label": "No fix yet",
+        "label": "Reproduction only",
         "url": null,
         "note": "No local or upstream patch is bundled; this needs a design decision first.",
         "beforeUrl": "https://blocknote-git-main-typecell.vercel.app/basic/default-blocks"
@@ -315,7 +315,7 @@
       "variants": false,
       "fix": {
         "kind": "none",
-        "label": "No fix yet",
+        "label": "Reproduction only",
         "url": null,
         "note": "No local or upstream patch is bundled; split the request before implementing.",
         "beforeUrl": "https://blocknote-git-main-typecell.vercel.app/basic/default-blocks"
