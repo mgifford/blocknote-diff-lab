@@ -22,10 +22,13 @@ serialize as semantic table markup.
 
 ## Current BlockNote behavior
 
-In the current-main Advanced Tables example, the table has three `th` elements
-but **no `scope`, no `id`, and no `td[headers]`**. The table also has no observed
-caption/accessible-name control. The example includes a merged 2×2 cell, so the
-missing relationships affect a realistic complex table.
+In the current-main Advanced Tables example, the table has a header row and
+column enabled (`headers: true` in the documented table options), producing three
+`th` elements. However, those headers have **no `scope`, no `id`, and no
+`td[headers]` relationships**, and no caption/accessible-name control was
+observed. The example includes a merged 2×2 cell, so the missing relationships
+affect a realistic complex table. The gap is the relationship/caption
+serialization, not the existence of a header option.
 
 An upstream pull request preview shows `scope`/`id`/`headers`, but this record
 describes current main and does not evaluate the PR.

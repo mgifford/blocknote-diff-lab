@@ -26,7 +26,7 @@ Three verified occurrences on current main:
 | Block | Current-main behavior | Evidence |
 | --- | --- | --- |
 | Image/file | Image renders with `alt=""`; no alt control observed | [AF-02](a11yfirst-02-image-alt-authoring.md) |
-| Table | `th` has no `scope`/`id`; no `td[headers]`; no caption control observed | [AF-07](a11yfirst-07-table-structure.md) |
+| Table | Header row/column can be enabled (`headers: true`), but `th` has no `scope`/`id`, `td` has no `headers`, and no caption control was observed | [AF-07](a11yfirst-07-table-structure.md) |
 | Read-only lists | No `ul`/`ol`/`li`; items spoken as paragraphs | [AF-08](a11yfirst-08-list-structure.md) |
 
 The separate records carry the commands and raw evidence. This record is the

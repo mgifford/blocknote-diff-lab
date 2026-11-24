@@ -282,8 +282,9 @@ If a patch was authored against another commit and cannot apply cleanly, fetch t
 | `pnpm test:pages` | Builds `_site` and runs the browser test for every issue’s Before/After region, observation persistence/export and Back/Forward navigation. |
 | `pnpm check:previews` | Network smoke check of the external Playground routes and main/PR differences; not part of the deploy gate. |
 | `pnpm test:a11y:local` | axe on the four #2854 bundles and comparator shell; real-keyboard #2854 focus/activation. No network. |
-| `pnpm test:a11y:previews` | axe, Guidepup Virtual Screen Reader and semantic before/after checks against the external previews. |
-| `pnpm test:a11y` | All axe, Guidepup, keyboard and semantic checks. |
+| `pnpm test:a11y:previews` | axe, Guidepup Virtual Screen Reader, semantic before/after checks and A11yFirst authoring probes against the external previews. |
+| `pnpm test:a11y:a11yfirst` | A11yFirst authoring probes: H1→H3 guidance and generic link text. |
+| `pnpm test:a11y` | All axe, Guidepup, keyboard, semantic and A11yFirst checks. |
 | `pnpm mcp:playwright` | Start the Playwright MCP server over stdio for interactive inspection. |
 | `node bin/diff-lab.mjs status` | State metadata plus `git status --short` for both worktrees. |
 | `node bin/diff-lab.mjs help` | Command summary. |

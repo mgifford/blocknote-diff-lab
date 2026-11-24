@@ -19,9 +19,9 @@ later repair pass.
 
 | ID | Gap | Status | ATAG B link | Evidence |
 | --- | --- | --- | --- | --- |
-| [AF-01](a11yfirst-01-heading-guidance.md) | Heading-level guidance and outline validation | Evidence gap | B.2.2.2 | Not assessed; no guidance observed |
+| [AF-01](a11yfirst-01-heading-guidance.md) | Heading-level guidance and outline validation | **Product gap** | B.2.2.2 | a11yfirst authoring probe |
 | [AF-02](a11yfirst-02-image-alt-authoring.md) | Image text-alternative authoring | **Product gap** | B.2.1.1, B.2.2.2, B.2.3.1 | axe, Guidepup, semantics |
-| [AF-03](a11yfirst-03-link-text.md) | Meaningful link-text guidance | Evidence gap | B.2.2.2 | Not assessed |
+| [AF-03](a11yfirst-03-link-text.md) | Meaningful link-text guidance | **Product gap** | B.2.2.2 | a11yfirst authoring probe |
 | [AF-04](a11yfirst-04-language-of-parts.md) | Language of passages | **Product gap** | B.2.1.1, B.2.2.2 | Upstream report #2823; not reproduced here |
 | [AF-05](a11yfirst-05-author-help.md) | In-product author help | **Product gap** | B.4.2.2, B.4.2.3 | No help surface observed |
 | [AF-06](a11yfirst-06-in-product-checking.md) | Built-in accessibility checking | **Product gap** | B.3.1.1 | No checker observed; lab checks are external |
@@ -69,10 +69,10 @@ applicable. The gap files assess **current main**, not upstream pull requests.
 | B.4.1.2 Option to reactivate features | A | **Product gap** | [B-09](atag-b-09-features-by-default.md) |
 | B.4.1.3 Feature deactivation warning | AA | **Product gap** | [B-09](atag-b-09-features-by-default.md) |
 | B.4.1.4 Feature prominence | AA | **Product gap** | [B-09](atag-b-09-features-by-default.md) |
-| B.4.2.1 Model practice | A (WCAG-dependent) | Evidence gap | [B-10](atag-b-10-documentation.md) |
-| B.4.2.2 Feature instructions | A | Evidence gap | [B-10](atag-b-10-documentation.md) |
-| B.4.2.3 Tutorial | AAA | Evidence gap | [B-10](atag-b-10-documentation.md) |
-| B.4.2.4 Instruction index | AAA | Evidence gap | [B-10](atag-b-10-documentation.md) |
+| B.4.2.1 Model practice | A (WCAG-dependent) | **Product gap** | [B-10](atag-b-10-documentation.md) |
+| B.4.2.2 Feature instructions | A | **Product gap** | [B-10](atag-b-10-documentation.md) |
+| B.4.2.3 Tutorial | AAA | **Product gap (AAA)** | [B-10](atag-b-10-documentation.md) |
+| B.4.2.4 Instruction index | AAA | **Product gap (AAA)** | [B-10](atag-b-10-documentation.md) |
 
 ## Status vocabulary
 

@@ -1,11 +1,11 @@
 # AF-03: Meaningful link-text guidance
 
-- **Status:** Evidence gap (likely product gap)
+- **Status:** Product gap — verified on current main
 - **Area:** BlockNote editor / current main, link toolbar
 - **A11yFirst:** Meaningful link text
 - **ATAG 2.0:** B.2.2.2 Setting Accessibility Properties
 - **WCAG 2.2:** 2.4.4 Link Purpose (In Context); 2.4.9 Link Purpose (Link Only)
-- **Evidence basis:** Manual observation; no dedicated test
+- **Evidence basis:** Automated authoring probe (`tests/a11y/a11yfirst.spec.mjs`) and manual observation
 - **Recorded:** 2026-11-24 against current main (`9cb988f`)
 
 ## Why this matters
@@ -22,15 +22,18 @@ descriptive name without knowing the HTML behind it.
 
 ## Current BlockNote behavior
 
-The formatted-link toolbar accepts a URL and link text. This lab did not find a
-prompt, check, or warning for generic text such as "click here", "read more", or
-a bare URL. A dedicated link-text test has not been written, so this remains an
-evidence gap rather than a confirmed failure.
+The formatted-link toolbar exposes an **Edit URL** field and an OK action; no
+separate link-text field, prompt, check, or warning for generic text was
+observed. The lab typed "click here", selected it, created a link to
+`https://example.com`, and the editor accepted the generic link text with no
+warning. This is a verified product gap.
 
 ## Evidence
 
-- Manual inspection of the link toolbar; no link-text guidance observed.
-- No test in `tests/a11y/` currently exercises link text.
+- `tests/a11y/a11yfirst.spec.mjs` — creates a "click here" link to
+  `https://example.com` and asserts that the link is accepted while no
+  alert/status text mentions link, text, descriptive, or purpose.
+- Manual inspection of the link toolbar; the only visible field is `Edit URL`.
 - No issue in the current catalog covers link text.
 
 ## Acceptance criteria

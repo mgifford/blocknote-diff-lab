@@ -47,6 +47,7 @@ shows a different result, it is context only; this lab does not evaluate the PR.
 | `pnpm test:a11y:guidepup` | Virtual Screen Reader tests only | Yes |
 | `pnpm test:a11y:keyboard` | #2854 keyboard focus and activation | No |
 | `pnpm test:a11y:semantics` | alt text, table headers, list wrappers | Yes |
+| `pnpm test:a11y:a11yfirst` | A11yFirst authoring probes: H1→H3 guidance and generic link text | Yes |
 | `pnpm test:a11y` | Everything | Mixed |
 
 Every run writes raw JSON evidence under `reports/a11y/<timestamp>/`. The tests
@@ -82,7 +83,7 @@ Every success criterion is mapped in the [gap register coverage table](gaps/READ
 | B.3.1.1–B.3.1.5 checking assistance | A / AA | [B-07](gaps/atag-b-07-checking-assistance.md) | **Product gap** — no in-product checker |
 | B.3.2.1 repair assistance | A (WCAG-dependent) | [B-08](gaps/atag-b-08-repair-assistance.md) | **Product gap** |
 | B.4.1.1–B.4.1.4 features by default | A / AA | [B-09](gaps/atag-b-09-features-by-default.md) | **Product gap** |
-| B.4.2.1–B.4.2.4 documentation | A / AAA | [B-10](gaps/atag-b-10-documentation.md) | Evidence gap |
+| B.4.2.1–B.4.2.4 documentation | A / AAA | [B-10](gaps/atag-b-10-documentation.md) | **Product gap** — targeted docs review |
 
 Concrete current-main occurrences are recorded in
 [AF-02](gaps/a11yfirst-02-image-alt-authoring.md) (image alt),
@@ -93,9 +94,9 @@ Concrete current-main occurrences are recorded in
 
 | A11yFirst principle | What the lab records | Gap record |
 | --- | --- | --- |
-| **Heading guidance** | No outline/level validation observed; not yet tested for skipped levels | [AF-01](gaps/a11yfirst-01-heading-guidance.md) |
+| **Heading guidance** | H1→H3 accepted with no outline or level warning | [AF-01](gaps/a11yfirst-01-heading-guidance.md) |
 | **Text alternatives for images** | Current-main image is `alt=""` and silent to the virtual reader | [AF-02](gaps/a11yfirst-02-image-alt-authoring.md) |
-| **Meaningful link text** | No guidance/check observed; not yet tested | [AF-03](gaps/a11yfirst-03-link-text.md) |
+| **Meaningful link text** | "click here" link accepted with no warning; only an Edit URL field | [AF-03](gaps/a11yfirst-03-link-text.md) |
 | **Language of passages** | No language marking; upstream report #2823, not reproduced here | [AF-04](gaps/a11yfirst-04-language-of-parts.md) |
 | **Author help** | No in-editor help surface observed | [AF-05](gaps/a11yfirst-05-author-help.md) |
 | **Built-in accessibility checking** | No in-product checker observed; lab checks are external | [AF-06](gaps/a11yfirst-06-in-product-checking.md) |
@@ -143,6 +144,7 @@ independent evaluation:
 - [`tests/a11y/guidepup.spec.mjs`](../tests/a11y/guidepup.spec.mjs)
 - [`tests/a11y/keyboard-2854.spec.mjs`](../tests/a11y/keyboard-2854.spec.mjs)
 - [`tests/a11y/semantics.spec.mjs`](../tests/a11y/semantics.spec.mjs)
+- [`tests/a11y/a11yfirst.spec.mjs`](../tests/a11y/a11yfirst.spec.mjs)
 - [`docs/gaps/README.md`](gaps/README.md) — the gap register
 - [`docs/STATIC-COMPARATOR.md`](STATIC-COMPARATOR.md)
 - [`reports/ISSUE-INVENTORY.md`](../reports/ISSUE-INVENTORY.md)

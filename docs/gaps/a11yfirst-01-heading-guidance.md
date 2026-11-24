@@ -1,11 +1,11 @@
 # AF-01: Heading-level guidance and outline validation
 
-- **Status:** Evidence gap (likely product gap)
+- **Status:** Product gap — verified on current main
 - **Area:** BlockNote editor / current main
 - **A11yFirst:** Heading — helps authors choose proper heading levels so the document outline is meaningful
 - **ATAG 2.0:** A.3.4.1 Navigate By Structure; B.2.2.2 Setting Accessibility Properties
 - **WCAG 2.2:** 1.3.1 Info and Relationships; 2.4.6 Headings and Labels
-- **Evidence basis:** Manual observation; heading-specific tests not yet written
+- **Evidence basis:** Automated authoring probe (`tests/a11y/a11yfirst.spec.mjs`) and manual observation
 - **Recorded:** 2026-11-24 against current main (`9cb988f`)
 
 ## Why this matters
@@ -25,18 +25,19 @@ level jumps (for example H1 directly to H3).
 
 BlockNote exposes heading blocks and a block-type selector. In the tested
 Default Schema example, the document contains a level-1 "Heading" and a level-1
-"Toggle Heading"; no heading-outline guidance, level validation, or skipped-level
-warning was observed. This lab has not run a dedicated skipped-heading test, so
-this is an evidence gap rather than a confirmed failure.
+"Toggle Heading". The lab then created an H1 followed immediately by an H3. The
+editor accepted both headings and produced `<h1>`/`<h3>` elements; no alert,
+status message, level validation, or skipped-level warning appeared. There is no
+visible outline. This is now a verified product gap, not only an evidence gap.
 
 ## Evidence
 
+- `tests/a11y/a11yfirst.spec.mjs` — creates H1 then H3 and asserts that an H3
+  exists while no alert/status text mentions heading, level, skip, or outline.
 - `tests/a11y/guidepup.spec.mjs` records Virtual Screen Reader heading phrases
   during the editor traversal; it does not assert heading sequence.
 - Manual inspection of the block type selector found no outline or level
   validation.
-- No issue in the current catalog covers heading guidance; this is the first
-  record of the gap.
 
 ## Acceptance criteria
 

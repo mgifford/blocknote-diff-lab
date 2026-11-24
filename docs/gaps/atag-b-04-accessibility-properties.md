@@ -25,8 +25,10 @@ inaccessible one.
 
 - Image: no alt-text control observed in the image/file UI; the image renders
   with `alt=""`.
-- Table: no header-row/column property or caption/name control observed; the
-  table has no `scope`/`id`/`headers`.
+- Table: header rows/columns are settable through the documented table options
+  (`headers: true`, `headerRows`, `headerCols`), but the table has no
+  `scope`/`id`/`headers` relationship output and no observed caption/name
+  control.
 - Table options that affect readability (merges, colors, alignment) are present
   without equivalent prominence for header relationships.
 - No accessibility-property panel was observed for the blocks tested.
@@ -38,6 +40,9 @@ BlockNote block or every consumer integration.
 
 - [AF-02](a11yfirst-02-image-alt-authoring.md), [AF-07](a11yfirst-07-table-structure.md) —
   concrete behavior and tests.
+- `docs/content/docs/features/blocks/tables.mdx` in the upstream source documents
+  `headers: true`, `headerRows`, and `headerCols`; it does not document
+  `scope`/`id`/`headers` output or a caption property.
 - `tests/a11y/semantics.spec.mjs` — property absence/presence in the DOM.
 - Manual inspection of the image and table controls.
 

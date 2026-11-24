@@ -1,10 +1,10 @@
 # B-10: Documentation promotes accessible authoring (B.4.2.1–B.4.2.4)
 
-- **Status:** Evidence gap
+- **Status:** Product gap — targeted docs review
 - **Area:** BlockNote documentation and authoring help / current main
 - **ATAG 2.0:** B.4.2.1 Model Practice; B.4.2.2 Feature Instructions; B.4.2.3 Tutorial; B.4.2.4 Instruction Index
 - **WCAG 2.2:** The level the documented output claims (WCAG-dependent)
-- **Evidence basis:** Not assessed
+- **Evidence basis:** Targeted search of upstream `docs/content` on 2026-11-24; not a full manual documentation audit
 - **Recorded:** 2026-11-24 against current main (`9cb988f`)
 
 ## Why this matters
@@ -23,15 +23,27 @@ B.4.2 asks the tool to model and teach accessible authoring.
 
 ## Current BlockNote behavior
 
-BlockNote documentation exists, but this lab has **not assessed** whether it models
-accessible image, table, list, and link authoring or explains the relevant
-features. The lab's own README, `docs/ATAG-2.0-A11YFIRST.md`, and gap register are
-lab documentation, not BlockNote's authoring help. This is an evidence gap, not a
-confirmed failure.
+BlockNote documentation exists. A targeted search of `docs/content` found
+accessibility mentions only in PDF/typst export, legal pages, and the Ariakit
+getting-started page; `alt text`/`alternative text` appears only in the math,
+email, and PDF pages. The table page documents `headers: true`, `headerRows`, and
+`headerCols`, but not the `scope`/`id`/`headers` relationships, captions, or the
+reason authors should use headers. No dedicated accessible-authoring guide,
+image-alt guidance, link-text guidance, or language guidance was found. The lab's
+own README, ATAG map, and gap register are lab documentation, not BlockNote's
+authoring help. This is a targeted review finding, not a full documentation
+audit.
 
 ## Evidence
 
-- No documentation review has been performed.
+- `grep -ril "accessib" docs/content --include="*.mdx"` — only export/legal/
+  Ariakit pages.
+- `grep -ril "alt text\|alternative text\|alt attribute" docs/content --include="*.mdx"`
+  — math, email, and PDF pages only.
+- `docs/content/docs/features/blocks/tables.mdx` — documents `headers: true` and
+  the header props, but not the relationships or the authoring rationale.
+- `docs/content/docs/features/blocks/list-types.mdx` — no accessibility terms
+  found.
 - [AF-05](a11yfirst-05-author-help.md) records the absence of in-product help.
 - [B-07](atag-b-07-checking-assistance.md) records the absence of an in-product
   checker that documentation would need to explain.
