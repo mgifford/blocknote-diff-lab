@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   test:
+    name: page-comparison-tests
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
