@@ -40,6 +40,7 @@ This starter kit is **not** a completed BlockNote regression suite or a WCAG con
 - `pages/` and `scripts/build-pages.mjs`: static before/after comparator for GitHub Pages, including the prebuilt `pages/before`, `pages/after`, `pages/after-inert` and `pages/after-activation` BlockNote bundles, evidence and patches. It does not need the Vite+ dev servers.
 - `pages/issues.json`: the reported-issue catalog, validation steps, expected results and fix links used by the page.
 - `pages/app/` and `scripts/build-static-bundles.sh`: the small Vite/React app used to build the static bundles. The Pages workflow only assembles committed bundles; rebuilding requires prepared BlockNote worktrees.
+- `scripts/check-previews.mjs`: network smoke check that the external Playground routes still render and that the current-main/PR differences are still present. `.github/workflows/preview-smoke.yml` runs it manually or weekly; it is not part of the deploy gate.
 - `docs/STATIC-COMPARATOR.md`: feature comparison with the FOSDEM comparator and the remaining gaps.
 - `.github/workflows/pages.yml`: builds and deploys that static report on pushes to `main`.
 - `reports/ISSUE-INVENTORY.md` and `reports/issue-inventory.json`: verified open/closed accessibility issue inventory and machine-readable data.
@@ -270,7 +271,8 @@ If a patch was authored against another commit and cannot apply cleanly, fetch t
 | `pnpm start` | Start both live playground servers and the viewer. |
 | `pnpm capture` | Screenshots, axe, ARIA and the keyboard scenario. |
 | `pnpm test` | Unit and catalog contract tests; no BlockNote download needed. |
-| `pnpm test:pages` | Builds `_site` and runs the browser test for every issue’s Before/After region. |
+| `pnpm test:pages` | Builds `_site` and runs the browser test for every issue’s Before/After region, observation persistence/export and Back/Forward navigation. |
+| `pnpm check:previews` | Network smoke check of the external Playground routes and main/PR differences; not part of the deploy gate. |
 | `node bin/diff-lab.mjs status` | State metadata plus `git status --short` for both worktrees. |
 | `node bin/diff-lab.mjs help` | Command summary. |
 
@@ -278,6 +280,7 @@ If a patch was authored against another commit and cannot apply cleanly, fetch t
 
 - The Git orchestration, configuration validation and static-file helper are covered by synthetic-fixture unit tests. The demo path and the live minimal route have both been exercised. A live smoke run at upstream `9cb988f` with Node 24.15.0 and pnpm 11.8.0 loaded both `/basic/minimal?hideMenu` editors, started both Vite+ servers through the kit launcher, and produced 10 capture runs with the pinned SHA and a local, uncommitted After-only focus-outline patch. That run reported `aria-input-field-name` on the editor textbox on both sides — a starting observation, not a conformance result. The full workspace install, other example routes and other upstream commits remain unvalidated.
 - Demo captures are labelled, but they are still synthetic; never cite them as editor evidence.
+- The external PR previews are Vercel deployments outside this repository. `pnpm check:previews` (or the weekly **Preview route smoke check** workflow) detects route or semantic drift, but it is not part of the Pages deploy gate because it depends on network access and the upstream previews staying online.
 - GitHub Pages serves a static #2854 before/after comparator built from prebuilt BlockNote bundles. It cannot run Vite+ dev servers or CDP forced-colours emulation; those remain local. More variants/pages and build-time automated-check summaries on Pages are future work.
 - The upstream playground is a large workspace. Even a shallow Git clone does not make dependency installation small. A more minimal source-bound editor fixture is an appropriate second optimization if this baseline proves too expensive.
 - Cross-origin iframe navigation and keyboard input are not mirrored. This is intentional for reliable test evidence.

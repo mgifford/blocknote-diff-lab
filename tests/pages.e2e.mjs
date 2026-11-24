@@ -163,6 +163,21 @@ try {
   assert.equal(await observedInputs.first().inputValue(), '', 'reset did not clear the observed value');
   assert.equal(await page.locator('#issue-notes').inputValue(), '', 'reset did not clear the notes');
 
+  // Issue selection is pushState: Back returns through viewed issues and the
+  // legacy page= parameter is normalised away.
+  await page.goto(`${base}/#issue=2854&variant=both&page=minimal`, { waitUntil: 'domcontentloaded' });
+  await waitForIssue(2854);
+  assert.doesNotMatch(page.url(), /[?&]page=/, 'legacy page parameter should be normalised away');
+  await page.click('.issue-card[data-issue="977"]');
+  await waitForIssue(977);
+  await page.click('.issue-card[data-issue="2822"]');
+  await waitForIssue(2822);
+  await page.goBack();
+  await waitForIssue(977);
+  assert.match(page.url(), /#issue=977/);
+  await page.goForward();
+  await waitForIssue(2822);
+
   await page.setViewportSize({ width: 390, height: 900 });
   await page.waitForTimeout(300);
   const overflow = await page.evaluate(() => ({
@@ -172,7 +187,7 @@ try {
   assert.ok(overflow.scrollWidth <= overflow.clientWidth + 1, `page overflows at 390px: ${overflow.scrollWidth} > ${overflow.clientWidth}`);
 
   assert.deepEqual(pageErrors, [], `page errors: ${pageErrors.join('; ')}`);
-  console.log(`pages e2e: ${issues.length} issues have visible before/after comparisons; hash and card navigation pass.`);
+  console.log(`pages e2e: ${issues.length} issues, observations/export, hash/card/Back navigation pass.`);
 } finally {
   await browser.close();
   await new Promise((resolve) => server.close(resolve));

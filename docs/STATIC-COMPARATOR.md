@@ -27,9 +27,10 @@ The page now follows the FOSDEM architecture and adds an issue catalog:
 
 - a catalog of **nine reported issues**, each with prefilled validation steps, expected results, fix status and upstream links;
 - for #2854, two prebuilt BlockNote editors in same-origin iframes (`pages/before`, `pages/after`);
-- three #2854 variants (both fixes, inert-only, activation-only) and one page (the minimal-editor fixture), with selectors;
+- three #2854 variants (both fixes, inert-only, activation-only), with selectors; there is no page selector because the lab bundles one fixture;
 - editor theme Light/Dark/Follow OS (reloads both frames), half/phone/tablet widths and synced scrolling;
-- URL hash state (`issue`, `variant`, `page`, optional `theme`);
+- URL hash state (`issue`, `variant`, optional `theme`); legacy `page=` links still load and are normalised away;
+- browser Back/Forward traverses issue selections; variant and theme changes replace the current history entry instead of adding one;
 - prefilled validation checklists with local progress, a per-check **Observed** field and per-issue observer notes; **Download observations (JSON)** exports every issue with recorded data and stamps the file with the build SHA;
 - every issue has a Before/After region: local built editors for #2854, side-by-side current-main vs PR Playground previews for #2822/#2825/#2826, and an explicit no-patch After panel for issues with no bundled or upstream patch; four of those are labelled **Reproduction only**, and #2829 is labelled **Docs** because its fix is a downstream documentation change;
 - external frames deep-link to a Playground example that contains the affected block: `basic/default-blocks` (image, file, table, video, audio, lists) and `ui-components/advanced-tables` (header cells and merge controls), plus `basic/read-only-editor` for #2809. The Playground root is an example chooser with no editor body, so linking to it produces two blank frames;
@@ -47,10 +48,10 @@ The page now follows the FOSDEM architecture and adds an issue catalog:
 | Per-check observations + export | No | Notes + JSON export | Observed field per check, issue notes, build-stamped JSON export |
 | Same-origin scroll/theme sync | Yes | No | #2854 only; PR previews are cross-origin |
 | Variant selector | 6 variants | No | 3 #2854 variants |
-| Page selector | 10 pages | No | 1 page |
+| Page selector | 10 pages | No | None (single fixture) |
 | Theme controls | Site theme + dark-OS CSS simulation | No | Editor Light/Dark/Follow OS |
 | Frame widths | Half/phone/tablet | No | Half/phone/tablet |
-| URL state | variant/page/os | No | variant/page/theme |
+| URL state | variant/page/os | No | issue/variant/theme |
 | Issue cards | 6 | No | 9 |
 | Build-time automated checks | Yes | No | Observed table + evidence JSON; no build-time check table |
 | Diff/patch section | Built-site diff | No | Source patch for #2854; PR files/patch for PR issues |
@@ -81,15 +82,18 @@ The first command builds `pages/before`, `pages/after` (both fixes), `pages/afte
 ## Tests
 
 ```sh
-pnpm test        # catalog contract tests plus the existing unit tests
-pnpm test:pages  # builds _site, serves it, and checks every issue's Before/After region in Chromium
+pnpm test            # catalog contract tests plus the existing unit tests
+pnpm test:pages      # builds _site, serves it, and checks every issue's Before/After region in Chromium
+pnpm check:previews  # network check of the external Playground routes (not part of the deploy gate)
 ```
 
-`tests/pages-contract.test.mjs` enforces the data contract (nine issues, steps/checks, PR before/after/patch URLs and a real Playground example route for every external frame, plus the observation-export and build-provenance markup). `tests/pages.e2e.mjs` checks that every issue shows exactly one comparison region, that #2854 has visible local frames and a patch, that PR issues have visible current/PR frames and a patch, that external frames are not pointed at the Playground index, that unfixed issues show an explicit no-patch panel and a **Reproduction only** card, that observations persist across a reload and export with the build SHA, that reset clears them, and that hash and issue-card navigation work. The Pages deployment depends on both test commands; `.github/workflows/pages-tests.yml` also runs them on pull requests.
+`tests/pages-contract.test.mjs` enforces the data contract (nine issues, steps/checks, PR before/after/patch URLs and a real Playground example route for every external frame, plus the observation-export, build-provenance and no-dead-page-control markup). `tests/pages.e2e.mjs` checks that every issue shows exactly one comparison region, that #2854 has visible local frames and a patch, that PR issues have visible current/PR frames and a patch, that external frames are not pointed at the Playground index, that unfixed issues show an explicit no-patch panel and a **Reproduction only** card, that observations persist across a reload and export with the build SHA, that reset clears them, that the legacy `page=` parameter is normalised away, that Back/Forward traverses issue selections, and that hash and issue-card navigation work. The Pages deployment depends on both test commands; `.github/workflows/pages-tests.yml` also runs them on pull requests.
 
 ## Preview route regression
 
 The first build linked external frames to the Playground root. That route renders the example chooser, so both frames were blank; the browser test only measured iframe height and still passed. Preview URLs must name a Playground example that contains the affected block (`/basic/default-blocks`, `/ui-components/advanced-tables`, `/basic/read-only-editor`). The contract test now rejects a `/` pathname and the e2e checks that the rendered frames are not pointed at the index.
+
+The external deployments can still drift independently of this repository. `scripts/check-previews.mjs` loads every external frame, waits for `.bn-editor`, and verifies the expected main/PR state: image alt fallback for #2822, `th[scope]`/`td[headers]` for #2825/#2826, read-only list output for #2809, and table/video presence for #2853/#2829. It is intentionally **not** part of the deploy gate because it depends on Vercel. Run it with `pnpm check:previews` or from the **Preview route smoke check** workflow (manual or weekly).
 
 ## Accessibility caveats
 

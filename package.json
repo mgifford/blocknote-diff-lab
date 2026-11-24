@@ -15,7 +15,8 @@
     "test": "node --test tests/*.test.mjs",
     "pages:build": "node scripts/build-pages.mjs",
     "pages:bundles": "bash scripts/build-static-bundles.sh",
-    "test:pages": "node tests/pages.e2e.mjs"
+    "test:pages": "node tests/pages.e2e.mjs",
+    "check:previews": "node scripts/check-previews.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.60.0",

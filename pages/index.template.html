@@ -30,8 +30,6 @@
       <option value="inert">Inert only (1 file)</option>
       <option value="activation">Activation only (1 file)</option>
     </select>
-    <label for="page">Editor page</label>
-    <select id="page"><option value="minimal">Minimal editor (two-paragraph fixture)</option></select>
     <fieldset>
       <legend>Editor theme</legend>
       <button type="button" data-theme="light">Light</button>
@@ -196,7 +194,6 @@
   if (!byNumber.has(currentIssue)) currentIssue = 2854;
   const state = {
     variant: params.get('variant') || 'both',
-    page: params.get('page') || 'minimal',
     theme: params.get('theme') || 'auto',
   };
   if (!['light', 'dark', 'auto'].includes(state.theme)) state.theme = 'auto';
@@ -218,19 +215,17 @@
     return `${dir}/index.html${query}`;
   };
 
-  function updateHash() {
+  function updateHash(mode = 'replace') {
     const issue = byNumber.get(currentIssue);
-    if (issue?.variants) {
-      const suffix = state.theme === 'auto' ? '' : `&theme=${state.theme}`;
-      history.replaceState(null, '', `#issue=${currentIssue}&variant=${state.variant}&page=${state.page}${suffix}`);
-    } else {
-      history.replaceState(null, '', `#issue=${currentIssue}`);
-    }
+    const hash = issue?.variants
+      ? `#issue=${currentIssue}&variant=${state.variant}${state.theme === 'auto' ? '' : `&theme=${state.theme}`}`
+      : `#issue=${currentIssue}`;
+    if (mode === 'push') history.pushState(null, '', hash);
+    else history.replaceState(null, '', hash);
   }
 
-  function applyCompare(reload = true) {
+  function applyCompare(reload = true, historyMode = 'replace') {
     $('variant').value = state.variant;
-    $('page').value = state.page;
     $('after-label').textContent = variantLabels[state.variant];
     $('diff-note').textContent = variantNotes[state.variant];
     for (const button of document.querySelectorAll('[data-theme]')) {
@@ -245,7 +240,7 @@
       $(`open-${side}`).href = src;
     }
     frames.after.title = `After: ${variantLabels[state.variant]}`;
-    updateHash();
+    updateHash(historyMode);
   }
 
   function issueFixLabel(issue) {
@@ -424,7 +419,7 @@
     $('status').textContent = `Cleared checklist, observations and notes for #${issue.number}.`;
   }
 
-  function applyIssue() {
+  function applyIssue(historyMode = 'replace') {
     const issue = byNumber.get(currentIssue) || byNumber.get(2854);
     currentIssue = issue.number;
     $('issue').value = String(issue.number);
@@ -456,7 +451,7 @@
     $('no-fix-compare').hidden = !noFix;
 
     if (local) {
-      applyCompare();
+      applyCompare(true, historyMode);
     } else if (pr) {
       const before = issue.fix.beforeUrl || MAIN_PLAYGROUND;
       $('pr-before').src = before;
@@ -493,12 +488,13 @@
       : pr
         ? `Showing #${issue.number}. Before is current main; After is the real PR preview. Both frames are external Playgrounds.`
         : `Showing #${issue.number}. Before is the current Playground; the After pane records that ${issue.fix.kind === 'docs' ? 'no runtime patch applies' : 'no patch is available'}.`;
-    updateHash();
+    if (!local) updateHash(historyMode);
   }
 
   function selectIssue(number) {
+    if (number === currentIssue) return;
     currentIssue = number;
-    applyIssue();
+    applyIssue('push');
   }
 
   for (const issue of issues) {
@@ -515,13 +511,11 @@
     currentIssue = number;
     state.variant = next.get('variant') || 'both';
     if (!variants.includes(state.variant)) state.variant = 'both';
-    state.page = next.get('page') || 'minimal';
     state.theme = next.get('theme') || 'auto';
     if (!['light', 'dark', 'auto'].includes(state.theme)) state.theme = 'auto';
-    applyIssue();
+    applyIssue('replace');
   });
   $('variant').addEventListener('change', (event) => { state.variant = event.target.value; applyCompare(); });
-  $('page').addEventListener('change', (event) => { state.page = event.target.value; applyCompare(); });
   for (const button of document.querySelectorAll('[data-theme]')) {
     button.addEventListener('click', () => { state.theme = button.dataset.theme; applyCompare(); });
   }

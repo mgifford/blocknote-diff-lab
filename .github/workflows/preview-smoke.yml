@@ -1,0 +1,31 @@
+name: Preview route smoke check
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Weekly drift check for the external Vercel Playground previews.
+    - cron: '17 13 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: preview-smoke
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.8.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm run check:previews

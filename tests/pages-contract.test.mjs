@@ -67,6 +67,8 @@ test('the page records observations, notes and build provenance', () => {
   assert.match(template, /observed-cell/, 'missing observed input cell');
   assert.match(template, /Download observations \(JSON\)/, 'missing observation export');
   assert.match(template, /Reproduction only/, 'missing reproduction-only label');
+  assert.doesNotMatch(template, /id="page"/, 'dead editor-page selector should be removed');
+  assert.doesNotMatch(template, /&page=/, 'dead page parameter should not be written');
 });
 
 test('the PR-backed issues use real previews and patch links', () => {
