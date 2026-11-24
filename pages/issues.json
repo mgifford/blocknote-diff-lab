@@ -57,7 +57,9 @@
         "kind": "none",
         "label": "No fix yet",
         "url": null,
-        "note": "No local or upstream patch is bundled on this page. Use these steps to record the current behavior."
+        "note": "No local or upstream patch is bundled on this page. Use these steps to record the current behavior.",
+        "beforeUrl": "https://blocknote-git-main-typecell.vercel.app/basic/default-blocks",
+        "afterText": "Upstream describes the toolbar focus behaviour as partly intentional, so record the actual Tab behaviour before treating it as a defect. No patch is bundled, so the After pane is intentionally empty."
       },
       "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/977",
       "wcag": [
@@ -65,7 +67,7 @@
         "2.4.3 Focus Order"
       ],
       "steps": [
-        "Select several blocks, for example by Shift+clicking or dragging across them.",
+        "The Default Schema Showcase example contains many blocks. Select several blocks, for example by Shift+clicking or dragging across them.",
         "Press Tab and record document.activeElement and whether focus leaves the editor.",
         "Repeat with a text selection, a multi-block selection and a list selection.",
         "Record whether Escape clears the selection and restores a predictable focus position."
@@ -95,10 +97,10 @@
         "kind": "pr",
         "label": "PR #3337 (open)",
         "url": "https://github.com/TypeCellOS/BlockNote/pull/3337",
-        "note": "The PR is not bundled in this static page. Open it, or run its head locally, to compare the media toolbar and alt fallback.",
-        "previewUrl": "https://blocknote-git-file-ux-update-typecell.vercel.app",
+        "note": "The PR is not bundled in this static page. The After frame loads the same example from the PR preview so the media controls and alt fallback can be compared directly.",
+        "previewUrl": "https://blocknote-git-file-ux-update-typecell.vercel.app/basic/default-blocks",
         "previewLabel": "Open the PR preview playground",
-        "beforeUrl": "https://blocknote-git-main-typecell.vercel.app",
+        "beforeUrl": "https://blocknote-git-main-typecell.vercel.app/basic/default-blocks",
         "patchUrl": "https://github.com/TypeCellOS/BlockNote/pull/3337/files",
         "changedFiles": 126,
         "additions": 705,
@@ -109,7 +111,7 @@
         "1.1.1 Non-text Content"
       ],
       "steps": [
-        "Insert an image block and select it.",
+        "The Default Schema Showcase example includes an image and a file block. Scroll to the image and select it.",
         "Open the formatting toolbar / file controls and look for the alternative-text field.",
         "Check whether the old preview toggle is still present.",
         "Clear the image name and inspect the rendered alt attribute for a fallback."
@@ -144,10 +146,10 @@
         "kind": "pr",
         "label": "PR #3215 (open)",
         "url": "https://github.com/TypeCellOS/BlockNote/pull/3215",
-        "note": "The PR is not bundled here. Its source changes are large and include tests and snapshots.",
-        "previewUrl": "https://blocknote-git-tables-a11y-typecell.vercel.app",
+        "note": "The PR is not bundled here. The After frame loads the Advanced Tables example from the PR preview so the header relationships can be compared directly.",
+        "previewUrl": "https://blocknote-git-tables-a11y-typecell.vercel.app/ui-components/advanced-tables",
         "previewLabel": "Open the PR preview playground",
-        "beforeUrl": "https://blocknote-git-main-typecell.vercel.app",
+        "beforeUrl": "https://blocknote-git-main-typecell.vercel.app/ui-components/advanced-tables",
         "patchUrl": "https://github.com/TypeCellOS/BlockNote/pull/3215/files",
         "changedFiles": 65,
         "additions": 2858,
@@ -158,7 +160,7 @@
         "1.3.1 Info and Relationships"
       ],
       "steps": [
-        "Create a table with at least one header row and one header column.",
+        "The Advanced Tables example opens with a table whose first row is marked as headers. Focus the table.",
         "Inspect the DOM: each th should have id and scope, and each td should reference its header(s).",
         "Navigate the table with a screen reader's table commands.",
         "Copy or export the table and inspect the serialized HTML."
@@ -193,7 +195,9 @@
         "kind": "none",
         "label": "No fix yet",
         "url": null,
-        "note": "No local or upstream patch is bundled. Record the current read-only/accessibility-tree output."
+        "note": "No local or upstream patch is bundled. Record the current read-only/accessibility-tree output.",
+        "beforeUrl": "https://blocknote-git-main-typecell.vercel.app/basic/read-only-editor",
+        "afterText": "No local or upstream patch is bundled. Record the current read-only accessibility tree; the fix is likely a wrapper or plugin in the consuming app, so the After pane stays empty."
       },
       "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2809",
       "wcag": [
@@ -201,7 +205,7 @@
         "4.1.2 Name, Role, Value"
       ],
       "steps": [
-        "Open a read-only editor containing nested bullet, numbered and check lists.",
+        "The Read-only Editor example opens with bullet, numbered and check lists and no editable content.",
         "Inspect the accessibility tree or DOM for list, listitem and group roles.",
         "Export the document and inspect the serialized list HTML.",
         "Compare the read-only output with the editable editor."
@@ -231,10 +235,10 @@
         "kind": "pr",
         "label": "PR #3215 (open)",
         "url": "https://github.com/TypeCellOS/BlockNote/pull/3215",
-        "note": "Not bundled here; validate the merged-cell cases against the PR.",
-        "previewUrl": "https://blocknote-git-tables-a11y-typecell.vercel.app",
+        "note": "The After frame loads the Advanced Tables example from PR #3215; merge cells there to validate the merged-cell case.",
+        "previewUrl": "https://blocknote-git-tables-a11y-typecell.vercel.app/ui-components/advanced-tables",
         "previewLabel": "Open the PR preview playground",
-        "beforeUrl": "https://blocknote-git-main-typecell.vercel.app",
+        "beforeUrl": "https://blocknote-git-main-typecell.vercel.app/ui-components/advanced-tables",
         "patchUrl": "https://github.com/TypeCellOS/BlockNote/pull/3215/files",
         "changedFiles": 65,
         "additions": 2858,
@@ -245,7 +249,7 @@
         "1.3.1 Info and Relationships"
       ],
       "steps": [
-        "Create a table with merged rows and columns and at least two headers.",
+        "The Advanced Tables example opens with a header row. Merge two adjacent header cells, or a header with a body cell.",
         "Inspect the merged cell's headers/scope relationships in the DOM.",
         "Navigate it with a screen reader and record which headers are announced.",
         "Repeat for row spans and column spans."
@@ -275,14 +279,15 @@
         "kind": "none",
         "label": "No fix yet",
         "url": null,
-        "note": "No local or upstream patch is bundled; this needs a design decision first."
+        "note": "No local or upstream patch is bundled; this needs a design decision first.",
+        "beforeUrl": "https://blocknote-git-main-typecell.vercel.app/basic/default-blocks"
       },
       "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2823",
       "wcag": [
         "3.1.2 Language of Parts"
       ],
       "steps": [
-        "Create a paragraph containing a passage in a different language.",
+        "The Default Schema Showcase example opens with text. Add a passage in another language.",
         "Look for a way to mark that passage's language.",
         "Inspect whether any lang attribute is emitted in the DOM or export.",
         "Record the closest workaround and its limitations."
@@ -312,7 +317,8 @@
         "kind": "none",
         "label": "No fix yet",
         "url": null,
-        "note": "No local or upstream patch is bundled; split the request before implementing."
+        "note": "No local or upstream patch is bundled; split the request before implementing.",
+        "beforeUrl": "https://blocknote-git-main-typecell.vercel.app/basic/default-blocks"
       },
       "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2853",
       "wcag": [
@@ -321,9 +327,9 @@
         "1.2.2 Captions"
       ],
       "steps": [
-        "Insert a table and try to add a visible or accessible caption/name.",
+        "The Default Schema Showcase example includes a table, image, video and audio block. Focus the table and try to add a visible or accessible caption/name.",
         "Inspect the table's accessible name and header relationships.",
-        "Insert a video and inspect its controls, captions track and accessible name.",
+        "Focus the video and inspect its controls, captions track and accessible name.",
         "Record which parts belong to table work and which belong to video work."
       ],
       "checks": [
@@ -351,7 +357,10 @@
         "kind": "docs",
         "label": "Downstream docs change",
         "url": "https://github.com/TypeCellOS/BlockNote/issues/2829",
-        "note": "No local runtime bundle; improve the downstream documentation after #2854 is resolved."
+        "note": "No local runtime bundle; improve the downstream documentation after #2854 is resolved.",
+        "beforeUrl": "https://blocknote-git-main-typecell.vercel.app/ui-components/advanced-tables",
+        "afterTitle": "No runtime patch applies",
+        "afterText": "This is a downstream documentation issue: the missing documentation is the fix, so there is no runtime After editor. Use the Before table to record the keyboard route that the docs should describe."
       },
       "issueUrl": "https://github.com/TypeCellOS/BlockNote/issues/2829",
       "wcag": [
@@ -359,8 +368,8 @@
         "3.3.5 Help"
       ],
       "steps": [
-        "Open the downstream docs for tables and keyboard shortcuts.",
-        "Try to find the documented way to delete a table without a pointer.",
+        "The Advanced Tables example opens with a table. Try to delete it using only the keyboard.",
+        "Open the downstream docs for tables and keyboard shortcuts and try to find the documented way to delete a table without a pointer.",
         "Follow the current instructions and record where they stop.",
         "Draft the missing keyboard route and add it to the docs."
       ],

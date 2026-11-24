@@ -16,6 +16,8 @@ test('the catalog contains the nine open issues with prefilled validation', () =
   }
 });
 
+const pathOf = (url) => new URL(url).pathname;
+
 test('every issue has a before/after route', () => {
   for (const issue of issues) {
     if (issue.variants) {
@@ -27,9 +29,27 @@ test('every issue has a before/after route', () => {
       assert.match(issue.fix.beforeUrl, /^https:\/\//, `#${issue.number} has no before URL`);
       assert.match(issue.fix.previewUrl, /^https:\/\//, `#${issue.number} has no after URL`);
       assert.match(issue.fix.patchUrl, /^https:\/\//, `#${issue.number} has no patch URL`);
+      assert.notEqual(pathOf(issue.fix.beforeUrl), '/', `#${issue.number} before URL still points at the Playground index`);
+      assert.notEqual(pathOf(issue.fix.previewUrl), '/', `#${issue.number} after URL still points at the Playground index`);
       continue;
     }
+    assert.match(issue.fix.beforeUrl, /^https:\/\//, `#${issue.number} has no before URL`);
+    assert.notEqual(pathOf(issue.fix.beforeUrl), '/', `#${issue.number} before URL still points at the Playground index`);
     assert.equal(issue.fix.previewUrl, undefined, `#${issue.number} is not fixed but has an after URL`);
+  }
+});
+
+test('external previews deep-link to a Playground example with the affected block', () => {
+  for (const issue of issues.filter((candidate) => candidate.fix.kind !== 'local')) {
+    for (const key of ['beforeUrl', 'previewUrl']) {
+      const url = issue.fix[key];
+      if (!url) continue;
+      assert.match(
+        pathOf(url),
+        /^\/(?:basic|ui-components)\/[\w-]+$/,
+        `#${issue.number} ${key} must name a Playground example route, not the index: ${url}`,
+      );
+    }
   }
 });
 

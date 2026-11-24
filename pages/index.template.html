@@ -92,7 +92,7 @@
     <div class="pane-focus-controls next"><button id="after-next" type="button">Focus after editor</button></div>
   </section>
 </div>
-<p id="focus-status" class="status">Keyboard focus: not in a preview control.</p>
+<p id="focus-status" class="status" role="status">Keyboard focus: not in a preview control.</p>
 
 <div class="panes" id="pr-compare" hidden>
   <section class="pane" aria-labelledby="pr-before-h">
@@ -112,9 +112,9 @@
     <iframe id="nofix-before" title="Before: current BlockNote Playground"></iframe>
   </section>
   <section class="pane" aria-labelledby="nofix-after-h">
-    <div class="panehead"><h2 id="nofix-after-h">After (no fix yet)</h2></div>
+    <div class="panehead"><h2 id="nofix-after-h">After (<span id="nofix-after-label">no fix yet</span>)</h2></div>
     <div class="no-fix-after">
-      <h3>No patch is available for this issue yet</h3>
+      <h3 id="nofix-title">No patch is available for this issue yet</h3>
       <p id="nofix-text"></p>
       <p><a id="nofix-link" target="_blank" rel="noopener" href="#">Open the upstream issue</a></p>
     </div>
@@ -389,9 +389,14 @@
       $('pr-patch-link').href = issue.fix.patchUrl || issue.fix.url;
       $('pr-patch-link').textContent = issue.fix.patchUrl ? `Open the PR files and patch for #${issue.number}` : 'Open the upstream pull request';
     } else {
-      $('nofix-before').src = MAIN_PLAYGROUND;
-      $('open-nofix-before').href = MAIN_PLAYGROUND;
-      $('nofix-text').textContent = `${issue.fix.note} There is no local or upstream patch to preview, so the After pane is intentionally empty.`;
+      // A no-fix issue still needs a real editor on the Before side; the bare
+      // Playground origin renders the example chooser, not an editing body.
+      const before = issue.fix.beforeUrl || MAIN_PLAYGROUND;
+      $('nofix-before').src = before;
+      $('open-nofix-before').href = before;
+      $('nofix-after-label').textContent = issue.fix.kind === 'docs' ? 'no runtime patch' : 'no fix yet';
+      $('nofix-title').textContent = issue.fix.afterTitle || 'No patch is available for this issue yet';
+      $('nofix-text').textContent = issue.fix.afterText || `${issue.fix.note} There is no local or upstream patch to preview, so the After pane is intentionally empty.`;
       $('nofix-link').href = issue.issueUrl;
       $('nofix-link').textContent = `Open upstream issue #${issue.number}`;
     }
@@ -404,13 +409,8 @@
       ? `Showing #${issue.number} with ${variantLabels[state.variant]}. The Before and After frames are built editors.`
       : pr
         ? `Showing #${issue.number}. Before is current main; After is the real PR preview. Both frames are external Playgrounds.`
-        : `Showing #${issue.number}. Before is the current Playground; the After pane records that no fix exists yet.`;
+        : `Showing #${issue.number}. Before is the current Playground; the After pane records that ${issue.fix.kind === 'docs' ? 'no runtime patch applies' : 'no fix exists yet'}.`;
     updateHash();
-  }
-
-  function selectIssue(number) {
-    currentIssue = number;
-    applyIssue();
   }
 
   function selectIssue(number) {

@@ -66,11 +66,18 @@ async function comparisonState() {
       localPatch: visible('issue-2854-diff'),
       prPatch: visible('pr-patch'),
       noFixText: document.querySelector('.no-fix-after')?.textContent.replace(/\s+/g, ' ').trim() || '',
-      afterSrc: document.querySelector('#pr-after')?.getAttribute('src') || '',
+      noFixTitle: document.querySelector('#nofix-title')?.textContent.trim() || '',
+      prBeforeSrc: document.querySelector('#pr-before')?.getAttribute('src') || '',
+      prAfterSrc: document.querySelector('#pr-after')?.getAttribute('src') || '',
+      noFixBeforeSrc: document.querySelector('#nofix-before')?.getAttribute('src') || '',
       issueCards: document.querySelectorAll('.issue-card').length,
     };
   });
 }
+
+const pathOf = (src) => {
+  try { return new URL(src).pathname; } catch { return ''; }
+};
 
 try {
   for (const issue of issues) {
@@ -88,11 +95,15 @@ try {
       assert.equal(state.pr, true, `#${issue.number} lost its PR comparison`);
       assert.ok(state.before > 100 && state.after > 100, `#${issue.number} PR frames are not visible`);
       assert.equal(state.prPatch, true, `#${issue.number} lost its PR patch`);
-      assert.ok(state.afterSrc.includes(issue.fix.previewUrl), `#${issue.number} after frame is not the PR preview`);
+      assert.ok(state.prAfterSrc.includes(issue.fix.previewUrl), `#${issue.number} after frame is not the PR preview`);
+      assert.notEqual(pathOf(state.prBeforeSrc), '/', `#${issue.number} before frame still loads the Playground index`);
+      assert.notEqual(pathOf(state.prAfterSrc), '/', `#${issue.number} after frame still loads the Playground index`);
     } else {
       assert.equal(state.noFix, true, `#${issue.number} lost its no-fix comparison`);
       assert.ok(state.before > 100, `#${issue.number} before frame is not visible`);
-      assert.match(state.noFixText, /No patch is available for this issue yet/, `#${issue.number} has no explicit no-fix state`);
+      assert.notEqual(pathOf(state.noFixBeforeSrc), '/', `#${issue.number} before frame still loads the Playground index`);
+      assert.equal(state.noFixTitle, issue.fix.afterTitle || 'No patch is available for this issue yet', `#${issue.number} has no explicit no-fix title`);
+      assert.ok(state.noFixText.length > 20, `#${issue.number} has no explicit no-fix explanation`);
     }
   }
 
