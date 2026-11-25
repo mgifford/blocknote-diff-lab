@@ -26,7 +26,8 @@
     "test:a11y:semantics": "playwright test --config playwright.a11y.config.mjs --grep @semantics",
     "mcp:playwright": "node node_modules/@playwright/mcp/cli.js --headless --isolated",
     "test:a11y:a11yfirst": "playwright test --config playwright.a11y.config.mjs --grep @a11yfirst",
-    "test:a11y:transformations": "playwright test --config playwright.a11y.config.mjs --grep @transformations"
+    "test:a11y:transformations": "playwright test --config playwright.a11y.config.mjs --grep @transformations",
+    "test:a11y:part-a": "playwright test --config playwright.a11y.config.mjs --grep @part-a"
   },
   "devDependencies": {
     "@guidepup/virtual-screen-reader": "0.33.0",

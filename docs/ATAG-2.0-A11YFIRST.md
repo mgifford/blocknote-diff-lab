@@ -59,6 +59,7 @@ shows a different result, it is context only; this lab does not evaluate the PR.
 | `pnpm test:a11y:semantics` | alt text, table headers, list wrappers | Yes |
 | `pnpm test:a11y:a11yfirst` | A11yFirst authoring probes: H1→H3 guidance and generic link text | Yes |
 | `pnpm test:a11y:transformations` | B-02 HTML-paste preservation probe | Yes |
+| `pnpm test:a11y:part-a` | ATAG Part A probes: media alternatives and undo | Yes |
 | `pnpm test:a11y` | Everything | Mixed |
 
 Every run writes raw JSON evidence under `reports/a11y/<timestamp>/`. The tests
@@ -75,9 +76,11 @@ rationale are in the [ATAG alignment register](ATAG-ALIGNMENT-ISSUES.md#atag-par
 | --- | --- | --- | --- |
 | [A.1.1.1 Web-Based Accessible (WCAG)](https://www.w3.org/TR/ATAG20/#sc_a111) | A/AA/AAA (WCAG-dependent) | `axe.spec.mjs` scans the comparator shell and all four #2854 bundles. The shell has no WCAG A/AA violations; every editor bundle exposes the known `aria-input-field-name` finding on `.tiptap` | **Partial** — the editor textbox still lacks an accessible name |
 | [A.2.1.1 Text Alternatives for Rendered Non-Text Content](https://www.w3.org/TR/ATAG20/#sc_a211) | A | `guidepup.spec.mjs` shows the current-main #2822 image is presentational (`alt=""`) and only its visible caption is announced. The upstream preview context announces `image, 332x322.jpg`, but it is not evaluated here | **Partial** — the rendered image is presentational; the missing authoring control is a separate Part B gap ([AF-02](gaps/a11yfirst-02-image-alt-authoring.md)) |
+| [A.2.1.2 Alternatives for Rendered Time-Based Media](https://www.w3.org/TR/ATAG20/#sc_a212) | A | `part-a.spec.mjs`: the Default Schema video and audio have no `<track>` captions, audio description, or transcript; only a visible figure caption | **Product gap** |
 | [A.3.1.1 Keyboard Access (Minimum)](https://www.w3.org/TR/ATAG20/#sc_a311) | A | `keyboard-2854.spec.mjs`: before the fix, Tab reaches a dead closing Add block clone; the inert variant moves focus to the next real control. Activation variant makes Enter open the suggestion menu | **Partial** — the side menu is still pointer-hover-dependent |
 | [A.3.1.2 No Keyboard Traps](https://www.w3.org/TR/ATAG20/#sc_a312) | A | The same keyboard trace shows Tab leaving the editor and reaching the parent focus control in the inert variant | **Tested for this path** |
 | [A.3.4.1 Navigate By Structure](https://www.w3.org/TR/ATAG20/#sc_a341) | AA | Virtual Screen Reader traversal announces headings, tables, rows, and cells in the Default Schema example | **Partial** — table header association is not exposed by the virtual reader; real AT is out of scope here |
+| [A.4.1.1 Content Changes Reversible (Minimum)](https://www.w3.org/TR/ATAG20/#sc_a411) | A | `part-a.spec.mjs`: typing a text edit and pressing the platform undo shortcut restores the empty editor | **Partial pass** — text only; block-level and settings reversibility not assessed |
 | [A.4.2.1 Describe Accessibility Features](https://www.w3.org/TR/ATAG20/#sc_a421) | A | This document and the README describe the comparison, scripts, and known limits | **Lab documentation only** |
 | [A.4.2.2 Document All Features](https://www.w3.org/TR/ATAG20/#sc_a422) | AA | README, `docs/STATIC-COMPARATOR.md`, issue files, and this map | **Lab documentation only** |
 
@@ -159,6 +162,7 @@ independent evaluation:
 - [`tests/a11y/keyboard-2854.spec.mjs`](../tests/a11y/keyboard-2854.spec.mjs)
 - [`tests/a11y/semantics.spec.mjs`](../tests/a11y/semantics.spec.mjs)
 - [`tests/a11y/a11yfirst.spec.mjs`](../tests/a11y/a11yfirst.spec.mjs)
+- [`tests/a11y/part-a.spec.mjs`](../tests/a11y/part-a.spec.mjs)
 - [`docs/gaps/README.md`](gaps/README.md) — the gap register
 - [`docs/ATAG-ALIGNMENT-ISSUES.md`](ATAG-ALIGNMENT-ISSUES.md) — standards, scope and evidence alignment issues
 - [`docs/STATIC-COMPARATOR.md`](STATIC-COMPARATOR.md)
