@@ -39,13 +39,16 @@ editor and an HTML export from the export example.
 | HTML export of a keyboard-created list | **Preserved/created** — the editor DOM has no `ul`/`li`, but the exported HTML contains `<ul><li><p>…</p></li></ul>` |
 | HTML export of an image with `alt` | **Preserved** — exported `<img … alt="A small cat">` |
 | Copy of an image + list (B.1.2.2) | **Preserved in copied HTML** — `alt="A small cat"` and `<ul><li>One</li><li>Two</li></ul>`; the editor DOM still has no list wrappers |
+| Copy of a table (B.1.2.2) | **Header cells kept; no explicit relationships** — copied HTML has `<th>` but no `scope`/`td[headers]`; the source table also lacks them |
 
 This verifies a **B.1.2.1** partial product gap: HTML paste drops list,
 table-relationship and language semantics, while HTML export and copy emit list
 structure and image alt. **B.1.2.2** is a partial pass for copying an image and
 list: the copied HTML has alt and `ul/li`, even though the editor DOM has no list
-wrappers. **B.1.2.4** is a partial pass for image alt in paste, copy and HTML
-export. B.1.2.2 for tables/language, B.1.2.3 (optimizations), the OS clipboard
+wrappers. Table copy keeps `<th>` cells but does not add `scope`/`headers`
+relationships; the source table lacks them, so this is an authoring gap
+(AF-07/B-04), not a copy loss. **B.1.2.4** is a partial pass for image alt in paste, copy and
+HTML export. B.1.2.2 for language, B.1.2.3 (optimizations), the OS clipboard
 path, and table/language/PDF/DOCX/ODT/email export remain untested.
 
 ## Evidence
@@ -55,7 +58,7 @@ path, and table/language/PDF/DOCX/ODT/email export remain untested.
 - `tests/a11y/export.spec.mjs` — creates a bullet list and pastes an image into
   the HTML export example, then inspects the exported `<pre>`.
 - `tests/a11y/copy-paste.spec.mjs` — captures the `copy` event’s `text/html`
-  after selecting a seeded image + list.
+  after selecting a seeded image + list, and after selecting the advanced table.
 - Raw evidence: `reports/a11y/<timestamp>/b02-html-paste.json`,
   `b02-html-export.json` and `b02-copy-image-list.json`.
 - Concrete source gaps: [AF-02](a11yfirst-02-image-alt-authoring.md),
@@ -63,9 +66,9 @@ path, and table/language/PDF/DOCX/ODT/email export remain untested.
 
 ## Still untested
 
-- **B.1.2.2** copy/paste of tables and language, and the OS clipboard path. The
-  copy-event test reads the editor's `text/html`; headless Chromium's system
-  clipboard exposed only `text/plain`.
+- **B.1.2.2** language copy and the OS clipboard path. The copy-event test reads
+  the editor's `text/html`; headless Chromium's system clipboard exposed only
+  `text/plain`. Table copy keeps `<th>` without explicit `scope`/`headers`; the source also lacks them.
 - **B.1.2.3** optimizations.
 - Markdown, PDF, DOCX, ODT and email export.
 - Table-relationship and language export from a document that contains them.

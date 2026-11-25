@@ -44,7 +44,7 @@ applicable. The gap files assess **current main**, not upstream pull requests.
 | B.1.1.1 Content auto-generation after authoring | A (WCAG-dependent) | N/A in tested surfaces | [B-01](atag-b-01-auto-generated-content.md) |
 | B.1.1.2 Content auto-generation during authoring | A (WCAG-dependent) | **Partial product gap** | [B-01](atag-b-01-auto-generated-content.md) |
 | B.1.2.1 Restructuring/re-coding transformations | A (WCAG-dependent) | **Partial product gap** — paste drops; HTML export preserves list/alt | [B-02](atag-b-02-transform-preservation.md) |
-| B.1.2.2 Copy-paste inside the authoring tool | A (WCAG-dependent) | **Partial pass** — image/list copied HTML preserves alt and `ul/li` | [B-02](atag-b-02-transform-preservation.md) |
+| B.1.2.2 Copy-paste inside the authoring tool | A (WCAG-dependent) | **Partial pass** — image/list preserved; table `th` kept without explicit scope/headers | [B-02](atag-b-02-transform-preservation.md) |
 | B.1.2.3 Optimizations preserve accessibility | A | Evidence gap | [B-02](atag-b-02-transform-preservation.md) |
 | B.1.2.4 Text alternatives preserved | A | **Partial** — image alt preserved on HTML paste and HTML export | [B-02](atag-b-02-transform-preservation.md) |
 | B.2.1.1 Accessible content possible | A (WCAG-dependent) | **Product gap** | [B-03](atag-b-03-accessible-content-possible.md) |
