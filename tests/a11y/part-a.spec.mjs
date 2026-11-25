@@ -91,4 +91,29 @@ test.describe('@part-a @previews — ATAG Part A coverage', () => {
 
     saveEvidence('atag-a313-slash.json', { menu, result });
   });
+
+  test('A.3.3.1: rendered video/audio do not autoplay and expose controls', async ({ page }) => {
+    await page.goto(previewUrl(2822, 'before'), { waitUntil: 'domcontentloaded' });
+    await page.locator('.bn-editor').waitFor({ state: 'visible', timeout: 30000 });
+    await page.waitForTimeout(800);
+    const media = await page.evaluate(() => ({
+      videos: [...document.querySelectorAll('.bn-editor video')].map((video) => ({
+        autoplay: video.autoplay,
+        controls: video.controls,
+        paused: video.paused,
+      })),
+      audios: [...document.querySelectorAll('.bn-editor audio')].map((audio) => ({
+        autoplay: audio.autoplay,
+        controls: audio.controls,
+        paused: audio.paused,
+      })),
+    }));
+    expect(media.videos.length).toBe(1);
+    expect(media.videos[0].autoplay).toBe(false);
+    expect(media.videos[0].controls).toBe(true);
+    expect(media.audios.length).toBe(1);
+    expect(media.audios[0].autoplay).toBe(false);
+    expect(media.audios[0].controls).toBe(true);
+    saveEvidence('atag-a331-static-view.json', media);
+  });
 });
