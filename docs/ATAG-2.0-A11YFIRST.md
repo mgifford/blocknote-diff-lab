@@ -98,7 +98,7 @@ Every success criterion is mapped in the [gap register coverage table](gaps/READ
 | B.2.1.1 accessible content possible | A (WCAG-dependent) | [B-03](gaps/atag-b-03-accessible-content-possible.md) | **Product gap** — image alt, table headers, list wrappers |
 | B.2.2.1–B.2.2.2 accessible options/properties | A (WCAG-dependent) | [B-04](gaps/atag-b-04-accessibility-properties.md) | **Product gap** |
 | B.2.3.1–B.2.3.3 alternative content editable/repaired/reused | A / AAA | [B-05](gaps/atag-b-05-alternative-content.md) | **Product gap**, AAA for reuse |
-| B.2.4.1–B.2.5.2 templates/pre-authored content | A / AA / AAA | [B-06](gaps/atag-b-06-templates-pre-authored.md) | **Product/evidence gap**; templates N/A in tested surfaces |
+| B.2.4.1–B.2.5.2 templates/pre-authored content | A / AA / AAA | [B-06](gaps/atag-b-06-templates-pre-authored.md) | **N/A in tested surfaces** — no author-facing template/pre-authored selection mechanism; consumer scope |
 | B.3.1.1–B.3.1.5 checking assistance | A / AA | [B-07](gaps/atag-b-07-checking-assistance.md) | **Product gap** — no in-product checker |
 | B.3.2.1 repair assistance | A (WCAG-dependent) | [B-08](gaps/atag-b-08-repair-assistance.md) | **Product gap** |
 | B.4.1.1–B.4.1.4 features by default | A / AA | [B-09](gaps/atag-b-09-features-by-default.md) | **Product gap** |

@@ -164,19 +164,32 @@ try {
   assert.equal(await page.locator('#issue-notes').inputValue(), '', 'reset did not clear the notes');
 
   // Issue selection is pushState: Back returns through viewed issues and the
-  // legacy page= parameter is normalised away.
-  await page.goto(`${base}/#issue=2854&variant=both&page=minimal`, { waitUntil: 'domcontentloaded' });
-  await waitForIssue(2854);
-  assert.doesNotMatch(page.url(), /[?&]page=/, 'legacy page parameter should be normalised away');
-  await page.click('.issue-card[data-issue="977"]');
-  await waitForIssue(977);
-  await page.click('.issue-card[data-issue="2822"]');
-  await waitForIssue(2822);
-  // Same-document pushState entries do not fire a load event, so use the
-  // history API directly and wait for the rendered issue title.
-  await page.evaluate(() => history.back());
-  await waitForIssue(977);
-  assert.match(page.url(), /#issue=977/);
+  // legacy page= parameter is normalised away. Use a fresh page so the prior
+  // navigation history from the issue loop cannot affect the assertion.
+  const historyPage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  try {
+    const waitHistoryIssue = (number) => historyPage.waitForFunction(
+      (n) => document.querySelector('#issue-title')?.textContent.startsWith(`#${n} —`),
+      number,
+      { timeout: 20000 },
+    );
+    await historyPage.goto(`${base}/#issue=2854&variant=both&page=minimal`, { waitUntil: 'domcontentloaded' });
+    await waitHistoryIssue(2854);
+    assert.doesNotMatch(historyPage.url(), /[?&]page=/, 'legacy page parameter should be normalised away');
+    await historyPage.click('.issue-card[data-issue="977"]');
+    await waitHistoryIssue(977);
+    await historyPage.click('.issue-card[data-issue="2822"]');
+    await waitHistoryIssue(2822);
+    // Same-document pushState entries do not fire a load event; wait for the
+    // hash before the title, which can lag while issue frames settle.
+    await historyPage.waitForTimeout(300);
+    await historyPage.evaluate(() => history.back());
+    await historyPage.waitForFunction(() => location.hash === '#issue=977', null, { timeout: 20000 });
+    await waitHistoryIssue(977);
+    assert.match(historyPage.url(), /#issue=977/);
+  } finally {
+    await historyPage.close();
+  }
   // Forward traversal is browser-dependent under iframe load and is not part
   // of the gate; Back is the behaviour users need after viewing an issue.
 
