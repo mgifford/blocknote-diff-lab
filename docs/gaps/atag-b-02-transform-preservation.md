@@ -1,11 +1,11 @@
 # B-02: Transformations preserve accessibility (B.1.2.1–B.1.2.4)
 
-- **Status:** Evidence gap — high priority
+- **Status:** Product gap — HTML paste verified; copy/paste and export untested
 - **Area:** BlockNote editor / current main, copy/paste and export
 - **ATAG 2.0:** B.1.2.1 Restructuring/re-coding transformations; B.1.2.2 Copy-paste inside the tool; B.1.2.3 Optimizations preserve accessibility; B.1.2.4 Text alternatives preserved
 - **WCAG 2.2:** The level the output must meet (A/AA, WCAG-dependent)
-- **Evidence basis:** Not assessed
-- **Recorded:** 2026-11-24 against current main (`9cb988f`)
+- **Evidence basis:** Automated HTML paste probe (`tests/a11y/transformations.spec.mjs`) on 2026-11-25; copy/paste and export paths still not assessed
+- **Recorded:** 2026-11-25 against current main (`9cb988f`)
 
 ## Why this matters
 
@@ -27,19 +27,35 @@ noticing.
 ## Current BlockNote behavior
 
 The playground exposes copy/paste and several export paths (HTML, Markdown, PDF,
-DOCX, ODT, email) in its examples. This lab has **not tested** whether those
-paths preserve alt text, table `scope`/`headers`, list wrappers, or language. On
-current main the source content already lacks some of that information, so a
-preservation test cannot be meaningful until the authoring gap is fixed. This is
-an evidence gap and a product risk, not a confirmed transformation failure.
+DOCX, ODT, email) in its examples. The lab tested one transformation: pasting an
+HTML fragment into the minimal editor.
+
+| Pasted HTML | Current-main result |
+| --- | --- |
+| `<img alt="A small cat">` | **Preserved** — the image block keeps `alt="A small cat"` |
+| `<p lang="fr">` | **Dropped** — no `lang` attribute in the editor |
+| `<ul><li>…</li></ul>` | **Dropped** — items become paragraphs; no `ul`/`ol`/`li` |
+| `<th id="h1" scope="col">`, `<td headers="h1">` | **Dropped** — the table remains, but the header has no `id`/`scope` and the data cell has no `headers` |
+
+This verifies a **B.1.2.1** product gap for list, table-relationship and language
+semantics, and a **B.1.2.4** partial pass for image alt text. B.1.2.2 (copy/paste
+inside the editor), B.1.2.3 (optimizations) and export transformations are still
+untested.
 
 ## Evidence
 
-- The export/interoperability examples exist in the upstream playground; see
-  `docs/STATIC-COMPARATOR.md`.
-- No test in `tests/a11y/` exercises copy/paste or export.
+- `tests/a11y/transformations.spec.mjs` — dispatches an HTML paste into the
+  current-main minimal editor and records the resulting DOM.
+- Raw evidence: `reports/a11y/<timestamp>/b02-html-paste.json`.
 - Concrete source gaps: [AF-02](a11yfirst-02-image-alt-authoring.md),
   [AF-07](a11yfirst-07-table-structure.md), [AF-08](a11yfirst-08-list-structure.md).
+
+## Still untested
+
+- **B.1.2.2** copy/paste inside the editor after content exists.
+- **B.1.2.3** optimizations.
+- HTML, Markdown, PDF, DOCX, ODT and email export.
+- Whether the author is warned/checked when a transformation drops information.
 
 ## Acceptance criteria
 
