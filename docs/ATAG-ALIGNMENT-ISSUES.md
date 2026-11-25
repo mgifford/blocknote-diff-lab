@@ -217,20 +217,22 @@ over-read.
 
 ### ALIGN-13: Accessibility support and technology scope are narrow
 
-- **Status:** Open.
-- **Issue:** Tests run in Chromium with the Mantine UI. ATAG/WCAG accessibility
-  support depends on the technologies and user agents in scope. Ariakit, shadcn,
-  Firefox, Safari, PDF, DOCX, ODT, and email outputs are not all exercised.
+- **Status:** Documented limitation.
+- **Issue:** Tests run in Chromium 148 with the Mantine UI. ATAG/WCAG
+  accessibility support depends on the technologies and user agents in scope.
+  Ariakit, shadcn, Firefox, Safari, PDF, DOCX, ODT, and email outputs are not all
+  exercised.
 - **Why it matters:** A result in Chromium/Mantine cannot be generalized to all
   BlockNote integrations or output formats.
-- **Current handling:** The README and issue files state the tested environment
-  and unverified surfaces.
-- **Decision:** Name the tested user agent and UI package in every ATAG row.
-  Do not generalize a Chromium result to "BlockNote supports X."
+- **Current handling:** [Support matrix](SUPPORT-MATRIX.md) names the tested
+  browser, OS, UI, assistive technology and output formats, and the untested
+  ones. ATAG rows name the tested surface.
+- **Decision:** Do not generalize a Chromium/Mantine result to "BlockNote
+  supports X." A consumer stack needs its own evaluation.
 
 ### ALIGN-14: Raw evidence is local and ignored
 
-- **Status:** Open lab-process issue.
+- **Status:** Partly resolved.
 - **Issue:** `reports/a11y/<timestamp>/` is under the ignored `reports/` tree.
   Gap records cite commands and local paths, but the raw JSON is not in the
   repository and may disappear. ATAG-style evidence needs retention and
@@ -238,11 +240,13 @@ over-read.
 - **Why it matters:** A reader cannot audit a claim from the docs alone, and a
   future run can overwrite the state. The evidence is not append-only in the
   repository.
-- **Current handling:** The docs name the commands and the evidence directory;
-  the tests are reproducible from the repo.
-- **Decision:** Publish a small, tracked summary (or CI artifact) per evidence
-  run, not the full trace. Record the command, commit, date, and result. Do not
-  commit large screenshots or raw logs.
+- **Current handling:** [Evidence retention](EVIDENCE.md) records the policy.
+  The `pages-tests` and `preview-smoke` workflows upload `reports/a11y` and
+  `test-results` as a 30-day `a11y-evidence-<run-id>` artifact, including failed
+  runs. Local raw evidence is still ignored.
+- **Decision:** Track commands, commits, dates and results; retain raw evidence
+  as a CI artifact for 30 days; do not commit large screenshots or raw logs.
+  A permanent claim needs a small tracked summary.
 
 ### ALIGN-15: A.3.4.1 was labeled Level A; it is Level AA
 

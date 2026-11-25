@@ -31,3 +31,13 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm run check:previews
       - run: pnpm test:a11y:previews
+      - name: Upload a11y evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-evidence-${{ github.run_id }}
+          path: |
+            reports/a11y
+            test-results
+          if-no-files-found: ignore
+          retention-days: 30
