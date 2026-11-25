@@ -91,7 +91,7 @@ Every success criterion is mapped in the [gap register coverage table](gaps/READ
 
 | Checkpoint cluster | Level | Gap record | Current-main status |
 | --- | --- | --- | --- |
-| B.1.1.1–B.1.1.2 auto-generated content | A (WCAG-dependent) | [B-01](gaps/atag-b-01-auto-generated-content.md) | Evidence gap |
+| B.1.1.1–B.1.1.2 auto-generated content | A (WCAG-dependent) | [B-01](gaps/atag-b-01-auto-generated-content.md) | **Partial product gap** — image/file derived text; post-session N/A; AI paths unassessed |
 | B.1.2.1–B.1.2.4 transformations/copy-paste | A (WCAG-dependent) | [B-02](gaps/atag-b-02-transform-preservation.md) | **Product gap** — HTML paste; copy/export untested |
 | B.2.1.1 accessible content possible | A (WCAG-dependent) | [B-03](gaps/atag-b-03-accessible-content-possible.md) | **Product gap** — image alt, table headers, list wrappers |
 | B.2.2.1–B.2.2.2 accessible options/properties | A (WCAG-dependent) | [B-04](gaps/atag-b-04-accessibility-properties.md) | **Product gap** |
