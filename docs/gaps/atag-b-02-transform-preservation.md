@@ -1,10 +1,10 @@
 # B-02: Transformations preserve accessibility (B.1.2.1–B.1.2.4)
 
-- **Status:** Product gap — HTML paste verified; copy/paste and export untested
+- **Status:** Partial product gap — HTML paste drops semantics; HTML export preserves list/alt; copy/paste and other exports untested
 - **Area:** BlockNote editor / current main, copy/paste and export
 - **ATAG 2.0:** B.1.2.1 Restructuring/re-coding transformations; B.1.2.2 Copy-paste inside the tool; B.1.2.3 Optimizations preserve accessibility; B.1.2.4 Text alternatives preserved
 - **WCAG 2.2:** The level the output must meet (A/AA, WCAG-dependent)
-- **Evidence basis:** Automated HTML paste probe (`tests/a11y/transformations.spec.mjs`) on 2026-11-25; copy/paste and export paths still not assessed
+- **Evidence basis:** Automated HTML paste (`transformations.spec.mjs`) and HTML export (`export.spec.mjs`) probes on 2026-11-25; copy/paste and other exports still not assessed
 - **Recorded:** 2026-11-25 against current main (`9cb988f`)
 
 ## Why this matters
@@ -27,8 +27,8 @@ noticing.
 ## Current BlockNote behavior
 
 The playground exposes copy/paste and several export paths (HTML, Markdown, PDF,
-DOCX, ODT, email) in its examples. The lab tested one transformation: pasting an
-HTML fragment into the minimal editor.
+DOCX, ODT, email) in its examples. The lab tested an HTML paste into the minimal
+editor and an HTML export from the export example.
 
 | Pasted HTML | Current-main result |
 | --- | --- |
@@ -36,25 +36,35 @@ HTML fragment into the minimal editor.
 | `<p lang="fr">` | **Dropped** — no `lang` attribute in the editor |
 | `<ul><li>…</li></ul>` | **Dropped** — items become paragraphs; no `ul`/`ol`/`li` |
 | `<th id="h1" scope="col">`, `<td headers="h1">` | **Dropped** — the table remains, but the header has no `id`/`scope` and the data cell has no `headers` |
+| HTML export of a keyboard-created list | **Preserved/created** — the editor DOM has no `ul`/`li`, but the exported HTML contains `<ul><li><p>…</p></li></ul>` |
+| HTML export of an image with `alt` | **Preserved** — exported `<img … alt="A small cat">` |
 
-This verifies a **B.1.2.1** product gap for list, table-relationship and language
-semantics, and a **B.1.2.4** partial pass for image alt text. B.1.2.2 (copy/paste
-inside the editor), B.1.2.3 (optimizations) and export transformations are still
-untested.
+This verifies a **B.1.2.1** partial product gap: HTML paste drops list,
+table-relationship and language semantics, while HTML export restores list
+structure and preserves image alt. **B.1.2.4** is a partial pass for image alt in
+both paste and HTML export. B.1.2.2 (copy/paste inside the editor), B.1.2.3
+(optimizations), table-relationship/language export, and the PDF/DOCX/ODT/email
+export paths are still untested.
 
 ## Evidence
 
 - `tests/a11y/transformations.spec.mjs` — dispatches an HTML paste into the
   current-main minimal editor and records the resulting DOM.
-- Raw evidence: `reports/a11y/<timestamp>/b02-html-paste.json`.
+- `tests/a11y/export.spec.mjs` — creates a bullet list and pastes an image into
+  the HTML export example, then inspects the exported `<pre>`.
+- Raw evidence: `reports/a11y/<timestamp>/b02-html-paste.json` and
+  `b02-html-export.json`.
 - Concrete source gaps: [AF-02](a11yfirst-02-image-alt-authoring.md),
   [AF-07](a11yfirst-07-table-structure.md), [AF-08](a11yfirst-08-list-structure.md).
 
 ## Still untested
 
-- **B.1.2.2** copy/paste inside the editor after content exists.
+- **B.1.2.2** copy/paste inside the editor after content exists. A headless
+  Chromium probe exposed only `text/plain` on the clipboard, so no HTML
+  round-trip evidence was produced.
 - **B.1.2.3** optimizations.
-- HTML, Markdown, PDF, DOCX, ODT and email export.
+- Markdown, PDF, DOCX, ODT and email export.
+- Table-relationship and language export from a document that contains them.
 - Whether the author is warned/checked when a transformation drops information.
 
 ## Acceptance criteria

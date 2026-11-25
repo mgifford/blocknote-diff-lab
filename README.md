@@ -288,6 +288,7 @@ If a patch was authored against another commit and cannot apply cleanly, fetch t
 | `pnpm test:a11y:previews` | axe, Guidepup Virtual Screen Reader, semantic checks, A11yFirst probes and B-02 transformation probe against the external previews. |
 | `pnpm test:a11y:a11yfirst` | A11yFirst authoring probes: H1→H3 guidance and generic link text. |
 | `pnpm test:a11y:transformations` | B-02 HTML-paste preservation probe for alt, lists, table headers and language. |
+| `pnpm test:a11y:export` | B-02 HTML export probe for list structure and image alt. |
 | `pnpm test:a11y:part-a` | ATAG Part A probes: time-based media alternatives, undo reversibility and slash-menu keyboard access. |
 | `pnpm test:a11y` | All axe, Guidepup, keyboard, semantic and A11yFirst checks. |
 | `pnpm mcp:playwright` | Start the Playwright MCP server over stdio for interactive inspection. |
