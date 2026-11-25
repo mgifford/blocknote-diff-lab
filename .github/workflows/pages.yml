@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   test:
+    name: pages-deploy-check
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -33,6 +34,7 @@ jobs:
       - run: pnpm test:a11y:local
 
   build:
+    name: pages-build
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -46,6 +48,7 @@ jobs:
         with:
           path: _site
   deploy:
+    name: pages-deploy
     needs: build
     runs-on: ubuntu-latest
     environment:
