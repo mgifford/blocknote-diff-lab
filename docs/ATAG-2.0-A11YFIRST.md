@@ -60,7 +60,7 @@ shows a different result, it is context only; this lab does not evaluate the PR.
 | `pnpm test:a11y:a11yfirst` | A11yFirst authoring probes: H1→H3 guidance and generic link text | Yes |
 | `pnpm test:a11y:transformations` | B-02 HTML-paste preservation probe | Yes |
 | `pnpm test:a11y:export` | B-02 HTML export preservation probe | Yes |
-| `pnpm test:a11y:part-a` | ATAG Part A probes: media alternatives, undo and slash-menu keyboard access | Yes |
+| `pnpm test:a11y:part-a` | ATAG Part A probes: media alternatives, undo, slash-menu keyboard access and static media playback | Yes |
 | `pnpm test:a11y` | Everything | Mixed |
 
 Every run writes raw JSON evidence under `reports/a11y/<timestamp>/`. The tests
@@ -85,6 +85,12 @@ rationale are in the [ATAG alignment register](ATAG-ALIGNMENT-ISSUES.md#atag-par
 | [A.4.1.1 Content Changes Reversible (Minimum)](https://www.w3.org/TR/ATAG20/#sc_a411) | A | `part-a.spec.mjs`: typing a text edit and pressing the platform undo shortcut restores the empty editor | **Partial pass** — text only; block-level and settings reversibility not assessed |
 | [A.4.2.1 Describe Accessibility Features](https://www.w3.org/TR/ATAG20/#sc_a421) | A | This document and the README describe the comparison, scripts, and known limits | **Lab documentation only** |
 | [A.4.2.2 Document All Features](https://www.w3.org/TR/ATAG20/#sc_a422) | AA | README, `docs/STATIC-COMPARATOR.md`, issue files, and this map | **Lab documentation only** |
+
+The remaining Part A checkpoints are triaged in the
+[alignment register](ATAG-ALIGNMENT-ISSUES.md#atag-part-a-coverage):
+A.2.2.1 N/A; A.2.2.2 partial; A.3.2.1–3 N/A/pass; A.3.2.4 not assessed;
+A.3.3.1 pass; A.3.5.1 **product gap** (no in-editor text search); A.3.6.1–2 N/A;
+A.3.6.3 not assessed; A.3.7.1–2 N/A.
 
 ## ATAG 2.0 Part B — support for accessible content
 

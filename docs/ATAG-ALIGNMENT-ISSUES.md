@@ -156,12 +156,11 @@ over-read.
 
 ### ALIGN-09: Part A coverage is incomplete
 
-- **Status:** Open.
-- **Issue:** The ATAG map covers a subset of Part A. The time-based media
-  alternative (A.2.1.2) and text reversibility (A.4.1.1) rows are now assessed,
-  but many checkpoints are not: editing-view status (A.2.2.1), rendered text
-  properties (A.2.2.2), time limits (A.3.2), flashing (A.3.3), text search
-  (A.3.5), preference settings (A.3.6), and previews (A.3.7).
+- **Status:** Partly resolved — all Part A rows are now classified.
+- **Issue:** The ATAG map covers a subset of Part A. The triage now classifies
+  every remaining row, but two checkpoints remain **not assessed**: A.3.2.4
+  (AAA auto-save) and A.3.6.3 (platform display/control settings). A.3.5.1 is a
+  confirmed product gap (no in-editor text search); A.2.2.2 is a partial pass.
 - **Why it matters:** ATAG Part A conformance requires all applicable SCs. A
   partial map cannot be read as "Part A done."
 - **Current handling:** The Part A table below records the gap. The map does not
@@ -171,17 +170,17 @@ over-read.
 
 ### ALIGN-10: Not-applicable checkpoints need explicit rationale
 
-- **Status:** Partly documented; open.
+- **Status:** Resolved for the tested surfaces.
 - **Issue:** A.1.2.1/A.1.2.2 apply to non-web-based functionality; the tested
   BlockNote surfaces are web-based, so they are not applicable here. B.2.4.3/
   B.2.4.4 author-created templates are not a tested feature. A.3.7 previews are
   not a BlockNote editing-view feature in the tested surfaces.
 - **Why it matters:** "Not tested" and "not applicable" are different. Marking
   an SC N/A without a rationale hides a coverage gap.
-- **Current handling:** The Part A table below records N/A with a reason. The gap
-  register marks template SCs N/A in the tested surfaces.
-- **Decision:** Keep the rationale next to every N/A row, and re-check it when a
-  consumer integration adds the feature.
+- **Current handling:** The Part A table below records N/A with a reason for
+  A.1.2, A.2.2.1, A.3.2.1–3, A.3.6.1–2 and A.3.7; B-06 records the template N/A.
+- **Decision:** Re-check each N/A rationale when a consumer integration adds the
+  feature. A residual "not assessed" row (A.3.2.4, A.3.6.3) is not N/A.
 
 ### ALIGN-11: The comparator/lab UI is not assessed against ATAG
 
@@ -282,25 +281,25 @@ This table is deliberately blunt. "Not assessed" is a coverage gap, not a pass.
 | [A.1.2.2 Platform Accessibility Services](https://www.w3.org/TR/ATAG20/#sc_a122) | A | N/A — tested surfaces are web-based |
 | [A.2.1.1 Text Alternatives for Rendered Non-Text Content](https://www.w3.org/TR/ATAG20/#sc_a211) | A | Partial — Guidepup #2822 rendered image; authoring view only |
 | [A.2.1.2 Alternatives for Rendered Time-Based Media](https://www.w3.org/TR/ATAG20/#sc_a212) | A | **Product gap** — video/audio render with no `<track>` captions, audio description, or transcript; only a visible figure caption (`part-a.spec.mjs`) |
-| [A.2.2.1 Editing-View Status Indicators](https://www.w3.org/TR/ATAG20/#sc_a221) | A | Not assessed |
-| [A.2.2.2 Access to Rendered Text Properties](https://www.w3.org/TR/ATAG20/#sc_a222) | AA | Not assessed |
+| [A.2.2.1 Editing-View Status Indicators](https://www.w3.org/TR/ATAG20/#sc_a221) | A | **N/A in tested surfaces** — no editing-view status indicators (spelling, tracked changes, hidden elements) were observed |
+| [A.2.2.2 Access to Rendered Text Properties](https://www.w3.org/TR/ATAG20/#sc_a222) | AA | **Partial pass / not fully assessed** — structural formatting (bold, italic, headings) renders as semantic HTML; visual-only color/alignment properties are not programmatically exposed |
 | [A.3.1.1 Keyboard Access (Minimum)](https://www.w3.org/TR/ATAG20/#sc_a311) | A | Partial — #2854 keyboard trace |
 | [A.3.1.2 No Keyboard Traps](https://www.w3.org/TR/ATAG20/#sc_a312) | A | Tested for the #2854 path only |
 | [A.3.1.3 Efficient Keyboard Access](https://www.w3.org/TR/ATAG20/#sc_a313) | AA | **Partial pass** — the slash menu is keyboard-operable and inserts a heading without a pointer; other efficient-access mechanisms are not assessed (`part-a.spec.mjs`) |
 | [A.3.1.4 Keyboard Access (Enhanced)](https://www.w3.org/TR/ATAG20/#sc_a314) | AAA | Not assessed |
 | [A.3.1.5 Customize Keyboard Access](https://www.w3.org/TR/ATAG20/#sc_a315) | AAA | Not assessed |
 | [A.3.1.6 Present Keyboard Commands](https://www.w3.org/TR/ATAG20/#sc_a316) | AAA | Not assessed |
-| [A.3.2.1 Auto-Save](https://www.w3.org/TR/ATAG20/#sc_a321) | A | Not assessed |
-| [A.3.2.2 Timing Adjustable](https://www.w3.org/TR/ATAG20/#sc_a322) | A | Not assessed |
-| [A.3.2.3 Static Input Components](https://www.w3.org/TR/ATAG20/#sc_a323) | A | Not assessed |
-| [A.3.2.4 Content Edits Saved (Extended)](https://www.w3.org/TR/ATAG20/#sc_a324) | AAA | Not assessed |
-| [A.3.3.1 Static View Option](https://www.w3.org/TR/ATAG20/#sc_a331) | A | Not assessed |
+| [A.3.2.1 Auto-Save](https://www.w3.org/TR/ATAG20/#sc_a321) | A | **N/A/pass in tested surfaces** — no session time limit was observed, so auto-save is not required by the checkpoint; no auto-save was tested |
+| [A.3.2.2 Timing Adjustable](https://www.w3.org/TR/ATAG20/#sc_a322) | A | **N/A/pass in tested surfaces** — no time limit was observed |
+| [A.3.2.3 Static Input Components](https://www.w3.org/TR/ATAG20/#sc_a323) | A | **N/A/pass in tested surfaces** — no moving input components were observed |
+| [A.3.2.4 Content Edits Saved (Extended)](https://www.w3.org/TR/ATAG20/#sc_a324) | AAA | **Not assessed (AAA)** — no auto-save setting observed |
+| [A.3.3.1 Static View Option](https://www.w3.org/TR/ATAG20/#sc_a331) | A | **Pass** — video/audio have controls and no autoplay (`part-a.spec.mjs`) |
 | [A.3.4.1 Navigate By Structure](https://www.w3.org/TR/ATAG20/#sc_a341) | **AA** | Partial — virtual-reader headings; header association not exposed |
 | [A.3.4.2 Navigate by Programmatic Relationships](https://www.w3.org/TR/ATAG20/#sc_a342) | AAA | Not assessed |
-| [A.3.5.1 Text Search](https://www.w3.org/TR/ATAG20/#sc_a351) | AA | Not assessed |
-| [A.3.6.1 Independence of Display](https://www.w3.org/TR/ATAG20/#sc_a361) | A | Not assessed |
-| [A.3.6.2 Save Settings](https://www.w3.org/TR/ATAG20/#sc_a362) | AA | Not assessed |
-| [A.3.6.3 Apply Platform Settings](https://www.w3.org/TR/ATAG20/#sc_a363) | AA | Not assessed |
+| [A.3.5.1 Text Search](https://www.w3.org/TR/ATAG20/#sc_a351) | AA | **Product gap** — no in-editor text search was observed; the browser find is a user-agent feature, not the authoring tool search |
+| [A.3.6.1 Independence of Display](https://www.w3.org/TR/ATAG20/#sc_a361) | A | **N/A in tested surfaces** — no display settings for the editing view were observed |
+| [A.3.6.2 Save Settings](https://www.w3.org/TR/ATAG20/#sc_a362) | AA | **N/A in tested surfaces** — no display/control settings were observed |
+| [A.3.6.3 Apply Platform Settings](https://www.w3.org/TR/ATAG20/#sc_a363) | AA | **Not assessed** — dark/light color-scheme support exists via Mantine, but the full platform display/control settings requirement was not tested |
 | [A.3.7.1 Preview (Minimum)](https://www.w3.org/TR/ATAG20/#sc_a371) | A | N/A in the tested editor surfaces; no preview feature evaluated |
 | [A.3.7.2 Preview (Enhanced)](https://www.w3.org/TR/ATAG20/#sc_a372) | AAA | N/A in the tested editor surfaces |
 | [A.4.1.1 Content Changes Reversible](https://www.w3.org/TR/ATAG20/#sc_a411) | A | **Partial pass** — a text edit can be undone with the keyboard; block-level undo and settings changes are not assessed (`part-a.spec.mjs`) |
