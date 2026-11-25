@@ -59,7 +59,7 @@ shows a different result, it is context only; this lab does not evaluate the PR.
 | `pnpm test:a11y:semantics` | alt text, table headers, list wrappers | Yes |
 | `pnpm test:a11y:a11yfirst` | A11yFirst authoring probes: H1→H3 guidance and generic link text | Yes |
 | `pnpm test:a11y:transformations` | B-02 HTML-paste preservation probe | Yes |
-| `pnpm test:a11y:part-a` | ATAG Part A probes: media alternatives and undo | Yes |
+| `pnpm test:a11y:part-a` | ATAG Part A probes: media alternatives, undo and slash-menu keyboard access | Yes |
 | `pnpm test:a11y` | Everything | Mixed |
 
 Every run writes raw JSON evidence under `reports/a11y/<timestamp>/`. The tests
@@ -79,6 +79,7 @@ rationale are in the [ATAG alignment register](ATAG-ALIGNMENT-ISSUES.md#atag-par
 | [A.2.1.2 Alternatives for Rendered Time-Based Media](https://www.w3.org/TR/ATAG20/#sc_a212) | A | `part-a.spec.mjs`: the Default Schema video and audio have no `<track>` captions, audio description, or transcript; only a visible figure caption | **Product gap** |
 | [A.3.1.1 Keyboard Access (Minimum)](https://www.w3.org/TR/ATAG20/#sc_a311) | A | `keyboard-2854.spec.mjs`: before the fix, Tab reaches a dead closing Add block clone; the inert variant moves focus to the next real control. Activation variant makes Enter open the suggestion menu | **Partial** — the side menu is still pointer-hover-dependent |
 | [A.3.1.2 No Keyboard Traps](https://www.w3.org/TR/ATAG20/#sc_a312) | A | The same keyboard trace shows Tab leaving the editor and reaching the parent focus control in the inert variant | **Tested for this path** |
+| [A.3.1.3 Efficient Keyboard Access](https://www.w3.org/TR/ATAG20/#sc_a313) | AA | `part-a.spec.mjs`: the slash menu opens with keyboard input and Enter inserts a heading without a pointer | **Partial pass** — other efficient-access mechanisms not assessed |
 | [A.3.4.1 Navigate By Structure](https://www.w3.org/TR/ATAG20/#sc_a341) | AA | Virtual Screen Reader traversal announces headings, tables, rows, and cells in the Default Schema example | **Partial** — table header association is not exposed by the virtual reader; real AT is out of scope here |
 | [A.4.1.1 Content Changes Reversible (Minimum)](https://www.w3.org/TR/ATAG20/#sc_a411) | A | `part-a.spec.mjs`: typing a text edit and pressing the platform undo shortcut restores the empty editor | **Partial pass** — text only; block-level and settings reversibility not assessed |
 | [A.4.2.1 Describe Accessibility Features](https://www.w3.org/TR/ATAG20/#sc_a421) | A | This document and the README describe the comparison, scripts, and known limits | **Lab documentation only** |
