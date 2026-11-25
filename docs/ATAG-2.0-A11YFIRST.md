@@ -59,6 +59,7 @@ shows a different result, it is context only; this lab does not evaluate the PR.
 | `pnpm test:a11y:semantics` | alt text, table headers, list wrappers | Yes |
 | `pnpm test:a11y:a11yfirst` | A11yFirst authoring probes: H1→H3 guidance and generic link text | Yes |
 | `pnpm test:a11y:transformations` | B-02 HTML-paste preservation probe | Yes |
+| `pnpm test:a11y:export` | B-02 HTML export preservation probe | Yes |
 | `pnpm test:a11y:part-a` | ATAG Part A probes: media alternatives, undo and slash-menu keyboard access | Yes |
 | `pnpm test:a11y` | Everything | Mixed |
 
@@ -93,7 +94,7 @@ Every success criterion is mapped in the [gap register coverage table](gaps/READ
 | Checkpoint cluster | Level | Gap record | Current-main status |
 | --- | --- | --- | --- |
 | B.1.1.1–B.1.1.2 auto-generated content | A (WCAG-dependent) | [B-01](gaps/atag-b-01-auto-generated-content.md) | **Partial product gap** — image/file derived text; post-session N/A; AI paths unassessed |
-| B.1.2.1–B.1.2.4 transformations/copy-paste | A (WCAG-dependent) | [B-02](gaps/atag-b-02-transform-preservation.md) | **Product gap** — HTML paste; copy/export untested |
+| B.1.2.1–B.1.2.4 transformations/copy-paste | A (WCAG-dependent) | [B-02](gaps/atag-b-02-transform-preservation.md) | **Partial product gap** — HTML paste drops semantics; HTML export preserves list/alt; copy/other exports untested |
 | B.2.1.1 accessible content possible | A (WCAG-dependent) | [B-03](gaps/atag-b-03-accessible-content-possible.md) | **Product gap** — image alt, table headers, list wrappers |
 | B.2.2.1–B.2.2.2 accessible options/properties | A (WCAG-dependent) | [B-04](gaps/atag-b-04-accessibility-properties.md) | **Product gap** |
 | B.2.3.1–B.2.3.3 alternative content editable/repaired/reused | A / AAA | [B-05](gaps/atag-b-05-alternative-content.md) | **Product gap**, AAA for reuse |
