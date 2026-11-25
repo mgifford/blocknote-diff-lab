@@ -41,8 +41,8 @@ applicable. The gap files assess **current main**, not upstream pull requests.
 
 | Checkpoint | Level | Status | Gap record |
 | --- | --- | --- | --- |
-| B.1.1.1 Content auto-generation after authoring | A (WCAG-dependent) | Evidence gap | [B-01](atag-b-01-auto-generated-content.md) |
-| B.1.1.2 Content auto-generation during authoring | A (WCAG-dependent) | Evidence gap | [B-01](atag-b-01-auto-generated-content.md) |
+| B.1.1.1 Content auto-generation after authoring | A (WCAG-dependent) | N/A in tested surfaces | [B-01](atag-b-01-auto-generated-content.md) |
+| B.1.1.2 Content auto-generation during authoring | A (WCAG-dependent) | **Partial product gap** | [B-01](atag-b-01-auto-generated-content.md) |
 | B.1.2.1 Restructuring/re-coding transformations | A (WCAG-dependent) | **Product gap** | [B-02](atag-b-02-transform-preservation.md) |
 | B.1.2.2 Copy-paste inside the authoring tool | A (WCAG-dependent) | Evidence gap | [B-02](atag-b-02-transform-preservation.md) |
 | B.1.2.3 Optimizations preserve accessibility | A | Evidence gap | [B-02](atag-b-02-transform-preservation.md) |
