@@ -109,7 +109,7 @@ Every success criterion is mapped in the [gap register coverage table](gaps/READ
 | B.3.1.1–B.3.1.5 checking assistance | A / AA | [B-07](gaps/atag-b-07-checking-assistance.md) | **Product gap** — no in-product checker |
 | B.3.2.1 repair assistance | A (WCAG-dependent) | [B-08](gaps/atag-b-08-repair-assistance.md) | **Product gap** |
 | B.4.1.1–B.4.1.4 features by default | A / AA | [B-09](gaps/atag-b-09-features-by-default.md) | **Product gap** |
-| B.4.2.1–B.4.2.4 documentation | A / AAA | [B-10](gaps/atag-b-10-documentation.md) | **Product gap** — targeted docs review |
+| B.4.2.1–B.4.2.4 documentation | A / AAA | [B-10](gaps/atag-b-10-documentation.md) | **Product gap** — 12-page docs audit; PDF/math model well, link/table/list/localization gaps |
 
 Concrete current-main occurrences are recorded in
 [AF-02](gaps/a11yfirst-02-image-alt-authoring.md) (image alt),
