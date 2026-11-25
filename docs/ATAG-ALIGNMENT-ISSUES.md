@@ -157,11 +157,12 @@ over-read.
 ### ALIGN-09: Part A coverage is incomplete
 
 - **Status:** Open.
-- **Issue:** The ATAG map covers a subset of Part A. Many checkpoints are not
-  assessed: time-based media alternatives (A.2.1.2), editing-view status
-  (A.2.2.1), rendered text properties (A.2.2.2), efficient keyboard access
-  (A.3.1.3), time limits (A.3.2), flashing (A.3.3), text search (A.3.5),
-  preference settings (A.3.6), previews (A.3.7), and reversibility (A.4.1).
+- **Issue:** The ATAG map covers a subset of Part A. The time-based media
+  alternative (A.2.1.2) and text reversibility (A.4.1.1) rows are now assessed,
+  but many checkpoints are not: editing-view status (A.2.2.1), rendered text
+  properties (A.2.2.2), efficient keyboard access (A.3.1.3), time limits
+  (A.3.2), flashing (A.3.3), text search (A.3.5), preference settings (A.3.6),
+  and previews (A.3.7).
 - **Why it matters:** ATAG Part A conformance requires all applicable SCs. A
   partial map cannot be read as "Part A done."
 - **Current handling:** The Part A table below records the gap. The map does not
@@ -277,7 +278,7 @@ This table is deliberately blunt. "Not assessed" is a coverage gap, not a pass.
 | [A.1.2.1 Accessibility Guidelines](https://www.w3.org/TR/ATAG20/#sc_a121) | A | N/A — tested surfaces are web-based |
 | [A.1.2.2 Platform Accessibility Services](https://www.w3.org/TR/ATAG20/#sc_a122) | A | N/A — tested surfaces are web-based |
 | [A.2.1.1 Text Alternatives for Rendered Non-Text Content](https://www.w3.org/TR/ATAG20/#sc_a211) | A | Partial — Guidepup #2822 rendered image; authoring view only |
-| [A.2.1.2 Alternatives for Rendered Time-Based Media](https://www.w3.org/TR/ATAG20/#sc_a212) | A | Not assessed — video/audio blocks exist |
+| [A.2.1.2 Alternatives for Rendered Time-Based Media](https://www.w3.org/TR/ATAG20/#sc_a212) | A | **Product gap** — video/audio render with no `<track>` captions, audio description, or transcript; only a visible figure caption (`part-a.spec.mjs`) |
 | [A.2.2.1 Editing-View Status Indicators](https://www.w3.org/TR/ATAG20/#sc_a221) | A | Not assessed |
 | [A.2.2.2 Access to Rendered Text Properties](https://www.w3.org/TR/ATAG20/#sc_a222) | AA | Not assessed |
 | [A.3.1.1 Keyboard Access (Minimum)](https://www.w3.org/TR/ATAG20/#sc_a311) | A | Partial — #2854 keyboard trace |
@@ -299,7 +300,7 @@ This table is deliberately blunt. "Not assessed" is a coverage gap, not a pass.
 | [A.3.6.3 Apply Platform Settings](https://www.w3.org/TR/ATAG20/#sc_a363) | AA | Not assessed |
 | [A.3.7.1 Preview (Minimum)](https://www.w3.org/TR/ATAG20/#sc_a371) | A | N/A in the tested editor surfaces; no preview feature evaluated |
 | [A.3.7.2 Preview (Enhanced)](https://www.w3.org/TR/ATAG20/#sc_a372) | AAA | N/A in the tested editor surfaces |
-| [A.4.1.1 Content Changes Reversible](https://www.w3.org/TR/ATAG20/#sc_a411) | A | Not assessed |
+| [A.4.1.1 Content Changes Reversible](https://www.w3.org/TR/ATAG20/#sc_a411) | A | **Partial pass** — a text edit can be undone with the keyboard; block-level undo and settings changes are not assessed (`part-a.spec.mjs`) |
 | [A.4.1.2 Settings Change Confirmation](https://www.w3.org/TR/ATAG20/#sc_a412) | A | Not assessed |
 | [A.4.1.3 Content Changes Reversible (Enhanced)](https://www.w3.org/TR/ATAG20/#sc_a413) | AAA | Not assessed |
 | [A.4.2.1 Describe Accessibility Features](https://www.w3.org/TR/ATAG20/#sc_a421) | A | Lab docs only — not BlockNote's authoring help |
