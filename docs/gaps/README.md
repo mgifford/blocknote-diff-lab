@@ -53,12 +53,12 @@ applicable. The gap files assess **current main**, not upstream pull requests.
 | B.2.3.1 Alternative content is editable | A (WCAG-dependent) | **Product gap** | [B-05](atag-b-05-alternative-content.md) |
 | B.2.3.2 Automating repair of text alternatives | A | **Product gap** | [B-05](atag-b-05-alternative-content.md) |
 | B.2.3.3 Save for reuse | AAA | **Product gap (AAA)** | [B-05](atag-b-05-alternative-content.md) |
-| B.2.4.1 Accessible template options | A (WCAG-dependent) | **Product/evidence gap** | [B-06](atag-b-06-templates-pre-authored.md) |
-| B.2.4.2 Identify template accessibility | AA | **Product/evidence gap** | [B-06](atag-b-06-templates-pre-authored.md) |
-| B.2.4.3 Author-created templates | AA | Not applicable in tested surfaces | [B-06](atag-b-06-templates-pre-authored.md) |
-| B.2.4.4 Accessible template options (enhanced) | AAA | Not applicable in tested surfaces | [B-06](atag-b-06-templates-pre-authored.md) |
-| B.2.5.1 Accessible pre-authored content options | AA | **Product/evidence gap** | [B-06](atag-b-06-templates-pre-authored.md) |
-| B.2.5.2 Identify pre-authored content accessibility | AA | **Product/evidence gap** | [B-06](atag-b-06-templates-pre-authored.md) |
+| B.2.4.1 Accessible template options | A (WCAG-dependent) | N/A in tested surfaces | [B-06](atag-b-06-templates-pre-authored.md) |
+| B.2.4.2 Identify template accessibility | AA | N/A in tested surfaces | [B-06](atag-b-06-templates-pre-authored.md) |
+| B.2.4.3 Author-created templates | AA | N/A in tested surfaces | [B-06](atag-b-06-templates-pre-authored.md) |
+| B.2.4.4 Accessible template options (enhanced) | AAA | N/A in tested surfaces | [B-06](atag-b-06-templates-pre-authored.md) |
+| B.2.5.1 Accessible pre-authored content options | AA | N/A in tested surfaces | [B-06](atag-b-06-templates-pre-authored.md) |
+| B.2.5.2 Identify pre-authored content accessibility | AA | N/A in tested surfaces | [B-06](atag-b-06-templates-pre-authored.md) |
 | B.3.1.1 Checking assistance | A (WCAG-dependent) | **Product gap** | [B-07](atag-b-07-checking-assistance.md) |
 | B.3.1.2 Help authors decide | A | **Product gap** | [B-07](atag-b-07-checking-assistance.md) |
 | B.3.1.3 Help authors locate | A | **Product gap** | [B-07](atag-b-07-checking-assistance.md) |

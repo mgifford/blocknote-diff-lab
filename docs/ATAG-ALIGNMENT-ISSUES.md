@@ -197,20 +197,24 @@ over-read.
 - **Decision:** If the lab is published as a product, give it its own scope and
   evaluation. Do not fold it into BlockNote's ATAG status.
 
-### ALIGN-12: Template and pre-authored-content definitions are provisional
+### ALIGN-12: Template and pre-authored-content definitions were provisional
 
-- **Status:** Open.
+- **Status:** Resolved for the tested surfaces.
 - **Issue:** ATAG uses specific definitions for templates and pre-authored
-  content. BlockNote's default schema, example documents, and block showcases may
-  not meet those definitions. B-06 currently treats the Default Schema Showcase
-  as pre-authored content and says templates are N/A in the tested surfaces.
+  content. BlockNote's default schema and example documents may not meet those
+  definitions, so treating the Default Schema Showcase as a template or
+  pre-authored content option could produce a false gap.
 - **Why it matters:** Applying B.2.4/B.2.5 to a feature that is not a template in
   ATAG's sense produces a false gap; missing a real template path produces a
   false pass.
-- **Current handling:** [B-06](gaps/atag-b-06-templates-pre-authored.md) labels
-  the mapping provisional and distinguishes pre-authored content from templates.
-- **Decision:** Validate the definitions against the ATAG glossary before
-  assigning B.2.4/B.2.5 status. Until then, treat B-06 as provisional.
+- **Current handling:** [B-06](gaps/atag-b-06-templates-pre-authored.md) checked the
+  ATAG definitions, searched `packages/core/src`, `packages/react/src` and the
+  docs, and confirmed there is no template or pre-authored-content selection
+  mechanism in the tested editor. `initialContent` is a host API, not an
+  author-facing template picker. B.2.4/B.2.5 are **N/A in the tested surfaces**.
+- **Decision:** A consumer integration that adds templates or pre-authored
+  content must assess B.2.4/B.2.5 in its own scope. Do not treat the demo pages
+  as author-facing pre-authored content.
 
 ### ALIGN-13: Accessibility support and technology scope are narrow
 
