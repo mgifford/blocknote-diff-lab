@@ -64,4 +64,31 @@ test.describe('@part-a @previews — ATAG Part A coverage', () => {
 
     saveEvidence('atag-a411-undo.json', { typed, undone, redone, modifier });
   });
+
+  test('A.3.1.3: the slash menu is operable without a pointer', async ({ page }) => {
+    await page.goto(MAIN_MINIMAL, { waitUntil: 'domcontentloaded' });
+    await page.locator('.bn-editor').waitFor({ state: 'visible', timeout: 30000 });
+    await page.waitForTimeout(600);
+    await page.locator('.bn-editor').click();
+    await page.keyboard.type('/heading');
+    await page.waitForTimeout(800);
+
+    const menu = await page.evaluate(() => ({
+      options: [...document.querySelectorAll('[role="option"], .bn-suggestion-menu-item')]
+        .map((option) => option.innerText.trim())
+        .filter(Boolean),
+    }));
+    expect(menu.options.length).toBeGreaterThan(0);
+    expect(menu.options[0]).toContain('Heading 1');
+
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(800);
+    const result = await page.evaluate(() => ({
+      headings: [...document.querySelectorAll('.bn-editor h1, .bn-editor h2, .bn-editor h3')].map((heading) => heading.tagName),
+      text: document.querySelector('.bn-editor')?.innerText.trim(),
+    }));
+    expect(result.headings).toContain('H1');
+
+    saveEvidence('atag-a313-slash.json', { menu, result });
+  });
 });

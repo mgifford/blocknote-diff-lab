@@ -160,9 +160,8 @@ over-read.
 - **Issue:** The ATAG map covers a subset of Part A. The time-based media
   alternative (A.2.1.2) and text reversibility (A.4.1.1) rows are now assessed,
   but many checkpoints are not: editing-view status (A.2.2.1), rendered text
-  properties (A.2.2.2), efficient keyboard access (A.3.1.3), time limits
-  (A.3.2), flashing (A.3.3), text search (A.3.5), preference settings (A.3.6),
-  and previews (A.3.7).
+  properties (A.2.2.2), time limits (A.3.2), flashing (A.3.3), text search
+  (A.3.5), preference settings (A.3.6), and previews (A.3.7).
 - **Why it matters:** ATAG Part A conformance requires all applicable SCs. A
   partial map cannot be read as "Part A done."
 - **Current handling:** The Part A table below records the gap. The map does not
@@ -283,7 +282,7 @@ This table is deliberately blunt. "Not assessed" is a coverage gap, not a pass.
 | [A.2.2.2 Access to Rendered Text Properties](https://www.w3.org/TR/ATAG20/#sc_a222) | AA | Not assessed |
 | [A.3.1.1 Keyboard Access (Minimum)](https://www.w3.org/TR/ATAG20/#sc_a311) | A | Partial — #2854 keyboard trace |
 | [A.3.1.2 No Keyboard Traps](https://www.w3.org/TR/ATAG20/#sc_a312) | A | Tested for the #2854 path only |
-| [A.3.1.3 Efficient Keyboard Access](https://www.w3.org/TR/ATAG20/#sc_a313) | AA | Not assessed |
+| [A.3.1.3 Efficient Keyboard Access](https://www.w3.org/TR/ATAG20/#sc_a313) | AA | **Partial pass** — the slash menu is keyboard-operable and inserts a heading without a pointer; other efficient-access mechanisms are not assessed (`part-a.spec.mjs`) |
 | [A.3.1.4 Keyboard Access (Enhanced)](https://www.w3.org/TR/ATAG20/#sc_a314) | AAA | Not assessed |
 | [A.3.1.5 Customize Keyboard Access](https://www.w3.org/TR/ATAG20/#sc_a315) | AAA | Not assessed |
 | [A.3.1.6 Present Keyboard Commands](https://www.w3.org/TR/ATAG20/#sc_a316) | AAA | Not assessed |
