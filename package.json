@@ -28,7 +28,8 @@
     "test:a11y:a11yfirst": "playwright test --config playwright.a11y.config.mjs --grep @a11yfirst",
     "test:a11y:transformations": "playwright test --config playwright.a11y.config.mjs --grep @transformations",
     "test:a11y:part-a": "playwright test --config playwright.a11y.config.mjs --grep @part-a",
-    "test:a11y:export": "playwright test --config playwright.a11y.config.mjs --grep @export"
+    "test:a11y:export": "playwright test --config playwright.a11y.config.mjs --grep @export",
+    "test:a11y:copy-paste": "playwright test --config playwright.a11y.config.mjs --grep @copy-paste"
   },
   "devDependencies": {
     "@guidepup/virtual-screen-reader": "0.33.0",
