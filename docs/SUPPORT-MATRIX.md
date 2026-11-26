@@ -12,7 +12,7 @@ what a result must not be generalized to.
 | Editor UI | BlockNote upstream previews with the Mantine UI | Ariakit, shadcn, custom consumer shells |
 | Assistive technology | Guidepup Virtual Screen Reader only | VoiceOver, NVDA, JAWS, Orca, real disabled participants |
 | Output formats | HTML (paste, copy event, HTML export) | PDF/UA, DOCX, ODT, Markdown, email |
-| Input | Keyboard and pointer basics; axe; virtual screen reader | Switch input, speech recognition, touch gestures |
+| Input | Keyboard and pointer basics; axe; virtual screen reader; headed OS clipboard | Switch input, speech recognition, touch gestures |
 | Themes | Light/dark capture checks; forced-colors spot checks | Full high-contrast and platform-setting matrix |
 
 ## Surfaces
@@ -39,4 +39,5 @@ what a result must not be generalized to.
   — this support matrix.
 - [ALIGN-16](ATAG-ALIGNMENT-ISSUES.md#align-16-a-content-component-result-is-not-a-host-product-atag-result)
   — component vs host-product scope.
+- [Headed clipboard probe](CLIPBOARD-MANUAL.md) — manual B.1.2.2 OS-clipboard check.
 - [Evidence retention](EVIDENCE.md) — what is kept and for how long.

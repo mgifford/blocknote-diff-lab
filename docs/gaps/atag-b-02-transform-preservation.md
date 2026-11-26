@@ -1,10 +1,10 @@
 # B-02: Transformations preserve accessibility (B.1.2.1–B.1.2.4)
 
-- **Status:** Partial product gap — copy/export preserve list/alt; paste drops list/table/lang; table/lang copy and OS clipboard untested
+- **Status:** Partial product gap — copy/export preserve list/alt; paste drops list/table/lang; OS clipboard verified headed; language copy untested
 - **Area:** BlockNote editor / current main, copy/paste and export
 - **ATAG 2.0:** B.1.2.1 Restructuring/re-coding transformations; B.1.2.2 Copy-paste inside the tool; B.1.2.3 Optimizations preserve accessibility; B.1.2.4 Text alternatives preserved
 - **WCAG 2.2:** The level the output must meet (A/AA, WCAG-dependent)
-- **Evidence basis:** Automated HTML paste (`transformations.spec.mjs`), HTML export (`export.spec.mjs`) and copy-event (`copy-paste.spec.mjs`) probes on 2026-11-25; OS clipboard and other exports still not assessed
+- **Evidence basis:** Automated HTML paste (`transformations.spec.mjs`), HTML export (`export.spec.mjs`) and copy-event (`copy-paste.spec.mjs`) probes on 2026-11-25, plus the [headed clipboard probe](../CLIPBOARD-MANUAL.md); other exports still not assessed
 - **Recorded:** 2026-11-25 against current main (`9cb988f`)
 
 ## Why this matters
@@ -40,6 +40,7 @@ editor and an HTML export from the export example.
 | HTML export of an image with `alt` | **Preserved** — exported `<img … alt="A small cat">` |
 | Copy of an image + list (B.1.2.2) | **Preserved in copied HTML** — `alt="A small cat"` and `<ul><li>One</li><li>Two</li></ul>`; the editor DOM still has no list wrappers |
 | Copy of a table (B.1.2.2) | **Header cells kept; no explicit relationships** — copied HTML has `<th>` but no `scope`/`td[headers]`; the source table also lacks them |
+| Headed OS clipboard (B.1.2.2) | **Pass for image + list** — Chromium 148 copied both `text/html` and `text/plain`; HTML keeps `alt` and `ul/li` |
 
 This verifies a **B.1.2.1** partial product gap: HTML paste drops list,
 table-relationship and language semantics, while HTML export and copy emit list
@@ -47,9 +48,11 @@ structure and image alt. **B.1.2.2** is a partial pass for copying an image and
 list: the copied HTML has alt and `ul/li`, even though the editor DOM has no list
 wrappers. Table copy keeps `<th>` cells but does not add `scope`/`headers`
 relationships; the source table lacks them, so this is an authoring gap
-(AF-07/B-04), not a copy loss. **B.1.2.4** is a partial pass for image alt in paste, copy and
-HTML export. B.1.2.2 for language, B.1.2.3 (optimizations), the OS clipboard
-path, and table/language/PDF/DOCX/ODT/email export remain untested.
+(AF-07/B-04), not a copy loss. A headed Chromium 148 run copied both
+`text/html` and `text/plain`, preserving the image alt and list on the OS
+clipboard. **B.1.2.4** is a partial pass for image alt in paste, copy and HTML
+export. B.1.2.2 for language, B.1.2.3 (optimizations), and
+table/language/PDF/DOCX/ODT/email export remain untested.
 
 ## Evidence
 
@@ -59,6 +62,9 @@ path, and table/language/PDF/DOCX/ODT/email export remain untested.
   the HTML export example, then inspects the exported `<pre>`.
 - `tests/a11y/copy-paste.spec.mjs` — captures the `copy` event’s `text/html`
   after selecting a seeded image + list, and after selecting the advanced table.
+- [`scripts/check-clipboard-headed.mjs`](../scripts/check-clipboard-headed.mjs)
+  and [the headed clipboard protocol](../CLIPBOARD-MANUAL.md) — reads the OS
+  clipboard in headed Chromium.
 - Raw evidence: `reports/a11y/<timestamp>/b02-html-paste.json`,
   `b02-html-export.json` and `b02-copy-image-list.json`.
 - Concrete source gaps: [AF-02](a11yfirst-02-image-alt-authoring.md),
@@ -66,9 +72,9 @@ path, and table/language/PDF/DOCX/ODT/email export remain untested.
 
 ## Still untested
 
-- **B.1.2.2** language copy and the OS clipboard path. The copy-event test reads
-  the editor's `text/html`; headless Chromium's system clipboard exposed only
-  `text/plain`. Table copy keeps `<th>` without explicit `scope`/`headers`; the source also lacks them.
+- **B.1.2.2** language copy. The OS clipboard is verified headed, but not gated
+  in CI; headless Chromium exposes only `text/plain`. Table copy keeps `<th>`
+  without explicit `scope`/`headers`; the source also lacks them.
 - **B.1.2.3** optimizations.
 - Markdown, PDF, DOCX, ODT and email export.
 - Table-relationship and language export from a document that contains them.
