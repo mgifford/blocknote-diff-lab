@@ -69,8 +69,8 @@ applicable. The gap files assess **current main**, not upstream pull requests.
 | B.4.1.2 Option to reactivate features | A | **Product gap** | [B-09](atag-b-09-features-by-default.md) |
 | B.4.1.3 Feature deactivation warning | AA | **Product gap** | [B-09](atag-b-09-features-by-default.md) |
 | B.4.1.4 Feature prominence | AA | **Product gap** | [B-09](atag-b-09-features-by-default.md) |
-| B.4.2.1 Model practice | A (WCAG-dependent) | **Product gap** | [B-10](atag-b-10-documentation.md) |
-| B.4.2.2 Feature instructions | A | **Product gap** | [B-10](atag-b-10-documentation.md) |
+| B.4.2.1 Model practice | A (WCAG-dependent) | **Product gap** — docs audit | [B-10](atag-b-10-documentation.md) |
+| B.4.2.2 Feature instructions | A | **Product gap** — docs audit | [B-10](atag-b-10-documentation.md) |
 | B.4.2.3 Tutorial | AAA | **Product gap (AAA)** | [B-10](atag-b-10-documentation.md) |
 | B.4.2.4 Instruction index | AAA | **Product gap (AAA)** | [B-10](atag-b-10-documentation.md) |
 
