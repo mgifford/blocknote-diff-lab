@@ -40,6 +40,7 @@ This starter kit is **not** a completed BlockNote regression suite or a WCAG con
 - `docs/gaps/`: the A11yFirst and ATAG 2.0 Part B gap register. One Markdown file per gap, with current-main behavior, evidence, acceptance criteria, and an out-of-scope section.
 - `docs/ATAG-ALIGNMENT-ISSUES.md`: standards, scope, and evidence alignment issues between the lab and ATAG 2.0 (WCAG version, component vs complete tool, Part A/B conflation, preview evidence, conformance limits).
 - `docs/REVIEW-PROTOCOL.md`: branch + PR workflow, required checks, evidence rules and the review checklist. Direct pushes to `main` are not part of the process.
+- `docs/LESSONS-LEARNED.md`: verification, evidence and process lessons from building the lab, including what we would do differently.
 - `docs/reviews/2026-11-24-direct-main-baseline.md`: one-time post-hoc review index for the accessibility work that landed directly on `main` before the protocol.
 - `docs/PLAYWRIGHT-MCP.md` and `mcp/playwright-mcp/`: Playwright MCP configuration for interactive inspection. The MCP path is not keyboard or screen-reader evidence; the test suite is.
 - `issues/`: issue-specific investigations, reproductions, experimental patches and evidence, starting with #2854.
