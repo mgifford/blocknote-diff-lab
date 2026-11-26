@@ -60,4 +60,50 @@ test.describe('@export @previews — ATAG B.1.2.1/B.1.2.4 HTML export', () => {
 
     saveEvidence('b02-html-export.json', { listHtml, exported, editor });
   });
+
+  test('HTML export keeps table header cells but has no language or explicit-relationship model', async ({ page }) => {
+    await page.goto(EXPORT_HTML, { waitUntil: 'domcontentloaded' });
+    await page.locator('.bn-editor').waitFor({ state: 'visible', timeout: 30000 });
+    await page.waitForTimeout(1000);
+
+    const source = '<p lang="fr">Bonjour</p>'
+      + '<table><thead><tr><th id="h1" scope="col">Name</th></tr></thead>'
+      + '<tbody><tr><td headers="h1">A</td></tr></tbody></table>';
+    await page.locator('.bn-editor').click();
+    await page.evaluate((payload) => {
+      const target = document.querySelector('.bn-editor');
+      target.focus();
+      const data = new DataTransfer();
+      data.setData('text/html', payload);
+      data.setData('text/plain', 'Bonjour Name A');
+      target.dispatchEvent(new ClipboardEvent('paste', { clipboardData: data, bubbles: true, cancelable: true }));
+    }, source);
+    await page.waitForFunction(() => {
+      const pre = [...document.querySelectorAll('pre')].at(-1);
+      return pre?.innerText.includes('<table>');
+    });
+
+    const exported = await page.evaluate(() => [...document.querySelectorAll('pre')].at(-1)?.innerText ?? '');
+    const editor = await page.evaluate(() => ({
+      langs: [...document.querySelectorAll('.bn-editor [lang]')].map((element) => element.getAttribute('lang')),
+      th: [...document.querySelectorAll('.bn-editor th')].map((cell) => ({
+        id: cell.id,
+        scope: cell.getAttribute('scope'),
+      })),
+      tdHeaders: [...document.querySelectorAll('.bn-editor td[headers]')].map((cell) => cell.getAttribute('headers')),
+    }));
+
+    expect(exported).toContain('<table>');
+    expect(exported).toContain('<th');
+    // The default schema has no content-language property, and table content
+    // has only headerRows/headerCols, not scope/id/headers relationships.
+    expect(exported).not.toContain('lang="fr"');
+    expect(exported).not.toContain('scope=');
+    expect(exported).not.toContain('headers=');
+    expect(editor.langs).toEqual([]);
+    expect(editor.th).toEqual([{ id: '', scope: null }]);
+    expect(editor.tdHeaders).toEqual([]);
+
+    saveEvidence('b02-language-table-export.json', { exported, editor });
+  });
 });

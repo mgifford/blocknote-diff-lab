@@ -274,6 +274,23 @@ over-read.
 - **Decision:** Keep a per-surface scope note. A host-app ATAG claim needs its own
   evaluation.
 
+### ALIGN-17: Content language is not modeled
+
+- **Status:** Open — product/model gap.
+- **Issue:** The default BlockNote schema has no content `lang` property; only
+  the code block has a `language` prop. Pasting `<p lang="fr">` into the editor
+  drops the attribute, and HTML export cannot emit a language that the model
+  never stored.
+- **Why it matters:** ATAG B.1.2.1/B.1.2.2 preservation cannot be tested for a
+  property the editor cannot represent. WCAG 3.1.1 (Language of Page) and 3.1.2
+  (Language of Parts) also depend on this information.
+- **Current handling:** [B-02](gaps/atag-b-02-transform-preservation.md) records
+  the paste/export loss and the model gap. A language-tagged fixture cannot be
+  authored in the default schema.
+- **Decision:** Add a content-language model and an authoring control before
+  claiming language preservation. Until then, treat language copy/export as
+  **not testable**, not as a missing test.
+
 ## ATAG Part A coverage
 
 This table is deliberately blunt. "Not assessed" is a coverage gap, not a pass.
