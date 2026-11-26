@@ -61,4 +61,35 @@ test.describe('@copy-paste @previews — ATAG B.1.2.2 copy/paste', () => {
 
     saveEvidence('b02-copy-image-list.json', { editor, captured });
   });
+
+  test('copying a table keeps th cells but does not add scope/headers relationships', async ({ page }) => {
+    await page.goto('https://blocknote-git-main-typecell.vercel.app/ui-components/advanced-tables', { waitUntil: 'domcontentloaded' });
+    await page.locator('.bn-editor').waitFor({ state: 'visible', timeout: 30000 });
+    await page.waitForTimeout(1000);
+
+    await page.locator('.bn-editor td, .bn-editor th').first().click();
+    for (let i = 0; i < 3; i++) await page.keyboard.press(`${modifier}+a`);
+
+    await page.evaluate(() => {
+      window.__copyCapture = null;
+      document.addEventListener('copy', (event) => {
+        window.__copyCapture = {
+          html: event.clipboardData?.getData('text/html') || '',
+          text: event.clipboardData?.getData('text/plain') || '',
+        };
+      }, { once: true });
+    });
+    await page.keyboard.press(`${modifier}+c`);
+    await page.waitForFunction(() => window.__copyCapture !== null);
+
+    const captured = await page.evaluate(() => window.__copyCapture);
+    expect(captured.html).toContain('<table>');
+    expect(captured.html).toContain('<th');
+    // The source table also lacks these relationships; this records that copy
+    // preserves the limitation rather than inventing a relationship.
+    expect(captured.html).not.toContain('scope=');
+    expect(captured.html).not.toContain('headers=');
+
+    saveEvidence('b02-copy-table.json', captured);
+  });
 });
